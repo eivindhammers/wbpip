@@ -24,8 +24,7 @@ md_compute_poverty_stats <- function(welfare, weight, povline_lcu) {
   welfare <- welfare[o]
   weight  <- weight[o]
 
-  alpha             <- c(0, 1, 2)
-  pov_status        <- (welfare < povline_lcu)
+  pov_status        <- (welfare <= povline_lcu)
   relative_distance <- (1 - (welfare[pov_status] / povline_lcu))
   non_pov           <- rep(0, collapse::fsum(!pov_status))
 
