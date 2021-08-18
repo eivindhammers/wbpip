@@ -3,8 +3,8 @@ default_ppp <- list(rural = 3.039222, urban = 3.905400)
 area_pop    <- list(rural = 793935216, urban = 199949784 )
 requested_mean <- list(rural = 29.57366 * 12 / 365, urban = 56.34465 * 12 / 365)
 # unit test TO BE UPDATED
-skip("ag_compute_pip_stats has changed")
 test_that("ag_compute_pip_stats works", {
+  skip("ag_compute_pip_stats has changed")
   out <- ag_compute_pip_stats(welfare = ag_ex1$welfare,
                               povline = 1.9,
                               population = ag_ex1$weight,
