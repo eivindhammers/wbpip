@@ -17,24 +17,32 @@ gd_select_lorenz <- function(lq, lb) {
   is_normal <- lq[["is_normal"]] | lb[["is_normal"]]
 
   # Selection of Lorenz fit for poverty statistics
-  use_lq_for_pov <- use_lq_for_poverty(lq = lq,
-                                       lb = lb)
+  use_lq_for_pov <- use_lq_for_poverty(
+    lq = lq,
+    lb = lb
+  )
 
   # Selection of Lorenz fit for distributional statistics
-  use_lq_for_dist <- use_lq_for_distributional(lq = lq,
-                                               lb = lb)
+  use_lq_for_dist <- use_lq_for_distributional(
+    lq = lq,
+    lb = lb
+  )
 
   # Retrieve distributional statistics
-  dist <- retrieve_distributional(lq = lq,
-                                  lb = lb,
-                                  is_valid = is_valid,
-                                  use_lq_for_dist = use_lq_for_dist)
+  dist <- retrieve_distributional(
+    lq = lq,
+    lb = lb,
+    is_valid = is_valid,
+    use_lq_for_dist = use_lq_for_dist
+  )
 
   # Retrieve poverty statistics
-  pov <- retrieve_poverty(lq = lq,
-                          lb = lb,
-                          is_normal = is_normal,
-                          use_lq_for_pov = use_lq_for_pov)
+  pov <- retrieve_poverty(
+    lq = lq,
+    lb = lb,
+    is_normal = is_normal,
+    use_lq_for_pov = use_lq_for_pov
+  )
 
   return(list(
     mean             = datamean,
@@ -63,7 +71,6 @@ gd_select_lorenz <- function(lq, lb) {
     watts            = pov[["watts"]],
     sse              = dist[["sse"]]
   ))
-
 }
 
 
@@ -120,7 +127,7 @@ use_lq_for_poverty <- function(lq,
     ifelse(lb[["is_normal"]], 1, 0)
 
   use_lq_for_pov <- TRUE
-  if (pov_flag %in% c(13, 9, 7, 5, 4, 1) ) {
+  if (pov_flag %in% c(13, 9, 7, 5, 4, 1)) {
     use_lq_for_pov <- FALSE
   } else if (pov_flag %in% c(15, 3)) {
     use_lq_for_pov <- lq[["ssez"]] <= lb[["ssez"]]
@@ -188,18 +195,17 @@ retrieve_distributional <- function(lq,
                                     lb,
                                     is_valid,
                                     use_lq_for_dist) {
-
   if (is_valid) {
     if (use_lq_for_dist) {
-      sse             <- lq[["sse"]]
-      z_min           <- lq[["z_min"]]
-      z_max           <- lq[["z_max"]]
-      gini            <- lq[["gini"]]
-      median          <- lq[["median"]]
-      polarization    <- lq[["polarization"]]
+      sse <- lq[["sse"]]
+      z_min <- lq[["z_min"]]
+      z_max <- lq[["z_max"]]
+      gini <- lq[["gini"]]
+      median <- lq[["median"]]
+      polarization <- lq[["polarization"]]
       # rmed          <- lq[["rmed # Returns NULL: Figure out what the issue is!!
-      rmhalf          <- lq[["rmhalf"]]
-      ris             <- lq[["ris"]]
+      rmhalf <- lq[["rmhalf"]]
+      ris <- lq[["ris"]]
 
       deciles <- lq[["deciles"]]
 
@@ -214,17 +220,15 @@ retrieve_distributional <- function(lq,
       } else {
         mld <- NA
       }
-
-
     } else {
-      sse    <- lb[["sse"]]
-      z_min  <- lb[["z_min"]]
-      z_max  <- lb[["z_max"]]
-      gini   <- lb[["gini"]]
+      sse <- lb[["sse"]]
+      z_min <- lb[["z_min"]]
+      z_max <- lb[["z_max"]]
+      gini <- lb[["gini"]]
       median <- lb[["median"]]
       # rmed   <- lb[["rmed"]] # Returns NULL: Figure out what the issue is!!
       rmhalf <- lb[["rmhalf"]]
-      ris    <- lb[["ris"]]
+      ris <- lb[["ris"]]
 
       deciles <- lb[["deciles"]]
       polarization <- lb[["polarization"]]
@@ -240,20 +244,19 @@ retrieve_distributional <- function(lq,
       } else {
         mld <- NA
       }
-
     }
   } else {
-    z_min         <- NA
-    z_max         <- NA
-    gini          <- NA
-    median        <- NA
-    rmed          <- NA
-    rmhalf        <- NA
-    polarization  <- NA
-    ris           <- NA
-    mld           <- NA
-    deciles       <- rep(NA, length(lq[["deciles"]]))
-    sse           <- NA
+    z_min <- NA
+    z_max <- NA
+    gini <- NA
+    median <- NA
+    rmed <- NA
+    rmhalf <- NA
+    polarization <- NA
+    ris <- NA
+    mld <- NA
+    deciles <- rep(NA, length(lq[["deciles"]]))
+    sse <- NA
   }
 
   return(
@@ -288,7 +291,6 @@ retrieve_poverty <- function(lq,
                              lb,
                              is_normal,
                              use_lq_for_pov) {
-
   if (!is_normal) {
     return(list(
       poverty_line     = NA,
@@ -301,21 +303,20 @@ retrieve_poverty <- function(lq,
       gh               = NA,
       gpg              = NA,
       gp               = NA,
-      watts            = NA)
-    )
+      watts            = NA
+    ))
   }
-  if (use_lq_for_pov)
-  {
-    poverty_line     <- lq[["poverty_line"]]
-    headcount        <- lq[["headcount"]]
-    poverty_gap      <- lq[["poverty_gap"]]
+  if (use_lq_for_pov) {
+    poverty_line <- lq[["poverty_line"]]
+    headcount <- lq[["headcount"]]
+    poverty_gap <- lq[["poverty_gap"]]
     poverty_severity <- lq[["poverty_severity"]]
-    eh               <- lq[["eh"]]
-    epg              <- lq[["epg"]]
-    ep               <- lq[["ep"]]
-    gh               <- lq[["gh"]]
-    gpg              <- lq[["gpg"]]
-    gp               <- lq[["gp"]]
+    eh <- lq[["eh"]]
+    epg <- lq[["epg"]]
+    ep <- lq[["ep"]]
+    gh <- lq[["gh"]]
+    gpg <- lq[["gpg"]]
+    gp <- lq[["gp"]]
 
     if (!is.na(lq[["watts"]])) {
       watts <- lq[["watts"]]
@@ -325,52 +326,51 @@ retrieve_poverty <- function(lq,
       watts <- NA
     }
   } else {
-    poverty_line     <- lb[["poverty_line"]]
-    headcount        <- lb[["headcount"]]
-    poverty_gap      <- lb[["poverty_gap"]]
+    poverty_line <- lb[["poverty_line"]]
+    headcount <- lb[["headcount"]]
+    poverty_gap <- lb[["poverty_gap"]]
     poverty_severity <- lb[["poverty_severity"]]
-    eh               <- lb[["eh"]]
-    epg              <- lb[["epg"]]
-    ep               <- lb[["ep"]]
-    gh               <- lb[["gh"]]
-    gpg              <- lb[["gpg"]]
-    gp               <- lb[["gp"]]
-      if (!is.na(lb[["watts"]])) {
-        watts <- lb[["watts"]]
-      } else if (!is.na(lq[["watts"]])) {
-        watts <- lq[["watts"]]
-      } else {
-        watts <- NA
-      }
+    eh <- lb[["eh"]]
+    epg <- lb[["epg"]]
+    ep <- lb[["ep"]]
+    gh <- lb[["gh"]]
+    gpg <- lb[["gpg"]]
+    gp <- lb[["gp"]]
+    if (!is.na(lb[["watts"]])) {
+      watts <- lb[["watts"]]
+    } else if (!is.na(lq[["watts"]])) {
+      watts <- lq[["watts"]]
+    } else {
+      watts <- NA
+    }
   }
   # fix abnormal values
   if (headcount < 0) {
-    headcount        <- NA
-    poverty_gap      <- NA
+    headcount <- NA
+    poverty_gap <- NA
     poverty_severity <- NA
   }
 
   if (headcount > 1) {
-    headcount        <- 0.99999
-    poverty_gap      <- 0.99998
+    headcount <- 0.99999
+    poverty_gap <- 0.99998
     poverty_severity <- 0.99997
   }
 
   return(
     list
     (
-      poverty_line     = poverty_line,
-      headcount        = headcount,
-      poverty_gap      = poverty_gap,
+      poverty_line = poverty_line,
+      headcount = headcount,
+      poverty_gap = poverty_gap,
       poverty_severity = poverty_severity,
-      eh               = eh,
-      epg              = epg,
-      ep               = ep,
-      gh               = gh,
-      gpg              = gpg,
-      gp               = gp,
-      watts            = watts
+      eh = eh,
+      epg = epg,
+      ep = ep,
+      gh = gh,
+      gpg = gpg,
+      gp = gp,
+      watts = watts
     )
   )
-
 }

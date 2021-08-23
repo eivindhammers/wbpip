@@ -28,42 +28,41 @@ prod_compute_pip_stats <- function(welfare,
                                    default_ppp = 1,
                                    ppp = NULL,
                                    p0 = 0.5,
-                                   distribution_type = c("micro",
-                                                         "group",
-                                                         "aggregate",
-                                                         "imputed")) {
-
+                                   distribution_type = c(
+                                     "micro",
+                                     "group",
+                                     "aggregate",
+                                     "imputed"
+                                   )) {
   distribution_type <- match.arg(distribution_type)
 
   if (distribution_type %in% c("micro", "imputed")) {
-
-    out <- prod_md_compute_pip_stats(welfare        = welfare,
-                                     povline        = povline,
-                                     population     = population,
-                                     requested_mean = requested_mean,
-                                     svy_mean_lcu   = svy_mean_lcu,
-                                     popshare       = popshare,
-                                     default_ppp    = default_ppp,
-                                     ppp            = ppp)
+    out <- prod_md_compute_pip_stats(
+      welfare = welfare,
+      povline = povline,
+      population = population,
+      requested_mean = requested_mean,
+      svy_mean_lcu = svy_mean_lcu,
+      popshare = popshare,
+      default_ppp = default_ppp,
+      ppp = ppp
+    )
 
     return(out)
-
   } else if (distribution_type %in% c("group", "aggregate")) {
-
-    out <- prod_gd_compute_pip_stats(welfare        = welfare,
-                                     povline        = povline,
-                                     population     = population,
-                                     requested_mean = requested_mean,
-                                     popshare       = popshare,
-                                     default_ppp    = default_ppp,
-                                     ppp            = ppp,
-                                     p0             = p0)
+    out <- prod_gd_compute_pip_stats(
+      welfare = welfare,
+      povline = povline,
+      population = population,
+      requested_mean = requested_mean,
+      popshare = popshare,
+      default_ppp = default_ppp,
+      ppp = ppp,
+      p0 = p0
+    )
 
     return(out)
-
   } else {
-
     return(NA)
-
   }
 }

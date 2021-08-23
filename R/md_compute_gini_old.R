@@ -13,7 +13,6 @@ NULL
 #'
 #' @examples
 #' wbpip:::md_compute_gini_old(welfare = 1:2000, weight = rep(1, 2000))
-#'
 #' @return numeric
 #' @keywords internal
 md_compute_gini_old <- function(welfare, weight) {
@@ -32,7 +31,7 @@ md_compute_gini_old <- function(welfare, weight) {
   auc <- auc / sum(weight) / sum(weighted_welfare)
 
   # Compute Gini
-  gini <- 1 -  2 * auc
+  gini <- 1 - 2 * auc
 
   return(gini)
 }

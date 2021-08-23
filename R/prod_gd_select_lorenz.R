@@ -18,14 +18,18 @@ prod_gd_select_lorenz <- function(lq, lb) {
   is_normal <- lq[["is_normal"]] | lb[["is_normal"]]
 
   # Selection of Lorenz fit for poverty statistics
-  use_lq_for_pov <- use_lq_for_poverty(lq = lq,
-                                       lb = lb)
+  use_lq_for_pov <- use_lq_for_poverty(
+    lq = lq,
+    lb = lb
+  )
 
   # Retrieve poverty statistics
-  pov <- retrieve_poverty(lq = lq,
-                          lb = lb,
-                          is_normal = is_normal,
-                          use_lq_for_pov = use_lq_for_pov)
+  pov <- retrieve_poverty(
+    lq = lq,
+    lb = lb,
+    is_normal = is_normal,
+    use_lq_for_pov = use_lq_for_pov
+  )
 
   return(list(
     mean             = datamean,
@@ -42,5 +46,4 @@ prod_gd_select_lorenz <- function(lq, lb) {
     gp               = pov[["gp"]],
     watts            = pov[["watts"]]
   ))
-
 }

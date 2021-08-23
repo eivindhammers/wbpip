@@ -10,19 +10,17 @@
 #'
 #' @examples
 #' wbpip:::md_compute_mld_old(welfare = 1:2000, weight = rep(1, 2000))
-#'
 #' @keywords internal
 md_compute_mld_old <- function(welfare, weight) {
 
   # Compute MLD
-  weighted_welfare     <- weight * welfare
+  weighted_welfare <- weight * welfare
   sum_weighted_welfare <- sum(weighted_welfare)
-  sum_weights          <- sum(weight)
-  mean_welfare         <- sum_weighted_welfare / sum_weights
-  mld                  <- 0
+  sum_weights <- sum(weight)
+  mean_welfare <- sum_weighted_welfare / sum_weights
+  mld <- 0
 
   for (i in seq_along(welfare)) {
-
     if (welfare[i] > 0) {
       # Apply Mean Log Deviation formula (MLD)
       # MLD is also referred to as GE(0) or Theil's L

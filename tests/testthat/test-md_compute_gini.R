@@ -1,7 +1,7 @@
 # Read in synthetic microdata
-dl <- readRDS('../testdata/synthetic-microdata.RDS')
+dl <- readRDS("../testdata/synthetic-microdata.RDS")
 
-test_that('md_compute_gini() computations are correct', {
+test_that("md_compute_gini() computations are correct", {
 
   # Test perfect equality
   expect_equal(
@@ -35,9 +35,10 @@ test_that('md_compute_gini() computations are correct', {
   # Test against pre-computed correct values
   lapply(dl, function(x) {
     df <- md_clean_data(x$data,
-                        welfare = "welfare",
-                        weight  = "weight",
-                        quiet = TRUE)$data
+      welfare = "welfare",
+      weight = "weight",
+      quiet = TRUE
+    )$data
     res <- md_compute_gini(welfare = df$welfare, weight = df$weight)
     expect_equal(res, x$stats$gini)
   })

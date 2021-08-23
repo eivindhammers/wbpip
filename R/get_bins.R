@@ -1,8 +1,9 @@
 # Add global variables to avoid NSE notes in R CMD check
-if (getRversion() >= '2.15.1')
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(
-    c('type', '.')
+    c("type", ".")
   )
+}
 
 #' Bins
 #'
@@ -22,15 +23,14 @@ if (getRversion() >= '2.15.1')
 #'
 #' bins <- get_bins(df, welfare, weight, output = "full")
 #' str(bins)
-#'
 #' @return data.frame
 #' @export
-get_bins <-  function(.data,
-                      welfare,
-                      weight,
-                      distribution_type = c("micro", "group", "aggregate", "imputed"),
-                      nbins  = 100,
-                      output = "simple") {
+get_bins <- function(.data,
+                     welfare,
+                     weight,
+                     distribution_type = c("micro", "group", "aggregate", "imputed"),
+                     nbins = 100,
+                     output = "simple") {
 
   # Match arg
   distribution_type <- match.arg(distribution_type)
@@ -38,27 +38,30 @@ get_bins <-  function(.data,
   if (inherits(.data, "grouped_df")) {
 
     # Organize argument to parse to md_clean_data
-    args_in <- list(welfare = substitute(welfare),
-                    weight  = substitute(weight),
-                    type    = type,
-                    nbins   = nbins,
-                    output  = output)
+    args_in <- list(
+      welfare = substitute(welfare),
+      weight = substitute(weight),
+      type = type,
+      nbins = nbins,
+      output = output
+    )
 
-    return(dplyr::do(.data,
-                     do.call(get_bins,c(list(.data = .), args_in)
-                     )
-    )
-    )
+    return(dplyr::do(
+      .data,
+      do.call(get_bins, c(list(.data = .), args_in))
+    ))
   }
 
   # Check arguments
   welfare <- deparse(substitute(welfare))
-  weight  <- deparse(substitute(weight))
+  weight <- deparse(substitute(weight))
 
   # Organize argument to parse to md_clean_data
-  args <- list(dt      = .data,
-               welfare = welfare,
-               weight  = weight)
+  args <- list(
+    dt = .data,
+    welfare = welfare,
+    weight = weight
+  )
 
   if (distribution_type == "micro") {
     # Clean data
@@ -66,18 +69,16 @@ get_bins <-  function(.data,
 
     # Compute Bins
     df_bins <- md_compute_bins(df[[welfare]],
-                               df[[weight]],
-                               nbins  = nbins,
-                               output = output)
-
+      df[[weight]],
+      nbins  = nbins,
+      output = output
+    )
   } else if (distribution_type == "group") {
-
     rlang::inform("process for group data not ready yet")
     gini <- NA
-
   } else {
-    msg     <- "Wrong `distribution_type`"
-    hint    <- "Make sure `distribution_type` is either 'micro' or 'group'"
+    msg <- "Wrong `distribution_type`"
+    hint <- "Make sure `distribution_type` is either 'micro' or 'group'"
     problem <- paste("your `distribution_type` is", distribution_type)
     rlang::abort(c(
       msg,
@@ -86,7 +87,6 @@ get_bins <-  function(.data,
     ),
     class = "wbpip_error"
     )
-
   }
 
   # return(gini)

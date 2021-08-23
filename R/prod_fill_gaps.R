@@ -87,10 +87,10 @@ prod_fg_compute_pip_stats <- function(request_year,
 #'
 #' @noRd
 prod_fg_select_compute_pip_stats <- list(
- micro = function(...) prod_md_compute_pip_stats(...),
- group = function(...) prod_gd_compute_pip_stats(...),
- aggregate = function(...) prod_gd_compute_pip_stats(...),
- imputed = function(...) prod_md_compute_pip_stats(...)
+  micro = function(...) prod_md_compute_pip_stats(...),
+  group = function(...) prod_gd_compute_pip_stats(...),
+  aggregate = function(...) prod_gd_compute_pip_stats(...),
+  imputed = function(...) prod_md_compute_pip_stats(...)
 )
 
 #' prod_fg_create_params
@@ -137,7 +137,7 @@ prod_fg_create_params <- function(predicted_request_mean,
         requested_mean = predicted_request_mean[1],
         svy_mean_lcu   = svy_mean_lcu[1]
       ),
-      params1 =  list(
+      params1 = list(
         welfare        = data$df1$welfare,
         population     = data$df1$weight,
         povline        = poverty_line,
@@ -161,7 +161,6 @@ prod_fg_create_params <- function(predicted_request_mean,
   })
 
   return(params)
-
 }
 
 #' Calculate a weighted average for poverty statistics based on the difference
@@ -185,9 +184,10 @@ prod_fg_adjust_poverty_stats <- function(stats0, stats1, survey_year, request_ye
       stats0, stats1,
       .f = function(measure0, measure1, survey_year, request_year) {
         ((survey_year[2] - request_year) * measure0 +
-           (request_year - survey_year[1]) * measure1) /
+          (request_year - survey_year[1]) * measure1) /
           (survey_year[2] - survey_year[1])
-      }, survey_year, request_year)
+      }, survey_year, request_year
+    )
 
   return(out)
 }

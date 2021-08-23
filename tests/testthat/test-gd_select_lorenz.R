@@ -1,44 +1,52 @@
 # Input definition
-welfare_mean    <- 51.56
-ppp             <- 3.69
-daily_povline   <- 1.9
+welfare_mean <- 51.56
+ppp <- 3.69
+daily_povline <- 1.9
 monthly_povline <- daily_povline * 365 / 12
 
-population <- c(0.0005,
-                0.0032,
-                0.014799999999999999,
-                0.0443,
-                0.0991,
-                0.257,
-                0.4385,
-                0.5938,
-                0.7089,
-                1)
+population <- c(
+  0.0005,
+  0.0032,
+  0.014799999999999999,
+  0.0443,
+  0.0991,
+  0.257,
+  0.4385,
+  0.5938,
+  0.7089,
+  1
+)
 
-welfare <- c(5.824760527229386e-05,
-             0.000604029410841011,
-             0.0037949334793616948,
-             0.013988878652244477,
-             0.036992164583098786,
-             0.12140708906131342,
-             0.24531391873082081,
-             0.37446670169288321,
-             0.48753116241194566,
-             1)
+welfare <- c(
+  5.824760527229386e-05,
+  0.000604029410841011,
+  0.0037949334793616948,
+  0.013988878652244477,
+  0.036992164583098786,
+  0.12140708906131342,
+  0.24531391873082081,
+  0.37446670169288321,
+  0.48753116241194566,
+  1
+)
 
-lq <- gd_compute_pip_stats_lq(welfare         = welfare,
-                              population      = population,
-                              requested_mean  = welfare_mean,
-                              povline         = monthly_povline,
-                              default_ppp     = ppp)
+lq <- gd_compute_pip_stats_lq(
+  welfare = welfare,
+  population = population,
+  requested_mean = welfare_mean,
+  povline = monthly_povline,
+  default_ppp = ppp
+)
 
-lb <- gd_compute_pip_stats_lb(welfare         = welfare,
-                              population      = population,
-                              requested_mean  = welfare_mean,
-                              povline         = monthly_povline,
-                              default_ppp     = ppp)
+lb <- gd_compute_pip_stats_lb(
+  welfare = welfare,
+  population = population,
+  requested_mean = welfare_mean,
+  povline = monthly_povline,
+  default_ppp = ppp
+)
 
-test_that('Outputs from gd_compute_pip_stats_* are consitents', {
+test_that("Outputs from gd_compute_pip_stats_* are consitents", {
 
   # Test perfect equality
   expect_equal(
@@ -74,15 +82,15 @@ test_that('Outputs from gd_compute_pip_stats_* are consitents', {
 #  O   O   O   O    0     Q
 #-----------------------------
 
-test_that('use_lq_for_poverty is correct when all fits are normal and valid', {
+test_that("use_lq_for_poverty is correct when all fits are normal and valid", {
 
   # Use smaller SSEz for selection
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- TRUE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- TRUE
-  lq$ssez      <- 2
-  lb$ssez      <- 1
+  lq$ssez <- 2
+  lb$ssez <- 1
 
   # LB has better fit
   # pov_flag = 15
@@ -98,16 +106,15 @@ test_that('use_lq_for_poverty is correct when all fits are normal and valid', {
     use_lq_for_poverty(lq = lq, lb = lb),
     TRUE
   )
-}
-)
+})
 
-test_that('use_lq_for_poverty is correct when only LQ is normal and valid', {
+test_that("use_lq_for_poverty is correct when only LQ is normal and valid", {
 
   # LB normal but not valid
   # pov_flag = 11
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- TRUE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -116,9 +123,9 @@ test_that('use_lq_for_poverty is correct when only LQ is normal and valid', {
 
   # LB valid but not normal
   # pov_flag = 14
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- TRUE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -127,24 +134,23 @@ test_that('use_lq_for_poverty is correct when only LQ is normal and valid', {
 
   # LB invalid and not normal
   # pov_flag = 10
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- TRUE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
     TRUE
   )
-}
-)
+})
 
-test_that('use_lq_for_poverty is correct when only LB is normal and valid', {
+test_that("use_lq_for_poverty is correct when only LB is normal and valid", {
 
   # LQ normal but not valid
   # pov_flag = 7
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- TRUE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -153,9 +159,9 @@ test_that('use_lq_for_poverty is correct when only LB is normal and valid', {
 
   # LQ valid but not normal
   # pov_flag = 13
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- FALSE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -164,25 +170,24 @@ test_that('use_lq_for_poverty is correct when only LB is normal and valid', {
 
   # LQ invalid and not normal
   # pov_flag = 5
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- FALSE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
     FALSE
   )
-}
-)
+})
 
-test_that('use_lq_for_poverty is correct when both LQ and LB are invalid', {
+test_that("use_lq_for_poverty is correct when both LQ and LB are invalid", {
   # Both LQ and LB are normal. Best SSEz fit
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- TRUE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- TRUE
-  lq$ssez      <- 2
-  lb$ssez      <- 1
+  lq$ssez <- 2
+  lb$ssez <- 1
 
   # pov_flag = 3
   expect_equal(
@@ -190,7 +195,7 @@ test_that('use_lq_for_poverty is correct when both LQ and LB are invalid', {
     FALSE
   )
 
-  lb$ssez      <- lq$ssez + 1
+  lb$ssez <- lq$ssez + 1
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
     TRUE
@@ -198,9 +203,9 @@ test_that('use_lq_for_poverty is correct when both LQ and LB are invalid', {
 
   # LQ is normal
   # pov_flag = 2
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- TRUE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -209,9 +214,9 @@ test_that('use_lq_for_poverty is correct when both LQ and LB are invalid', {
 
   # LB is normal
   # pov_flag = 1
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- FALSE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -220,24 +225,23 @@ test_that('use_lq_for_poverty is correct when both LQ and LB are invalid', {
 
   # Both LQ and LB are not normal
   # pov_flag = 0
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- FALSE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
     TRUE
   )
-}
-)
+})
 
-test_that('use_lq_for_poverty is correct for remaining cases', {
+test_that("use_lq_for_poverty is correct for remaining cases", {
 
   # Both LQ and LB are normal and not valid
   # pov_flag = 12
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- FALSE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -246,9 +250,9 @@ test_that('use_lq_for_poverty is correct for remaining cases', {
 
   # LQ is valid, LB is normal
   # pov_flag = 9
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- FALSE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- TRUE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -257,9 +261,9 @@ test_that('use_lq_for_poverty is correct for remaining cases', {
 
   # LQ is valid, all rest is not
   # pov_flag = 8
-  lq$is_valid  <- TRUE
+  lq$is_valid <- TRUE
   lq$is_normal <- FALSE
-  lb$is_valid  <- FALSE
+  lb$is_valid <- FALSE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -268,9 +272,9 @@ test_that('use_lq_for_poverty is correct for remaining cases', {
 
   # LB is valid, LQ is normal
   # pov_flag = 6
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- TRUE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
@@ -279,13 +283,12 @@ test_that('use_lq_for_poverty is correct for remaining cases', {
 
   # LB is valid
   # pov_flag = 4
-  lq$is_valid  <- FALSE
+  lq$is_valid <- FALSE
   lq$is_normal <- FALSE
-  lb$is_valid  <- TRUE
+  lb$is_valid <- TRUE
   lb$is_normal <- FALSE
   expect_equal(
     use_lq_for_poverty(lq = lq, lb = lb),
     FALSE
   )
-}
-)
+})

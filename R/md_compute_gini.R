@@ -11,7 +11,7 @@ fgini <- function(welfare, weight) {
 
   # Compute area under the curve using
   # Area of trapezoid = Base * Average height
-  v <- (cumsum(weighted_welfare_lag) + (weighted_welfare / 2) ) * weight
+  v <- (cumsum(weighted_welfare_lag) + (weighted_welfare / 2)) * weight
   auc <- collapse::fsum(v) # Area Under the Curve
 
   # Compute Area Under the Lorenz Curve
@@ -19,7 +19,7 @@ fgini <- function(welfare, weight) {
   auc <- (auc / collapse::fsum(weight)) / collapse::fsum(weighted_welfare)
 
   # Compute Gini
-  gini <- 1 -  (2 * auc)
+  gini <- 1 - (2 * auc)
 
   return(gini)
 }
@@ -36,7 +36,6 @@ fgini <- function(welfare, weight) {
 #'
 #' @examples
 #' wbpip:::md_compute_gini(welfare = 1:2000, weight = rep(1, 2000))
-#'
 #' @return numeric
 #' @keywords internal
 md_compute_gini <- compiler::cmpfun(fgini)

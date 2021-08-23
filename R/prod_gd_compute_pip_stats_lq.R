@@ -8,27 +8,32 @@
 #'
 #' @examples
 #' # Set initial parameters
-#' L <- c(0.00208, 0.01013, 0.03122, 0.07083, 0.12808, 0.23498, 0.34887,
-#'   0.51994, 0.6427, 0.79201, 0.86966, 0.91277, 1)
-#' P <- c(0.0092, 0.0339, 0.085, 0.164, 0.2609, 0.4133, 0.5497, 0.7196,
-#'   0.8196, 0.9174, 0.957, 0.9751, 1)
-#' mu  <- 109.9 # mean
-#' z   <- 89    # poverty line
+#' L <- c(
+#'   0.00208, 0.01013, 0.03122, 0.07083, 0.12808, 0.23498, 0.34887,
+#'   0.51994, 0.6427, 0.79201, 0.86966, 0.91277, 1
+#' )
+#' P <- c(
+#'   0.0092, 0.0339, 0.085, 0.164, 0.2609, 0.4133, 0.5497, 0.7196,
+#'   0.8196, 0.9174, 0.957, 0.9751, 1
+#' )
+#' mu <- 109.9 # mean
+#' z <- 89 # poverty line
 #'
 #' res <- wbpip:::prod_gd_compute_pip_stats_lq(
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   povline = z)
+#'   povline = z
+#' )
 #' res$headcount
 #'
 #' res2 <- wbpip:::prod_gd_compute_pip_stats_lq(
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   popshare = res$headcount)
+#'   popshare = res$headcount
+#' )
 #' res2$povline
-#'
 #' @return list
 #' @keywords internal
 prod_gd_compute_pip_stats_lq <- function(welfare,
@@ -44,11 +49,13 @@ prod_gd_compute_pip_stats_lq <- function(welfare,
   if (!is.null(ppp)) {
     requested_mean <- requested_mean * default_ppp / ppp
   } else {
-      ppp <- default_ppp
-    }
+    ppp <- default_ppp
+  }
   # STEP 1: Prep data to fit functional form
-  prepped_data <- create_functional_form_lq(welfare = welfare,
-                                            population = population)
+  prepped_data <- create_functional_form_lq(
+    welfare = welfare,
+    population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LQ parameterization
   reg_results <- regres(prepped_data, is_lq = TRUE)
@@ -82,7 +89,6 @@ prod_gd_compute_pip_stats_lq <- function(welfare,
   res <- c(results1, results2, results_fit, reg_results)
 
   return(res)
-
 }
 
 #' Estimates poverty and inequality stats from Quadratic Lorenz fit
@@ -122,21 +128,22 @@ prod_gd_estimate_lq <- function(mean, povline, p0, A, B, C) {
 
   pov_stats <- gd_compute_poverty_stats_lq(mean, povline, A, B, C, e, m, n, r, s1, s2)
 
-  out <- list(headcount = pov_stats$headcount,
-              poverty_gap = pov_stats$pg,
-              poverty_severity = pov_stats$p2,
-              eh = pov_stats$eh,
-              epg = pov_stats$epg,
-              ep = pov_stats$ep,
-              gh = pov_stats$gh,
-              gpg = pov_stats$gpg,
-              gp = pov_stats$gp,
-              watts = pov_stats$watts,
-              dl = pov_stats$dl,
-              ddl = pov_stats$ddl,
-              is_normal = validity$is_normal,
-              is_valid = validity$is_valid)
+  out <- list(
+    headcount = pov_stats$headcount,
+    poverty_gap = pov_stats$pg,
+    poverty_severity = pov_stats$p2,
+    eh = pov_stats$eh,
+    epg = pov_stats$epg,
+    ep = pov_stats$ep,
+    gh = pov_stats$gh,
+    gpg = pov_stats$gpg,
+    gp = pov_stats$gp,
+    watts = pov_stats$watts,
+    dl = pov_stats$dl,
+    ddl = pov_stats$ddl,
+    is_normal = validity$is_normal,
+    is_valid = validity$is_valid
+  )
 
   return(out)
-
 }

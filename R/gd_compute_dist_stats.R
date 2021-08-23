@@ -18,7 +18,8 @@ gd_compute_dist_stats <- function(welfare,
 
   # STEP 1: Prep data to fit functional form
   prepped_data <- create_functional_form_lq(
-    welfare = welfare, population = population)
+    welfare = welfare, population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LQ parameterization
   reg_results_lq <- regres(prepped_data, is_lq = TRUE)
@@ -26,8 +27,9 @@ gd_compute_dist_stats <- function(welfare,
 
   # STEP 3: Calculate distributional stats
   results_lq <- gd_estimate_dist_stats_lq(
-    mean = mean,  p0 = p0, A = reg_coef_lq[1],
-    B = reg_coef_lq[2], C = reg_coef_lq[3])
+    mean = mean, p0 = p0, A = reg_coef_lq[1],
+    B = reg_coef_lq[2], C = reg_coef_lq[3]
+  )
 
   results_lq <- append(results_lq, reg_results_lq)
 
@@ -35,7 +37,8 @@ gd_compute_dist_stats <- function(welfare,
 
   # STEP 1: Prep data to fit functional form
   prepped_data <- create_functional_form_lb(
-    welfare = welfare, population = population)
+    welfare = welfare, population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LB parameterization
   reg_results_lb <- regres(prepped_data, is_lq = FALSE)
@@ -44,7 +47,8 @@ gd_compute_dist_stats <- function(welfare,
   # STEP 3: Calculate distributional stats
   results_lb <- gd_estimate_dist_stats_lb(
     mean = mean, p0 = p0, A = reg_coef_lb[1],
-    B = reg_coef_lb[2], C = reg_coef_lb[3])
+    B = reg_coef_lb[2], C = reg_coef_lb[3]
+  )
 
   results_lb <- append(results_lb, reg_results_lb)
 
@@ -52,15 +56,18 @@ gd_compute_dist_stats <- function(welfare,
 
   # STEP 4: Select best fit
   out <- gd_select_lorenz_dist(
-    lq = results_lq, lb = results_lb)
+    lq = results_lq, lb = results_lb
+  )
 
   # Return only subset of variables
-  out <- out[c("mean",
-               "median",
-               "gini",
-               "mld",
-               "polarization",
-               "deciles")]
+  out <- out[c(
+    "mean",
+    "median",
+    "gini",
+    "mld",
+    "polarization",
+    "deciles"
+  )]
 
   return(out)
 }
@@ -102,10 +109,10 @@ gd_estimate_dist_stats_lq <- function(mean, p0, A, B, C) {
     mld = dist_stats$mld,
     dcm = dist_stats$dcm,
     deciles = dist_stats$deciles,
-    is_valid = validity$is_valid)
+    is_valid = validity$is_valid
+  )
 
   return(out)
-
 }
 
 #' Estimates distributional stats from beta Lorenz fit
@@ -130,10 +137,10 @@ gd_estimate_dist_stats_lb <- function(mean, p0, A, B, C) {
     mld = dist_stats$mld,
     dcm = dist_stats$dcm,
     deciles = dist_stats$deciles,
-    is_valid = validity$is_valid)
+    is_valid = validity$is_valid
+  )
 
   return(out)
-
 }
 
 #' gd_select_lorenz_dist
@@ -158,7 +165,8 @@ gd_select_lorenz_dist <- function(lq, lb) {
       lq = lq,
       lb = lb,
       is_valid = is_valid,
-      use_lq_for_dist = use_lq_for_dist)
+      use_lq_for_dist = use_lq_for_dist
+    )
 
   return(list(
     mean             = datamean,
@@ -173,7 +181,6 @@ gd_select_lorenz_dist <- function(lq, lb) {
     deciles          = dist[["deciles"]],
     sse              = dist[["sse"]]
   ))
-
 }
 
 
@@ -183,7 +190,6 @@ gd_select_lorenz_dist <- function(lq, lb) {
 #' @return list
 #' @keywords internal
 check_curve_validity_dist_lb <- function(A, B, C) {
-
   is_valid <- TRUE
 
   for (w in seq(from = 0.001, to = 0.1, by = 0.05)) {
@@ -203,7 +209,6 @@ check_curve_validity_dist_lb <- function(A, B, C) {
   }
 
   return(list(
-    is_valid = is_valid)
-  )
-
+    is_valid = is_valid
+  ))
 }

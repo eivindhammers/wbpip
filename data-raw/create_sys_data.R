@@ -24,5 +24,6 @@ empty_gd_compute_pip_stats_response <- list(
 )
 
 usethis::use_data(empty_gd_compute_pip_stats_response,
-                  overwrite = TRUE,
-                  internal  = TRUE)
+  overwrite = TRUE,
+  internal  = TRUE
+)

@@ -8,13 +8,13 @@
 #' @return list
 #' @keywords internal
 prod_gd_compute_pip_stats_lb <- function(welfare,
-                                    povline,
-                                    population,
-                                    requested_mean,
-                                    popshare = NULL,
-                                    default_ppp = NULL,
-                                    ppp = NULL,
-                                    p0 = 0.5) {
+                                         povline,
+                                         population,
+                                         requested_mean,
+                                         popshare = NULL,
+                                         default_ppp = NULL,
+                                         ppp = NULL,
+                                         p0 = 0.5) {
 
   # Adjust mean if different PPP value is provided
   if (!is.null(ppp)) {
@@ -23,8 +23,10 @@ prod_gd_compute_pip_stats_lb <- function(welfare,
     ppp <- default_ppp
   }
   # STEP 1: Prep data to fit functional form
-  prepped_data <- create_functional_form_lb(welfare = welfare,
-                                            population = population)
+  prepped_data <- create_functional_form_lb(
+    welfare = welfare,
+    population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LB parameterization
   reg_results <- regres(prepped_data, is_lq = FALSE)
@@ -59,7 +61,6 @@ prod_gd_compute_pip_stats_lb <- function(welfare,
   res <- c(results1, results2, results_fit, reg_results)
 
   return(res)
-
 }
 
 #' Estimates poverty and inequality stats from beta Lorenz fit
@@ -85,21 +86,22 @@ prod_gd_estimate_lb <- function(mean, povline, p0, A, B, C) {
   # Check validity
   validity <- check_curve_validity_lb(headcount = pov_stats[["headcount"]], A, B, C)
 
-  out <- list(headcount = pov_stats$headcount,
-              poverty_gap = pov_stats$pg,
-              poverty_severity = pov_stats$p2,
-              eh = pov_stats$eh,
-              epg = pov_stats$epg,
-              ep = pov_stats$ep,
-              gh = pov_stats$gh,
-              gpg = pov_stats$gpg,
-              gp = pov_stats$gp,
-              watts = pov_stats$watts,
-              dl = pov_stats$dl,
-              ddl = pov_stats$ddl,
-              is_normal = validity$is_normal,
-              is_valid = validity$is_valid)
+  out <- list(
+    headcount = pov_stats$headcount,
+    poverty_gap = pov_stats$pg,
+    poverty_severity = pov_stats$p2,
+    eh = pov_stats$eh,
+    epg = pov_stats$epg,
+    ep = pov_stats$ep,
+    gh = pov_stats$gh,
+    gpg = pov_stats$gpg,
+    gp = pov_stats$gp,
+    watts = pov_stats$watts,
+    dl = pov_stats$dl,
+    ddl = pov_stats$ddl,
+    is_normal = validity$is_normal,
+    is_valid = validity$is_valid
+  )
 
   return(out)
-
 }

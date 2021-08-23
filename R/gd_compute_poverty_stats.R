@@ -26,8 +26,10 @@ gd_compute_poverty_stats <- function(welfare,
     ppp <- default_ppp
   }
   # STEP 1: Prep data to fit functional form
-  prepped_data <- create_functional_form_lq(welfare = welfare,
-                                            population = population)
+  prepped_data <- create_functional_form_lq(
+    welfare = welfare,
+    population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LQ parameterization
   reg_results_lq <- regres(prepped_data, is_lq = TRUE)
@@ -39,15 +41,18 @@ gd_compute_poverty_stats <- function(welfare,
     povline = povline,
     A = reg_coef_lq[1],
     B = reg_coef_lq[2],
-    C = reg_coef_lq[3])
+    C = reg_coef_lq[3]
+  )
 
   # STEP 4: Compute measure of regression fit
-  fit_lq <- gd_compute_fit_lq(welfare = welfare,
-                              population = population,
-                              headcount = results_lq$headcount,
-                              A = reg_coef_lq[1],
-                              B = reg_coef_lq[2],
-                              C = reg_coef_lq[3])
+  fit_lq <- gd_compute_fit_lq(
+    welfare = welfare,
+    population = population,
+    headcount = results_lq$headcount,
+    A = reg_coef_lq[1],
+    B = reg_coef_lq[2],
+    C = reg_coef_lq[3]
+  )
 
   results_lq <- c(results_lq, reg_results_lq, fit_lq)
 
@@ -55,7 +60,8 @@ gd_compute_poverty_stats <- function(welfare,
 
   # STEP 1: Prep data to fit functional form
   prepped_data <- create_functional_form_lb(
-    welfare = welfare, population = population)
+    welfare = welfare, population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LB parameterization
   reg_results_lb <- regres(prepped_data, is_lq = FALSE)
@@ -67,15 +73,18 @@ gd_compute_poverty_stats <- function(welfare,
     povline = povline,
     A = reg_coef_lb[1],
     B = reg_coef_lb[2],
-    C = reg_coef_lb[3])
+    C = reg_coef_lb[3]
+  )
 
   # STEP 4: Compute measure of regression fit
-  fit_lb <- gd_compute_fit_lb(welfare = welfare,
-                              population = population,
-                              headcount = results_lq$headcount,
-                              A = reg_coef_lb[1],
-                              B = reg_coef_lb[2],
-                              C = reg_coef_lb[3])
+  fit_lb <- gd_compute_fit_lb(
+    welfare = welfare,
+    population = population,
+    headcount = results_lq$headcount,
+    A = reg_coef_lb[1],
+    B = reg_coef_lb[2],
+    C = reg_coef_lb[3]
+  )
 
   results_lb <- c(results_lb, reg_results_lb, fit_lb)
 
@@ -84,14 +93,17 @@ gd_compute_poverty_stats <- function(welfare,
   # STEP 4: Select best fit
   out <- gd_select_lorenz_poverty(
     lq = results_lq,
-    lb = results_lb)
+    lb = results_lb
+  )
 
   # Return only subset of variables
-  out <- out[c("poverty_line",
-               "headcount",
-               "poverty_gap",
-               "poverty_severity",
-               "watts")]
+  out <- out[c(
+    "poverty_line",
+    "headcount",
+    "poverty_gap",
+    "poverty_severity",
+    "watts"
+  )]
   out$poverty_line <- povline
 
   return(out)
@@ -122,32 +134,36 @@ gd_estimate_poverty_stats_lq <- function(mean, povline, A, B, C) {
 
   # Compute poverty measures -----------------------------------------
 
-  pov_stats <- gd_compute_poverty_stats_lq(mean = mean,
-                                           povline = povline,
-                                           A = A,
-                                           B = B,
-                                           C = C,
-                                           e = e,
-                                           m = m,
-                                           n = n,
-                                           r = r,
-                                           s1 = s1,
-                                           s2 = s2)
+  pov_stats <- gd_compute_poverty_stats_lq(
+    mean = mean,
+    povline = povline,
+    A = A,
+    B = B,
+    C = C,
+    e = e,
+    m = m,
+    n = n,
+    r = r,
+    s1 = s1,
+    s2 = s2
+  )
 
-  out <- list(headcount = pov_stats$headcount,
-              poverty_gap = pov_stats$pg,
-              poverty_severity = pov_stats$p2,
-              eh = pov_stats$eh,
-              epg = pov_stats$epg,
-              ep = pov_stats$ep,
-              gh = pov_stats$gh,
-              gpg = pov_stats$gpg,
-              gp = pov_stats$gp,
-              watts = pov_stats$watts,
-              dl = pov_stats$dl,
-              ddl = pov_stats$ddl,
-              is_normal = validity$is_normal,
-              is_valid = validity$is_valid)
+  out <- list(
+    headcount = pov_stats$headcount,
+    poverty_gap = pov_stats$pg,
+    poverty_severity = pov_stats$p2,
+    eh = pov_stats$eh,
+    epg = pov_stats$epg,
+    ep = pov_stats$ep,
+    gh = pov_stats$gh,
+    gpg = pov_stats$gpg,
+    gp = pov_stats$gp,
+    watts = pov_stats$watts,
+    dl = pov_stats$dl,
+    ddl = pov_stats$ddl,
+    is_normal = validity$is_normal,
+    is_valid = validity$is_valid
+  )
 
   return(out)
 }
@@ -160,29 +176,33 @@ gd_estimate_poverty_stats_lb <- function(mean, povline, A, B, C) {
 
   # Compute distributional measures
   pov_stats <-
-    gd_compute_poverty_stats_lb(mean = mean,
-                                povline = povline,
-                                A = A,
-                                B = B,
-                                C = C)
+    gd_compute_poverty_stats_lb(
+      mean = mean,
+      povline = povline,
+      A = A,
+      B = B,
+      C = C
+    )
 
   # Check validity
   validity <- check_curve_validity_lb(headcount = pov_stats$headcount, A, B, C)
 
-  out <- list(headcount = pov_stats$headcount,
-              poverty_gap = pov_stats$pg,
-              poverty_severity = pov_stats$p2,
-              eh = pov_stats$eh,
-              epg = pov_stats$epg,
-              ep = pov_stats$ep,
-              gh = pov_stats$gh,
-              gpg = pov_stats$gpg,
-              gp = pov_stats$gp,
-              watts = pov_stats$watts,
-              dl = pov_stats$dl,
-              ddl = pov_stats$ddl,
-              is_normal = validity$is_normal,
-              is_valid = validity$is_valid)
+  out <- list(
+    headcount = pov_stats$headcount,
+    poverty_gap = pov_stats$pg,
+    poverty_severity = pov_stats$p2,
+    eh = pov_stats$eh,
+    epg = pov_stats$epg,
+    ep = pov_stats$ep,
+    gh = pov_stats$gh,
+    gpg = pov_stats$gpg,
+    gp = pov_stats$gp,
+    watts = pov_stats$watts,
+    dl = pov_stats$dl,
+    ddl = pov_stats$ddl,
+    is_normal = validity$is_normal,
+    is_valid = validity$is_valid
+  )
 
   return(out)
 }
@@ -199,14 +219,18 @@ gd_select_lorenz_poverty <- function(lq, lb) {
   is_normal <- lq[["is_normal"]] | lb[["is_normal"]]
 
   # Selection of Lorenz fit for poverty statistics
-  use_lq_for_pov <- use_lq_for_poverty(lq = lq,
-                                       lb = lb)
+  use_lq_for_pov <- use_lq_for_poverty(
+    lq = lq,
+    lb = lb
+  )
 
   # Retrieve poverty statistics
-  pov <- retrieve_poverty(lq = lq,
-                          lb = lb,
-                          is_normal = is_normal,
-                          use_lq_for_pov = use_lq_for_pov)
+  pov <- retrieve_poverty(
+    lq = lq,
+    lb = lb,
+    is_normal = is_normal,
+    use_lq_for_pov = use_lq_for_pov
+  )
 
   return(list(
     mean             = datamean,
@@ -222,7 +246,4 @@ gd_select_lorenz_poverty <- function(lq, lb) {
     gp               = pov[["gp"]],
     watts            = pov[["watts"]]
   ))
-
 }
-
-

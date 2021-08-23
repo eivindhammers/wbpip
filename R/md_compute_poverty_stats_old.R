@@ -14,36 +14,32 @@
 #' wbpip:::md_compute_poverty_stats_old(
 #'   welfare = 1:2000,
 #'   weight = rep(1, 2000),
-#'   povline_lcu = 10)
-#'
+#'   povline_lcu = 10
+#' )
 #' @return list
 #' @keywords internal
 md_compute_poverty_stats_old <- function(welfare, weight, povline_lcu) {
-
   headcount <- 0
   gap <- 0
   severity <- 0
   watt8 <- 0
 
   for (i in seq_along(welfare)) {
-
     weight_i <- weight[i]
     welfare_i <- welfare[i]
 
     if (welfare_i <= povline_lcu) {
-
       headcount <- sum(headcount, weight_i)
       gap_i <- 1 - welfare_i / povline_lcu
       gap <- sum(gap, weight_i * gap_i)
-      severity <- sum(severity, weight_i * gap_i ^ 2)
+      severity <- sum(severity, weight_i * gap_i^2)
       if (welfare_i > 0) { # Is this check needed no negative welfare value should make it to the application
         watt8 <- sum(watt8, weight_i * log(povline_lcu / welfare_i))
       }
-
     }
   }
 
-  #compute the values for the return
+  # compute the values for the return
   sum_weight <- sum(weight)
 
   headcount <- headcount / sum_weight
@@ -52,7 +48,8 @@ md_compute_poverty_stats_old <- function(welfare, weight, povline_lcu) {
   watt8 <- if (headcount > 0) {
     watt8 <- watt8 / sum_weight
   } else {
-    watt8 <- 0}
+    watt8 <- 0
+  }
 
   return(list(
     headcount = headcount,
