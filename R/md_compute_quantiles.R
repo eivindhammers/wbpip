@@ -18,10 +18,12 @@
 #'
 #' @examples
 #' lz <- wbpip:::md_compute_lorenz(welfare = 1:2000, weight = rep(1, 2000))
-#' wbpip:::md_compute_quantiles(lwelfare   = lz$welfare,
-#'                      lweight    = lz$lorenz_weight,
-#'                      percentile = lz$lorenz_welfare,
-#'                      n_quantile = 10)
+#' wbpip:::md_compute_quantiles(
+#'   lwelfare = lz$welfare,
+#'   lweight = lz$lorenz_weight,
+#'   percentile = lz$lorenz_welfare,
+#'   n_quantile = 10
+#' )
 #' @return list
 #' @keywords internal
 md_compute_quantiles <- function(lwelfare,
@@ -35,15 +37,16 @@ md_compute_quantiles <- function(lwelfare,
 
   n_lorenz <- length(lwelfare)
   assertthat::assert_that(n_quantile < n_lorenz,
-                          msg = "The number of requested quantiles is superior to the number of points on the Lorenz curve")
+    msg = "The number of requested quantiles is superior to the number of points on the Lorenz curve"
+  )
 
 
   #--------- Make sure data is sorted properly ---------
   # I assume the three vectors are of the same length
 
-  or         <- order(percentile)
-  lwelfare   <- lwelfare[or]
-  lweight    <- lweight[or]
+  or <- order(percentile)
+  lwelfare <- lwelfare[or]
+  lweight <- lweight[or]
   percentile <- percentile[or]
 
   #--------- Initial parameters ---------
@@ -59,10 +62,9 @@ md_compute_quantiles <- function(lwelfare,
   #--------- Calculations ---------
 
   for (i in seq_len(n_lorenz)) {
-
-    yi      <- percentile[i] # Percentile of income
-    lorenzw <- lweight[i]    # Cumulative share of population
-    lorenzy <- lwelfare[i]   # Cumulative share of income / consumption
+    yi <- percentile[i] # Percentile of income
+    lorenzw <- lweight[i] # Cumulative share of population
+    lorenzy <- lwelfare[i] # Cumulative share of income / consumption
 
     if (lorenzw > nextQ | assertthat::are_equal(lorenzw, nextQ, tolerance = tolerance)) {
       if (nextQ == 0.5) {

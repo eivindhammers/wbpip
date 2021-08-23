@@ -12,7 +12,7 @@
 #' @keywords internal
 regres <- function(df, is_lq = TRUE) {
 
-  #CHECK inputs
+  # CHECK inputs
   assertthat::are_equal(ncol(df), 4)
   assertthat::are_equal(names(df), c("y", "x1", "x2", "x3"))
 
@@ -27,13 +27,17 @@ regres <- function(df, is_lq = TRUE) {
   se <- unname(sqrt(diag(stats::vcov(res)))) # Standard error
   # REVIEW:
   # Why exp() if isLQ == FALSE?
-  if (!is_lq) {coef[1] <- exp(coef[1])}
+  if (!is_lq) {
+    coef[1] <- exp(coef[1])
+  }
 
-  return(list(ymean = ymean,
-              sst = sst,
-              coef = coef,
-              sse = sse,
-              r2 = r2,
-              mse = mse,
-              se = se))
+  return(list(
+    ymean = ymean,
+    sst = sst,
+    coef = coef,
+    sse = sse,
+    r2 = r2,
+    mse = mse,
+    se = se
+  ))
 }

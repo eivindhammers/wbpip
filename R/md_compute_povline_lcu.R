@@ -20,16 +20,16 @@ md_compute_povline_lcu <- function(welfare,
                                    data_mean) {
   if (!is.null(popshare)) {
     # Infer poverty line from share of population living in poverty
-    pl_lcu <- md_infer_poverty_line(welfare = welfare,
-                                    weight = weight,
-                                    popshare = popshare)
+    pl_lcu <- md_infer_poverty_line(
+      welfare = welfare,
+      weight = weight,
+      popshare = popshare
+    )
 
     povline <- pl_lcu * requested_mean / data_mean
-
   } else {
     # Convert user defined international poverty line in Local Currency Units
     pl_lcu <- povline * data_mean / requested_mean
-
   }
 
   return(list(

@@ -28,37 +28,45 @@ prod_gd_compute_pip_stats <- function(welfare,
 
 
   # Apply Lorenz quadratic fit ----------------------------------------------
-  results_lq <- prod_gd_compute_pip_stats_lq(welfare         = welfare,
-                                             population      = population,
-                                             requested_mean  = requested_mean,
-                                             povline         = povline,
-                                             popshare        = popshare,
-                                             default_ppp     = default_ppp,
-                                             ppp             = ppp,
-                                             p0              = p0)
+  results_lq <- prod_gd_compute_pip_stats_lq(
+    welfare = welfare,
+    population = population,
+    requested_mean = requested_mean,
+    povline = povline,
+    popshare = popshare,
+    default_ppp = default_ppp,
+    ppp = ppp,
+    p0 = p0
+  )
 
   # Apply Lorenz beta fit ----------------------------------------------
-  results_lb <- prod_gd_compute_pip_stats_lb(welfare         = welfare,
-                                             population      = population,
-                                             requested_mean  = requested_mean,
-                                             povline         = povline,
-                                             popshare        = popshare,
-                                             default_ppp     = default_ppp,
-                                             ppp             = ppp,
-                                             p0              = p0)
+  results_lb <- prod_gd_compute_pip_stats_lb(
+    welfare = welfare,
+    population = population,
+    requested_mean = requested_mean,
+    povline = povline,
+    popshare = popshare,
+    default_ppp = default_ppp,
+    ppp = ppp,
+    p0 = p0
+  )
 
 
   # Apply selection rules ---------------------------------------------------
-  out <- prod_gd_select_lorenz(lq = results_lq,
-                               lb = results_lb)
+  out <- prod_gd_select_lorenz(
+    lq = results_lq,
+    lb = results_lb
+  )
 
   # Retun only subset of variables
-  out <- out[c("poverty_line",
-               "mean",
-               "headcount",
-               "poverty_gap",
-               "poverty_severity",
-               "watts")]
+  out <- out[c(
+    "poverty_line",
+    "mean",
+    "headcount",
+    "poverty_gap",
+    "poverty_severity",
+    "watts"
+  )]
 
 
   return(out)

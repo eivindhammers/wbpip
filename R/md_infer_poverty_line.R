@@ -14,11 +14,14 @@
 #'
 #' @examples
 #' wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000))
-#' wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000),
-#'   popshare = .2)
-#' wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000),
-#'   popshare = .6)
-#'
+#' wbpip:::md_infer_poverty_line(1:2000,
+#'   weight = rep(1, 2000),
+#'   popshare = .2
+#' )
+#' wbpip:::md_infer_poverty_line(1:2000,
+#'   weight = rep(1, 2000),
+#'   popshare = .6
+#' )
 #' @return numeric
 #' @keywords internal
 md_infer_poverty_line <- function(welfare,
@@ -26,16 +29,17 @@ md_infer_poverty_line <- function(welfare,
                                   popshare = .5,
                                   na.rm = FALSE,
                                   include = FALSE) {
-
-  prob   <- cumsum(weight) / sum(weight, na.rm = na.rm)
-  ps     <- which(abs(prob - popshare) == min(abs(prob - popshare), na.rm = na.rm))
+  prob <- cumsum(weight) / sum(weight, na.rm = na.rm)
+  ps <- which(abs(prob - popshare) == min(abs(prob - popshare), na.rm = na.rm))
 
   # Weighted mean with the next available value in order to
   # guarantee inclusion in poverty calculation
 
   if (include == TRUE) {
-    pctile <- stats::weighted.mean(c(welfare[ps], welfare[ps + 1]),
-                                   c(weight[ps], weight[ps + 1]))
+    pctile <- stats::weighted.mean(
+      c(welfare[ps], welfare[ps + 1]),
+      c(weight[ps], weight[ps + 1])
+    )
   } else {
     pctile <- mean(welfare[ps])
   }

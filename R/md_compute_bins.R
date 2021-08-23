@@ -34,54 +34,53 @@
 #'
 #' @examples
 #' wbpip:::md_compute_bins(welfare = 1:2000, weight = rep(1, 2000))
-#' wbpip:::md_compute_bins(welfare = 1:2000, weight = rep(1, 2000),
-#'  output = 'full')
-#' wbpip:::md_compute_bins(welfare = 1:2000, weight = rep(1, 2000),
-#'   output = c('cum_pop', 'cum_prop_pop'))
-#'
+#' wbpip:::md_compute_bins(
+#'   welfare = 1:2000, weight = rep(1, 2000),
+#'   output = "full"
+#' )
+#' wbpip:::md_compute_bins(
+#'   welfare = 1:2000, weight = rep(1, 2000),
+#'   output = c("cum_pop", "cum_prop_pop")
+#' )
 #' @return data.table
 #' @keywords internal
 md_compute_bins <- function(welfare, weight,
-                            nbins  = 100,
-                            na.rm  = FALSE,
+                            nbins = 100,
+                            na.rm = FALSE,
                             output = "simple") {
 
   #--------- Create data.table for fast calculations ---------
-  dt <- data.table::data.table(welfare = welfare,
-                               weight  = weight)
+  dt <- data.table::data.table(
+    welfare = welfare,
+    weight = weight
+  )
   data.table::setorder(dt, welfare)
 
-  total_pop <- dt[,sum(weight, na.rm = na.rm)]  # total population
+  total_pop <- dt[, sum(weight, na.rm = na.rm)] # total population
 
   #--------- Calculations ---------
 
-  dt[,
-     c("cum_pop", "cum_prop_pop", "bins") := {
+  dt[
+    ,
+    c("cum_pop", "cum_prop_pop", "bins") := {
+      cum_pop <- cumsum(weight) # cumulative population
+      cum_prop_pop <- cum_pop / total_pop # cumulative proportion of population
+      bins <- ceiling(cum_prop_pop * nbins) # Bins
 
-       cum_pop      = cumsum(weight)     # cumulative population
-       cum_prop_pop = cum_pop/total_pop  # cumulative proportion of population
-       bins         = ceiling(cum_prop_pop*nbins) # Bins
-
-       list(cum_pop, cum_prop_pop, bins)
-     }
-     ]
+      list(cum_pop, cum_prop_pop, bins)
+    }
+  ]
 
   #--------- labels ---------
-  attr(dt$cum_pop,      "label")  <- "cumulative population"
-  attr(dt$cum_prop_pop, "label")  <- "cumulative proportion of population"
-  attr(dt$bins,          "label") <- "Quantiles"
+  attr(dt$cum_pop, "label") <- "cumulative population"
+  attr(dt$cum_prop_pop, "label") <- "cumulative proportion of population"
+  attr(dt$bins, "label") <- "Quantiles"
 
   if ("simple" %in% output) {
-
     return(dt[, "bins"])
-
   } else if ("full" %in% output) {
-
     return(dt)
-
   } else {
-
     return(dt[, ..output])
-
   }
 }

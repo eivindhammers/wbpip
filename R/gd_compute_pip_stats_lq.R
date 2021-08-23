@@ -7,27 +7,32 @@
 #'
 #' @examples
 #' # Set initial parameters
-#' L <- c(0.00208, 0.01013, 0.03122, 0.07083, 0.12808, 0.23498, 0.34887,
-#'   0.51994, 0.6427, 0.79201, 0.86966, 0.91277, 1)
-#' P <- c(0.0092, 0.0339, 0.085, 0.164, 0.2609, 0.4133, 0.5497, 0.7196,
-#'   0.8196, 0.9174, 0.957, 0.9751, 1)
-#' mu  <- 109.9 # mean
-#' z   <- 89    # poverty line
+#' L <- c(
+#'   0.00208, 0.01013, 0.03122, 0.07083, 0.12808, 0.23498, 0.34887,
+#'   0.51994, 0.6427, 0.79201, 0.86966, 0.91277, 1
+#' )
+#' P <- c(
+#'   0.0092, 0.0339, 0.085, 0.164, 0.2609, 0.4133, 0.5497, 0.7196,
+#'   0.8196, 0.9174, 0.957, 0.9751, 1
+#' )
+#' mu <- 109.9 # mean
+#' z <- 89 # poverty line
 #'
 #' res <- wbpip:::gd_compute_pip_stats_lq(
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   povline = z)
+#'   povline = z
+#' )
 #' res$headcount
 #'
 #' res2 <- wbpip:::gd_compute_pip_stats_lq(
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   popshare = res$headcount)
+#'   popshare = res$headcount
+#' )
 #' res2$povline
-#'
 #' @return list
 #' @keywords internal
 gd_compute_pip_stats_lq <- function(welfare,
@@ -43,11 +48,13 @@ gd_compute_pip_stats_lq <- function(welfare,
   if (!is.null(ppp)) {
     requested_mean <- requested_mean * default_ppp / ppp
   } else {
-      ppp <- default_ppp
-    }
+    ppp <- default_ppp
+  }
   # STEP 1: Prep data to fit functional form
-  prepped_data <- create_functional_form_lq(welfare = welfare,
-                                            population = population)
+  prepped_data <- create_functional_form_lq(
+    welfare = welfare,
+    population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LQ parameterization
   reg_results <- regres(prepped_data, is_lq = TRUE)
@@ -81,7 +88,6 @@ gd_compute_pip_stats_lq <- function(welfare,
   res <- c(results1, results2, results_fit, reg_results)
 
   return(res)
-
 }
 
 #' Prepares data for Lorenz Quadratic regression
@@ -197,17 +203,22 @@ derive_lq <- function(x, A, B, C) {
 #' @return list
 #' @keywords internal
 check_curve_validity_lq <- function(A, B, C, e, m, n, r) {
-
   is_normal <- FALSE
   is_valid <- FALSE
 
   # r needs to be > 0 because need to extract sq root
-  if (r < 0) {return(list(is_normal = is_normal,
-                          is_valid = is_valid))}
+  if (r < 0) {
+    return(list(
+      is_normal = is_normal,
+      is_valid = is_valid
+    ))
+  }
 
   if (e > 0 || C < 0) {
-    return(list(is_normal = is_normal,
-                is_valid = is_valid))
+    return(list(
+      is_normal = is_normal,
+      is_valid = is_valid
+    ))
   }
 
   # Failure conditions for checking theoretically valid Lorenz curve
@@ -216,18 +227,21 @@ check_curve_validity_lq <- function(A, B, C, e, m, n, r) {
   cn3 <- cn1 / (4 * e^2)
 
   if (!((m < 0) |
-        ((m > 0) & (m < cn3) & (n >= 0)) |
-        ((m > 0) & (m < -n/2) & (m < cn3)))) {
-    return(list(is_normal = is_normal,
-                is_valid = is_valid))
+    ((m > 0) & (m < cn3) & (n >= 0)) |
+    ((m > 0) & (m < -n / 2) & (m < cn3)))) {
+    return(list(
+      is_normal = is_normal,
+      is_valid = is_valid
+    ))
   }
 
   is_normal <- TRUE
   is_valid <- (A + C) >= 0.9
 
-  return(list(is_normal = is_normal,
-              is_valid = is_valid))
-
+  return(list(
+    is_normal = is_normal,
+    is_valid = is_valid
+  ))
 }
 
 #' Compute gini index from Lorenz Quadratic fit
@@ -270,21 +284,19 @@ gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 
     # Formula from Datt paper
     # CHECK that code matches formulas in paper
-    gini <- e2 + (tmp3/(4 * m)) * e1 - (n*abs(e) / (4 * m)) - ((r^2) / (8 * sqrt(m)^3)) * log(abs(((tmp3 + (2 * sqrt(m) * e1)))/(n + (2 * sqrt(m) * abs(e)))))
-    #P.gi <- (e/2) - tmp1 - (tmp2 * log(abs(tmpnum/tmpden)) / sqrt(m))
-
+    gini <- e2 + (tmp3 / (4 * m)) * e1 - (n * abs(e) / (4 * m)) - ((r^2) / (8 * sqrt(m)^3)) * log(abs(((tmp3 + (2 * sqrt(m) * e1))) / (n + (2 * sqrt(m) * abs(e)))))
+    # P.gi <- (e/2) - tmp1 - (tmp2 * log(abs(tmpnum/tmpden)) / sqrt(m))
   } else {
-    tmp4 <- ((2*m) + n) / r
+    tmp4 <- ((2 * m) + n) / r
     tmp4 <- ifelse(tmp4 < -1, -1, tmp4)
     tmp4 <- ifelse(tmp4 > 1, 1, tmp4)
 
     # Formula does not match with paper
-    gini <- e2 + (tmp3/(4*m)) * e1 - (n*abs(e)/(4*m)) + (tmp2 * (asin(tmp4) - asin(n/r)) / sqrt(-m))
+    gini <- e2 + (tmp3 / (4 * m)) * e1 - (n * abs(e) / (4 * m)) + (tmp2 * (asin(tmp4) - asin(n / r)) / sqrt(-m))
     # P.gi <- (e/2) - tmp1 + ((tmp2 * (asin(tmp4) - asin(n/r))) / sqrt(-m))
   }
 
   return(gini)
-
 }
 
 #' Solves for quadratic Lorenz curves
@@ -330,8 +342,7 @@ gd_compute_mld_lq <- function(dd, A, B, C) {
   mld <- 0
   if (x1 == 0) {
     gap <- 0.0005
-  }
-  else {
+  } else {
     mld <- suppressWarnings(log(x1) * 0.001)
   }
   x1 <- derive_lq(0, A, B, C)
@@ -342,8 +353,7 @@ gd_compute_mld_lq <- function(dd, A, B, C) {
       if (gap > 0.5) {
         return(-1)
       }
-    }
-    else {
+    } else {
       gap <- 0
       mld <- mld + (log(x1) + log(x2)) * 0.0005
     }
@@ -466,10 +476,9 @@ gd_compute_polarization_lq <- function(mean,
                                        p0,
                                        dcm,
                                        A, B, C) {
-
   pol <- 2 - (1 / p0) +
     (dcm - (2 * value_at_lq(p0, A, B, C) * mean)) /
-    (p0 * mean * derive_lq(p0, A, B, C))
+      (p0 * mean * derive_lq(p0, A, B, C))
 
   return(pol)
 }
@@ -492,14 +501,13 @@ gd_compute_polarization_lq <- function(mean,
 #' @return list
 #' @keywords internal
 gd_compute_dist_stats_lq <- function(mean, p0, A, B, C, e, m, n, r) {
-
-  gini    <- gd_compute_gini_lq(A, B, C, e, m, n, r)
-  median  <- mean * derive_lq(0.5, A, B, C)
-  rmhalf  <- value_at_lq(p0, A, B, C) * mean / p0 # What is this??
-  dcm     <- (1 - gini) * mean
-  pol     <- gd_compute_polarization_lq(mean, p0, dcm, A, B, C)
-  ris     <- value_at_lq(0.5, A, B, C)
-  mld     <- gd_compute_mld_lq(0.01, A, B, C)
+  gini <- gd_compute_gini_lq(A, B, C, e, m, n, r)
+  median <- mean * derive_lq(0.5, A, B, C)
+  rmhalf <- value_at_lq(p0, A, B, C) * mean / p0 # What is this??
+  dcm <- (1 - gini) * mean
+  pol <- gd_compute_polarization_lq(mean, p0, dcm, A, B, C)
+  ris <- value_at_lq(0.5, A, B, C)
+  mld <- gd_compute_mld_lq(0.01, A, B, C)
   deciles <- gd_compute_quantile_lq(A, B, C)
 
   return(list(
@@ -560,19 +568,19 @@ gd_compute_poverty_stats_lq <- function(mean,
   ddl <- r^2 / (tmp0^3 * 8)
 
   if (headcount < 0) {
-    headcount = pov_gap = pov_gap_sq = watts <- 0
-    eh = epg = ep = gh = gpg = gp  <- 0
+    headcount <- pov_gap <- pov_gap_sq <- watts <- 0
+    eh <- epg <- ep <- gh <- gpg <- gp <- 0
   } else {
 
     # Poverty gap index (P.pg)
     pov_gap <- headcount - (u * value_at_lq(headcount, A, B, C))
 
     # P.p2 - Distributionally sensitive FGT poverty measure
-    #P.p2 <- (2*P.pg) - P.h - u^2 * (A*P.h + B*value_at_lq(P.h, A, B, C) - (r/16 *log((1 - P.h/s1))/(1 - P.h/s2)))
+    # P.p2 <- (2*P.pg) - P.h - u^2 * (A*P.h + B*value_at_lq(P.h, A, B, C) - (r/16 *log((1 - P.h/s1))/(1 - P.h/s2)))
     # Poverty severity
     pov_gap_sq <- (2 * pov_gap) - headcount -
       (u^2 * (A * headcount + B * value_at_lq(headcount, A, B, C) -
-                ((r / 16) * log((1 - headcount / s1)/(1 - headcount / s2)))))
+        ((r / 16) * log((1 - headcount / s1) / (1 - headcount / s2)))))
 
     # Elasticity of headcount index w.r.t mean (P.eh)
     eh <- -povline / (mean * headcount * ddl)
@@ -654,31 +662,32 @@ gd_estimate_lq <- function(mean, povline, p0, A, B, C) {
 
   pov_stats <- gd_compute_poverty_stats_lq(mean, povline, A, B, C, e, m, n, r, s1, s2)
 
-  out <- list(gini = dist_stats$gini,
-              median = dist_stats$median,
-              rmhalf = dist_stats$rmhalf,
-              polarization = dist_stats$polarization,
-              ris = dist_stats$ris,
-              mld = dist_stats$mld,
-              dcm = dist_stats$dcm,
-              deciles = dist_stats$deciles,
-              headcount = pov_stats$headcount,
-              poverty_gap = pov_stats$pg,
-              poverty_severity = pov_stats$p2,
-              eh = pov_stats$eh,
-              epg = pov_stats$epg,
-              ep = pov_stats$ep,
-              gh = pov_stats$gh,
-              gpg = pov_stats$gpg,
-              gp = pov_stats$gp,
-              watts = pov_stats$watts,
-              dl = pov_stats$dl,
-              ddl = pov_stats$ddl,
-              is_normal = validity$is_normal,
-              is_valid = validity$is_valid)
+  out <- list(
+    gini = dist_stats$gini,
+    median = dist_stats$median,
+    rmhalf = dist_stats$rmhalf,
+    polarization = dist_stats$polarization,
+    ris = dist_stats$ris,
+    mld = dist_stats$mld,
+    dcm = dist_stats$dcm,
+    deciles = dist_stats$deciles,
+    headcount = pov_stats$headcount,
+    poverty_gap = pov_stats$pg,
+    poverty_severity = pov_stats$p2,
+    eh = pov_stats$eh,
+    epg = pov_stats$epg,
+    ep = pov_stats$ep,
+    gh = pov_stats$gh,
+    gpg = pov_stats$gpg,
+    gp = pov_stats$gp,
+    watts = pov_stats$watts,
+    dl = pov_stats$dl,
+    ddl = pov_stats$ddl,
+    is_normal = validity$is_normal,
+    is_valid = validity$is_valid
+  )
 
   return(out)
-
 }
 
 #' Computes the sum of squares of error
@@ -700,7 +709,6 @@ gd_compute_fit_lq <- function(welfare,
                               A,
                               B,
                               C) {
-
   if (is.na(headcount)) {
     return(list(
       sse  = NA,
@@ -708,17 +716,16 @@ gd_compute_fit_lq <- function(welfare,
     ))
   }
 
-  lasti  <- 0
-  sse  <- 0 # Sum of square error
+  lasti <- 0
+  sse <- 0 # Sum of square error
   ssez <- 0
 
   for (i in seq_along(welfare[-1])) {
     residual <- welfare[i] - value_at_lq(population[i], A, B, C)
     residual_sq <- residual^2
     sse <- sse + residual_sq
-    if (population[i] < headcount)
-    {
-      ssez <- ssez  + residual_sq
+    if (population[i] < headcount) {
+      ssez <- ssez + residual_sq
       lasti <- i
     }
   }

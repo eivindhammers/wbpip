@@ -13,9 +13,10 @@ ag_compute_pip_stats <- function(welfare,
                                  default_ppp = NULL,
                                  ppp = NULL,
                                  p0 = 0.5) {
-
-  assertthat::assert_that(assertthat::are_equal(sort(unique(area)),
-                                                sort(names(area_pop))))
+  assertthat::assert_that(assertthat::are_equal(
+    sort(unique(area)),
+    sort(names(area_pop))
+  ))
   # Compute stats for each sub-group
   out <- vector(mode = "list", length = length(area_pop))
   for (i in seq_along(area_pop)) {
@@ -25,45 +26,38 @@ ag_compute_pip_stats <- function(welfare,
     tmp_mean <- requested_mean[[area_name]]
     tmp_ppp <- default_ppp[[area_name]]
 
-    out[[i]] <- gd_compute_poverty_stats(welfare = tmp_welfare,
-                                         povline = povline,
-                                         population = tmp_population,
-                                         requested_mean = tmp_mean,
-                                         default_ppp = tmp_ppp
+    out[[i]] <- gd_compute_poverty_stats(
+      welfare = tmp_welfare,
+      povline = povline,
+      population = tmp_population,
+      requested_mean = tmp_mean,
+      default_ppp = tmp_ppp
     )
     names(out)[i] <- area_name
-
   }
 
   # Compute population weighted average
   wgt_urban <- area_pop[["urban"]] / sum(unlist(area_pop))
   wgt_rural <- 1 - wgt_urban
 
-  out_mean = wgt_urban * requested_mean[["urban"]] + wgt_rural * requested_mean[["rural"]]
+  out_mean <- wgt_urban * requested_mean[["urban"]] + wgt_rural * requested_mean[["rural"]]
 
   if (out[["rural"]]$poverty_severity < 0) # Check if rural poverty severity < 0
-  {
-    if (out[["urban"]]$poverty_severity < 0) # Same for urban
     {
-      out_headcount <- out_poverty_gap <- out_poverty_severity <- NA
-    }
-    else
-    {
-      out_headcount        <- out[["urban"]]$headcount
-      out_poverty_gap      <- out[["urban"]]$poverty_gap
-      out_poverty_severity <- out[["urban"]]$poverty_severity
-    }
-  }
-  else
-  {
-    if (out[["urban"]]$poverty_severity < 0)
-    {
-      out_headcount        <- out[["rural"]]$headcount
-      out_poverty_gap      <- out[["rural"]]$poverty_gap
+      if (out[["urban"]]$poverty_severity < 0) # Same for urban
+        {
+          out_headcount <- out_poverty_gap <- out_poverty_severity <- NA
+        } else {
+        out_headcount <- out[["urban"]]$headcount
+        out_poverty_gap <- out[["urban"]]$poverty_gap
+        out_poverty_severity <- out[["urban"]]$poverty_severity
+      }
+    } else {
+    if (out[["urban"]]$poverty_severity < 0) {
+      out_headcount <- out[["rural"]]$headcount
+      out_poverty_gap <- out[["rural"]]$poverty_gap
       out_poverty_severity <- out[["rural"]]$poverty_severity
-    }
-    else
-    {
+    } else {
       out_headcount <- wgt_rural * out[["rural"]]$headcount +
         wgt_urban * out[["urban"]]$headcount
 

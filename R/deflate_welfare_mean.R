@@ -22,7 +22,7 @@
 #' World Bank, Washington, DC.
 #'
 #' @export
-deflate_welfare_mean <- function(welfare_mean, ppp, cpi){
+deflate_welfare_mean <- function(welfare_mean, ppp, cpi) {
   deflated_welfare_mean <- welfare_mean / ppp / cpi
   return(deflated_welfare_mean)
 }

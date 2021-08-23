@@ -22,7 +22,7 @@ gd_clean_data <- function(dt, welfare, population,
                           gd_type, quiet = FALSE) {
 
   # Convert to data.table
-  if (!(inherits(dt, 'data.table'))) {
+  if (!(inherits(dt, "data.table"))) {
     data.table::setDT(dt)
   }
 
@@ -34,32 +34,38 @@ gd_clean_data <- function(dt, welfare, population,
   check_inputs_gd_clean_data(
     population = population_vector,
     welfare = welfare_vector,
-    gd_type = gd_type)
+    gd_type = gd_type
+  )
 
   # Standardize data according to type
   if (gd_type == 1) {
     res <- gd_standardize_type1(
       population = population_vector,
-      welfare = welfare_vector)
+      welfare = welfare_vector
+    )
   } else if (gd_type == 2) {
     res <- gd_standardize_type2(
       population = population_vector,
-      welfare = welfare_vector)
+      welfare = welfare_vector
+    )
   } else if (gd_type == 5) {
     res <- gd_standardize_type5(
       population = population_vector,
-      welfare = welfare_vector)
+      welfare = welfare_vector
+    )
   }
 
   # Check that data was standardized correctly
   validate_output_gd_clean_data(
     population = res$population,
-    welfare = res$welfare)
+    welfare = res$welfare
+  )
 
   if (!quiet) {
     cli::cli_alert_info(
-      'columns {.val welfare} and {.val {population}} have been rescaled to range (0,1]',
-      wrap = TRUE)
+      "columns {.val welfare} and {.val {population}} have been rescaled to range (0,1]",
+      wrap = TRUE
+    )
   }
 
   # Overwrite values in supplied data frame
@@ -76,7 +82,6 @@ gd_clean_data <- function(dt, welfare, population,
 #' @noRd
 gd_standardize_type1 <- function(population,
                                  welfare) {
-
   nobs <- length(population)
   sum_population <- population[nobs]
   sum_welfare <- welfare[nobs]
@@ -87,7 +92,8 @@ gd_standardize_type1 <- function(population,
 
   out <- list(
     welfare = lorenz_welfare,
-    population = lorenz_pop)
+    population = lorenz_pop
+  )
 
   return(out)
 }
@@ -107,7 +113,8 @@ gd_standardize_type2 <- function(population,
 
   out <- list(
     welfare = lorenz_welfare,
-    population = lorenz_pop)
+    population = lorenz_pop
+  )
 
   return(out)
 }
@@ -119,7 +126,6 @@ gd_standardize_type2 <- function(population,
 #' @return list
 #' @noRd
 gd_standardize_type5 <- function(welfare, population) {
-
   sum_population <- sum(population)
   sum_welfare <- sum(population * welfare)
 
@@ -128,8 +134,10 @@ gd_standardize_type5 <- function(welfare, population) {
   share_welfare <- population * (welfare / sum_welfare)
   lorenz_welfare <- cumsum(share_welfare)
 
-  out <- list(welfare = lorenz_welfare,
-              population = lorenz_pop)
+  out <- list(
+    welfare = lorenz_welfare,
+    population = lorenz_pop
+  )
 
   return(out)
 }
@@ -147,15 +155,17 @@ check_inputs_gd_clean_data <- function(population,
   assertthat::is.number(population)
   assertthat::is.number(welfare)
   assertthat::assert_that(sum(is.na(population)) == 0,
-                          msg = 'Data can\'t have NA in population.')
+    msg = "Data can't have NA in population."
+  )
   assertthat::assert_that(sum(is.na(welfare)) == 0,
-                          msg = 'Data can\'t have NA in welfare.')
+    msg = "Data can't have NA in welfare."
+  )
 
   # Check data type
   assertthat::assert_that(length(gd_type) == 1)
   assertthat::assert_that(gd_type %in% c(1, 2, 5),
-                          msg = 'Data must be of type 1, 2 or 5.')
-
+    msg = "Data must be of type 1, 2 or 5."
+  )
 }
 
 #' validate_output_gd_clean_data
@@ -169,15 +179,19 @@ validate_output_gd_clean_data <- function(population,
   share_pop <- c(population[1], diff(population))
   share_wel <- c(welfare[1], diff(welfare))
   assertthat::assert_that(round(sum(share_pop), digits = 8) == 1,
-                          msg = 'Share of `population` does not sum up to 1')
+    msg = "Share of `population` does not sum up to 1"
+  )
   assertthat::assert_that(round(sum(share_wel), digits = 8) == 1,
-                          msg = 'Share of `welfare` does not sum up to 1')
+    msg = "Share of `welfare` does not sum up to 1"
+  )
 
   # Check that share of income is always increasing
   norm_wel <- diff(share_wel / share_pop) # normalize welfare by population
   assertthat::assert_that(all(norm_wel >= 0),
-                          msg = paste0('share of `welfare` must increase with each\n',
-                                       'subsequent bin relative to its corresponging\n',
-                                       'population. Make sure data is sorted correctly.'))
-
+    msg = paste0(
+      "share of `welfare` must increase with each\n",
+      "subsequent bin relative to its corresponging\n",
+      "population. Make sure data is sorted correctly."
+    )
+  )
 }

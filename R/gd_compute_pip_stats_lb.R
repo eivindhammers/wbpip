@@ -22,8 +22,10 @@ gd_compute_pip_stats_lb <- function(welfare,
     ppp <- default_ppp
   }
   # STEP 1: Prep data to fit functional form
-  prepped_data <- create_functional_form_lb(welfare = welfare,
-                                            population = population)
+  prepped_data <- create_functional_form_lb(
+    welfare = welfare,
+    population = population
+  )
 
   # STEP 2: Estimate regression coefficients using LB parameterization
   reg_results <- regres(prepped_data, is_lq = FALSE)
@@ -58,7 +60,6 @@ gd_compute_pip_stats_lb <- function(welfare,
   res <- c(results1, results2, results_fit, reg_results)
 
   return(res)
-
 }
 
 #' create_functional_form_lb
@@ -93,7 +94,7 @@ create_functional_form_lb <- function(welfare, population) {
   welfare <- welfare[1:nobs]
 
   # y
-  y <-  log(population - welfare)
+  y <- log(population - welfare)
   # x1
   x1 <- 1
   # x2
@@ -119,12 +120,20 @@ create_functional_form_lb <- function(welfare, population) {
 #' @keywords internal
 derive_lb <- function(x, A, B, C) {
   if (x == 0) {
-    if (B == 1) {return(1 - A)}
-    if (B > 1) {return(1)}
+    if (B == 1) {
+      return(1 - A)
+    }
+    if (B > 1) {
+      return(1)
+    }
     return(-Inf)
   } else if (x == 1) {
-    if (C == 1) {return(1 + A)}
-    if (C > 1) {return(1)}
+    if (C == 1) {
+      return(1 + A)
+    }
+    if (C > 1) {
+      return(1)
+    }
     return(Inf)
   }
 
@@ -156,7 +165,6 @@ derive_lb <- function(x, A, B, C) {
 #' @return list
 #' @keywords internal
 check_curve_validity_lb <- function(headcount, A, B, C) {
-
   is_valid <- TRUE
 
   for (w in seq(from = 0.001, to = 0.1, by = 0.05)) {
@@ -185,9 +193,7 @@ check_curve_validity_lb <- function(headcount, A, B, C) {
   return(list(
     is_valid = is_valid,
     is_normal = is_normal
-  )
-  )
-
+  ))
 }
 
 #' Compute gini index from Lorenz beta fit
@@ -205,8 +211,7 @@ check_curve_validity_lb <- function(headcount, A, B, C) {
 #'
 #' @return numeric
 #' @keywords internal
-gd_compute_gini_lb <- function(A, B, C,nbins = 499) {
-
+gd_compute_gini_lb <- function(A, B, C, nbins = 499) {
   out <- vector(mode = "numeric", length = nbins)
 
   for (i in seq(from = 0, to = nbins, by = 1)) {
@@ -217,7 +222,6 @@ gd_compute_gini_lb <- function(A, B, C,nbins = 499) {
   gini <- sum(out)
   gini <- 1 - ((gini - 1) / 1500) # Why 1500? Why is it hardcoded?
   return(gini)
-
 }
 
 #' Solves for beta Lorenz curves
@@ -232,7 +236,6 @@ gd_compute_gini_lb <- function(A, B, C,nbins = 499) {
 #' @return numeric
 #' @keywords internal
 value_at_lb <- function(x, A, B, C) {
-
   out <- x - (A * (x^B) * ((1 - x)^C))
 
   return(out)
@@ -256,8 +259,7 @@ gd_compute_mld_lb <- function(dd, A, B, C) {
   mld <- 0
   if (x1 <= 0) {
     gap <- 0.0005
-  }
-  else {
+  } else {
     mld <- suppressWarnings(log(x1) * 0.001)
   }
   x1 <- derive_lb(0, A, B, C)
@@ -268,8 +270,7 @@ gd_compute_mld_lb <- function(dd, A, B, C) {
       if (gap > 0.5) {
         return(NA)
       }
-    }
-    else {
+    } else {
       gap <- 0
       mld <- mld + (log(x1) + log(x2)) * 0.0005
     }
@@ -386,14 +387,13 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
 #' @return list
 #' @keywords internal
 gd_compute_dist_stats_lb <- function(mean, p0, A, B, C) {
-
-  gini    <- gd_compute_gini_lb(A, B, C)
-  median  <- mean * derive_lb(0.5, A, B, C)
-  rmhalf  <- value_at_lb(p0, A, B, C) * mean / p0 # What is this??
-  dcm     <- (1 - gini) * mean
-  pol     <- gd_compute_polarization_lb(mean, p0, dcm, A, B, C)
-  ris     <- value_at_lb(0.5, A, B, C)
-  mld     <- gd_compute_mld_lb(0.01, A, B, C)
+  gini <- gd_compute_gini_lb(A, B, C)
+  median <- mean * derive_lb(0.5, A, B, C)
+  rmhalf <- value_at_lb(p0, A, B, C) * mean / p0 # What is this??
+  dcm <- (1 - gini) * mean
+  pol <- gd_compute_polarization_lb(mean, p0, dcm, A, B, C)
+  ris <- value_at_lb(0.5, A, B, C)
+  mld <- gd_compute_mld_lb(0.01, A, B, C)
   deciles <- gd_compute_quantile_lb(A, B, C)
 
   return(list(
@@ -425,10 +425,9 @@ gd_compute_polarization_lb <- function(mean,
                                        p0,
                                        dcm,
                                        A, B, C) {
-
   pol <- 2 - (1 / p0) +
     (dcm - (2 * value_at_lb(p0, A, B, C) * mean)) /
-    (p0 * mean * derive_lb(p0, A, B, C))
+      (p0 * mean * derive_lb(p0, A, B, C))
 
   return(pol)
 }
@@ -449,11 +448,13 @@ gd_compute_poverty_stats_lb <- function(mean,
                                         B,
                                         C) {
   # Compute headcount
-  headcount <- gd_compute_headcount_lb(mean = mean,
-                                       povline = povline,
-                                       A = A,
-                                       B = B,
-                                       C = C)
+  headcount <- gd_compute_headcount_lb(
+    mean = mean,
+    povline = povline,
+    A = A,
+    B = B,
+    C = C
+  )
 
   # Poverty gap
   u <- mean / povline
@@ -469,8 +470,8 @@ gd_compute_poverty_stats_lb <- function(mean,
   ddl <- A * (headcount^B) *
     ((1 - headcount)^C) *
     ((B * (1 - B) / headcount^2) +
-       (2 * B * C / (headcount * (1 - headcount))) +
-       (C * (1 - C) / ((1 - headcount)^2)))
+      (2 * B * C / (headcount * (1 - headcount))) +
+      (C * (1 - C) / ((1 - headcount)^2)))
 
   # Elasticity of headcount index w.r.t mean
   eh <- -povline / (mean * headcount * ddl)
@@ -482,7 +483,7 @@ gd_compute_poverty_stats_lb <- function(mean,
   ep <- 2 * (1 - pov_gap / pov_gap_sq)
 
   # PElasticity of headcount index w.r.t gini index
-  gh <- (1 - povline / mean) / (headcount  * ddl)
+  gh <- (1 - povline / mean) / (headcount * ddl)
 
   # Elasticity of poverty gap index w.r.t gini index
   gpg <- 1 + (((mean / povline) - 1) * headcount / pov_gap)
@@ -536,31 +537,32 @@ gd_estimate_lb <- function(mean, povline, p0, A, B, C) {
   # Check validity
   validity <- check_curve_validity_lb(headcount = pov_stats[["headcount"]], A, B, C)
 
-  out <- list(gini = dist_stats$gini,
-              median = dist_stats$median,
-              rmhalf = dist_stats$rmhalf,
-              polarization = dist_stats$polarization,
-              ris = dist_stats$ris,
-              mld = dist_stats$mld,
-              dcm = dist_stats$dcm,
-              deciles = dist_stats$deciles,
-              headcount = pov_stats$headcount,
-              poverty_gap = pov_stats$pg,
-              poverty_severity = pov_stats$p2,
-              eh = pov_stats$eh,
-              epg = pov_stats$epg,
-              ep = pov_stats$ep,
-              gh = pov_stats$gh,
-              gpg = pov_stats$gpg,
-              gp = pov_stats$gp,
-              watts = pov_stats$watts,
-              dl = pov_stats$dl,
-              ddl = pov_stats$ddl,
-              is_normal = validity$is_normal,
-              is_valid = validity$is_valid)
+  out <- list(
+    gini = dist_stats$gini,
+    median = dist_stats$median,
+    rmhalf = dist_stats$rmhalf,
+    polarization = dist_stats$polarization,
+    ris = dist_stats$ris,
+    mld = dist_stats$mld,
+    dcm = dist_stats$dcm,
+    deciles = dist_stats$deciles,
+    headcount = pov_stats$headcount,
+    poverty_gap = pov_stats$pg,
+    poverty_severity = pov_stats$p2,
+    eh = pov_stats$eh,
+    epg = pov_stats$epg,
+    ep = pov_stats$ep,
+    gh = pov_stats$gh,
+    gpg = pov_stats$gpg,
+    gp = pov_stats$gp,
+    watts = pov_stats$watts,
+    dl = pov_stats$dl,
+    ddl = pov_stats$ddl,
+    is_normal = validity$is_normal,
+    is_valid = validity$is_valid
+  )
 
   return(out)
-
 }
 
 #' Computes the sum of squares of error
@@ -581,20 +583,17 @@ gd_compute_fit_lb <- function(welfare,
                               A,
                               B,
                               C) {
-
   if (!is.na(headcount)) {
-
-    lasti  <- 0
-    sse  <- 0 # Sum of square error
+    lasti <- 0
+    sse <- 0 # Sum of square error
     ssez <- 0 # Sum of square error up to poverty line threshold (see Datt paper)
 
     for (i in seq_along(welfare[-1])) {
       residual <- welfare[i] - value_at_lb(population[i], A, B, C)
       residual_sq <- residual^2
       sse <- sse + residual_sq
-      if (population[i] < headcount)
-      {
-        ssez <- ssez  + residual_sq
+      if (population[i] < headcount) {
+        ssez <- ssez + residual_sq
         lasti <- i
       }
     }
@@ -604,11 +603,8 @@ gd_compute_fit_lb <- function(welfare,
 
     out <- list(sse, ssez)
     names(out) <- list("sse", "ssez")
-
   } else {
-
     out <- list(sse = NA, ssez = NA)
-
   }
 
   return(out)
@@ -646,25 +642,36 @@ DDLK <- function(h, A, B, C) {
 gd_compute_headcount_lb <- function(mean, povline, A, B, C) {
   # Compute headcount
   headcount <- rtSafe(0.0001, 0.9999, 1e-4,
-                      mean = mean,
-                      povline = povline,
-                      A = A,
-                      B = B,
-                      C = C)
+    mean = mean,
+    povline = povline,
+    A = A,
+    B = B,
+    C = C
+  )
   # Check headcount invalidity conditions
-  if (headcount < 0 | is.na(headcount)) {return(NA)}
+  if (headcount < 0 | is.na(headcount)) {
+    return(NA)
+  }
 
-  condition1 <- is.na(BETAI(a = 2 * B - 1,
-                            b = 2 * C + 1,
-                            x = headcount))
-  condition2 <- is.na(BETAI(a = 2 * B,
-                            b = 2 * C,
-                            x = headcount))
-  condition3 <- is.na(BETAI(a = 2 * B + 1,
-                            b = 2 * C - 1,
-                            x = headcount))
+  condition1 <- is.na(BETAI(
+    a = 2 * B - 1,
+    b = 2 * C + 1,
+    x = headcount
+  ))
+  condition2 <- is.na(BETAI(
+    a = 2 * B,
+    b = 2 * C,
+    x = headcount
+  ))
+  condition3 <- is.na(BETAI(
+    a = 2 * B + 1,
+    b = 2 * C - 1,
+    x = headcount
+  ))
 
-  if (condition1 | condition2 | condition3) {return(NA)}
+  if (condition1 | condition2 | condition3) {
+    return(NA)
+  }
 
   return(headcount)
 }
@@ -680,7 +687,6 @@ gd_compute_headcount_lb <- function(mean, povline, A, B, C) {
 #' @return numeric
 #' @noRd
 BETAI <- function(a, b, x) {
-
   if (!is.na(x)) {
     bt <- betai <- 0
 
@@ -690,12 +696,13 @@ BETAI <- function(a, b, x) {
       bt <- exp((a * log(x)) + (b * log(1 - x)))
     }
 
-    if (x < (a + 1)/(a + b + 2))
+    if (x < (a + 1) / (a + b + 2)) {
       betai <- bt * BETAICF(a, b, x) / a
-    else if (is.na(GAMMLN(a)) || is.na(GAMMLN(b)) || is.na(GAMMLN(a + b)))
+    } else if (is.na(GAMMLN(a)) || is.na(GAMMLN(b)) || is.na(GAMMLN(a + b))) {
       betai <- NA
-    else
+    } else {
       betai <- exp(GAMMLN(a) + GAMMLN(b) - GAMMLN(a + b)) - (bt * BETAICF(b, a, 1 - x) / b)
+    }
   } else {
     betai <- NA
   }
@@ -712,7 +719,6 @@ BETAI <- function(a, b, x) {
 #' @return numeric
 #' @noRd
 GAMMLN <- function(xx) {
-
   cof <- list(76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003e-2, -0.536382e-5)
   stp <- 2.50662827465
   half <- 0.5
@@ -725,8 +731,9 @@ GAMMLN <- function(xx) {
 
   x <- xx - one
   tmp <- x + fpf
-  if (tmp <= 0)
+  if (tmp <= 0) {
     return(NA)
+  }
 
   tmp <- (x + half) * log(tmp) - tmp
   ser <- one
@@ -736,8 +743,9 @@ GAMMLN <- function(xx) {
     ser <- sum(ser, cof[[i]] / x)
   }
 
-  if (stp*ser <= 0)
+  if (stp * ser <= 0) {
     return(NA)
+  }
 
   return(tmp + log(stp * ser))
 }
@@ -753,7 +761,6 @@ GAMMLN <- function(xx) {
 #' @return numeric
 #' @noRd
 BETAICF <- function(a, b, x) {
-
   eps <- 3e-7
   # am = bm = az <- 1
   am <- 1
@@ -787,8 +794,9 @@ BETAICF <- function(a, b, x) {
     bm <- bp / bpp
     az <- app / bpp
     bz <- 1
-    if ((abs(az - aold)) < (eps * abs(az)))
+    if ((abs(az - aold)) < (eps * abs(az))) {
       break
+    }
   }
   return(az)
 }
@@ -804,7 +812,6 @@ BETAICF <- function(a, b, x) {
 #' @return numeric
 #' @keywords internal
 gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
-
   pov_gap <- headcount - (u * value_at_lb(headcount, A, B, C))
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty gap
@@ -827,15 +834,21 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
 #' @keywords internal
 gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
   u1 <- 1 - u
-  beta1 <- BETAI(a = 2 * B - 1,
-                 b = 2 * C + 1,
-                 x = headcount)
-  beta2 <- BETAI(a = 2 * B,
-                 b = 2 * C,
-                 x = headcount)
-  beta3 <- BETAI(a = 2 * B + 1,
-                 b = 2 * C - 1,
-                 x = headcount)
+  beta1 <- BETAI(
+    a = 2 * B - 1,
+    b = 2 * C + 1,
+    x = headcount
+  )
+  beta2 <- BETAI(
+    a = 2 * B,
+    b = 2 * C,
+    x = headcount
+  )
+  beta3 <- BETAI(
+    a = 2 * B + 1,
+    b = 2 * C - 1,
+    x = headcount
+  )
 
   pov_gap_sq <- u1 * (2 * pov_gap - u1 * headcount) + A^2 * u^2 * (B^2 * beta1 - 2 * B * C * beta2 + C^2 * beta3)
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
@@ -862,7 +875,6 @@ gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
 #' @return numeric
 #' @noRd
 rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
-
   funcCall1 <- funcD(x1, mean, povline, A, B, C)
   fl <- funcCall1[[1]]
 
@@ -898,22 +910,29 @@ rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
       dxold <- dx
       dx <- 0.5 * (xh - xl)
       rtsafe <- xl + dx
-      if (xl == rtsafe) {return(rtsafe)}
+      if (xl == rtsafe) {
+        return(rtsafe)
+      }
     } else {
       dxold <- dx
-      dx <- f/df
+      dx <- f / df
       temp <- temp - dx
-      if (temp == rtsafe) {return(rtsafe)}
+      if (temp == rtsafe) {
+        return(rtsafe)
+      }
     }
-    if (abs(dx) < xacc) {return(rtsafe)}
+    if (abs(dx) < xacc) {
+      return(rtsafe)
+    }
 
     funcCall4 <- funcD(rtsafe, mean, povline, A, B, C)
     f <- funcCall4[[1]]
 
-    if (f < 0)
+    if (f < 0) {
       xl <- rtsafe
-    else
+    } else {
       xh <- rtsafe
+    }
   }
 
   return(NA)
@@ -935,10 +954,12 @@ rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
 funcD <- function(x, mean, povline, A, B, C) {
   x1 <- 1 - x
   v1 <- (x^B) * (x1^C)
-  f <- (A * v1 * ((B/x) - (C/x1))) + (povline/mean) - 1
-  df <- A * v1 * (((B/x) - (C/x1))^2 - (B/x^2) - (C/x1^2))
-  return(list(f = f,
-              df = df))
+  f <- (A * v1 * ((B / x) - (C / x1))) + (povline / mean) - 1
+  df <- A * v1 * (((B / x) - (C / x1))^2 - (B / x^2) - (C / x1^2))
+  return(list(
+    f = f,
+    df = df
+  ))
 }
 
 #' rtNewt
@@ -962,15 +983,16 @@ rtNewt <- function(mean, povline, A, B, C) {
   for (i in seq(0, 19, by = 1)) {
     x <- rtnewt
     v1 <- (x^B) * ((1 - x)^C)
-    f <- A * v1 * ((B / x) - C/(1 - x)) + (povline / mean) - 1
+    f <- A * v1 * ((B / x) - C / (1 - x)) + (povline / mean) - 1
     df <- A * v1 * (((B / x) - C / (1 - x))^2 - (B / x^2) - (C / (1 - x)^2))
     dx <- f / df
     rtnewt <- rtnewt - dx
     if ((x1 - rtnewt) * (rtnewt - x2) < 0) {
       rtnewt <- ifelse(rtnewt < x1, 0.5 * (x2 - x), 0.5 * (x - x1))
     } else {
-      if (abs(dx) < xacc)
+      if (abs(dx) < xacc) {
         return(rtnewt)
+      }
     }
   }
   return(NA)

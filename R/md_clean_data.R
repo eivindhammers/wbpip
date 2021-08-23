@@ -2,10 +2,11 @@
 NULL
 
 # Add global variables to avoid NSE notes in R CMD check
-if (getRversion() >= '2.15.1')
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(
-    c('weight')
+    c("weight")
   )
+}
 
 #' Clean data (micro)
 #'
@@ -42,20 +43,20 @@ md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
   weight_col <- weight
 
   # Create output list
-  ll <- vector(mode = 'list')
+  ll <- vector(mode = "list")
 
   #--------- WELFARE ---------
 
   # Check for missing welfare values
-  nna <- dt[is.na(get(welfare_col)) , .N]
+  nna <- dt[is.na(get(welfare_col)), .N]
   if (nna > 0) {
     # Get which rows w/ missing values
     ina <- dt[, which(is.na(get(welfare_col)))]
     # Remove rows
-    dt  <- dt[!is.na(get(welfare_col))]
+    dt <- dt[!is.na(get(welfare_col))]
     # Add to output list
-    ll[[paste0('nna_', welfare_col)]] <- nna
-    ll[[paste0('ina_', welfare_col)]] <- ina
+    ll[[paste0("nna_", welfare_col)]] <- nna
+    ll[[paste0("ina_", welfare_col)]] <- ina
     # Print message
     if (!quiet) {
       nna_msg(nna, welfare_col)
@@ -63,15 +64,15 @@ md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
   }
 
   # Check for negative welfare values
-  nng <- dt[get(welfare_col) < 0 , .N]
+  nng <- dt[get(welfare_col) < 0, .N]
   if (nng > 0) {
     # Get which rows w/ negative values
     ing <- dt[, which(get(welfare_col) < 0)]
     # Remove rows
     dt <- dt[get(welfare_col) >= 0]
     # Add to output list
-    ll[[paste0('nng_', welfare_col)]] <- nng
-    ll[[paste0('ing_', welfare_col)]] <- ing
+    ll[[paste0("nng_", welfare_col)]] <- nng
+    ll[[paste0("ing_", welfare_col)]] <- ing
     # Print message
     if (!quiet) {
       nng_msg(nng, welfare_col)
@@ -82,7 +83,7 @@ md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
   if (is.unsorted(dt[[welfare_col]])) {
     data.table::setorderv(dt, welfare_col)
     if (!quiet) {
-      cli::cli_alert_info('Data has been sorted by variable {.val {welfare_col}}')
+      cli::cli_alert_info("Data has been sorted by variable {.val {welfare_col}}")
     }
   }
 
@@ -91,15 +92,15 @@ md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
   if (!is.null(weight_col)) {
 
     # Check for missing weight values
-    nna <- dt[is.na(get(weight_col)) , .N]
+    nna <- dt[is.na(get(weight_col)), .N]
     if (nna > 0) {
       # Get which rows w/ missing values
       ina <- dt[, which(is.na(get(weight_col)))]
       # Remove rows
       dt <- dt[!is.na(get(weight_col))]
       # Add to output list
-      ll[[paste0('nna_', weight_col)]] <- nna
-      ll[[paste0('ina_', weight_col)]] <- ina
+      ll[[paste0("nna_", weight_col)]] <- nna
+      ll[[paste0("ina_", weight_col)]] <- ina
       # Print message
       if (!quiet) {
         nna_msg(nna, weight_col)
@@ -107,15 +108,15 @@ md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
     }
 
     # Check for negative weight values
-    nng <- dt[get(weight_col) <= 0 , .N]
+    nng <- dt[get(weight_col) <= 0, .N]
     if (nng > 0) {
       # Get which rows w/ negative values
       ing <- dt[, which(get(weight_col) <= 0)]
       # Remove rows
       dt <- dt[get(weight_col) > 0]
       # Add to output list
-      ll[[paste0('nng_', weight_col)]] <- nng
-      ll[[paste0('ing_', weight_col)]] <- ing
+      ll[[paste0("nng_", weight_col)]] <- nng
+      ll[[paste0("ing_", weight_col)]] <- ing
       # Print message
       if (!quiet) {
         nng_msg(nng, weight_col)
@@ -127,15 +128,15 @@ md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
     dt[, weight := 1]
     if (!quiet) {
       cli::cli_alert_info(
-        'since {.val weight} is not provided, variable {.field `weight = 1`} has been created',
-        wrap = TRUE)
+        "since {.val weight} is not provided, variable {.field `weight = 1`} has been created",
+        wrap = TRUE
+      )
     }
   }
   # Add data to output list
-  ll[['data']] <- dt
+  ll[["data"]] <- dt
 
   return(ll)
-
 }
 
 #' nng_msg

@@ -1,17 +1,19 @@
 df <- readr::read_rds("../testdata/md_lorenz3.rds")
 
 test_that("md_compute_mld() returns consistent variable type", {
-
-  out <- md_compute_mld(welfare = df$welfare,
-                        weight = df$weight)
+  out <- md_compute_mld(
+    welfare = df$welfare,
+    weight = df$weight
+  )
   expect_equal(length(out), 1)
   expect_true(is.numeric(out))
 })
 
 test_that("md_compute_mld() returns expected results for know distribution", {
-
-  out <- md_compute_mld(welfare = df$welfare,
-                        weight = df$weight)
+  out <- md_compute_mld(
+    welfare = df$welfare,
+    weight = df$weight
+  )
   expect_equal(out, 0.7502036651)
 })
 
@@ -33,9 +35,13 @@ test_that("md_compute_mld() returns expected results for perfect inequality", {
 
 test_that("md_compute_mld() values change in the expected direction", {
   # Compare MLD values for two known distributions
-  lower_expected_mld  <- md_compute_mld(welfare = c(rep(20, 999), 10000),
-                                        weight  = rep(1, 1000))  # Less inequal
-  higher_expected_mld <- md_compute_mld(welfare = c(rep(20, 999), 100000),
-                                        weight  = rep(1, 1000)) # More inequal
+  lower_expected_mld <- md_compute_mld(
+    welfare = c(rep(20, 999), 10000),
+    weight = rep(1, 1000)
+  ) # Less inequal
+  higher_expected_mld <- md_compute_mld(
+    welfare = c(rep(20, 999), 100000),
+    weight = rep(1, 1000)
+  ) # More inequal
   expect_true(lower_expected_mld < higher_expected_mld)
 })

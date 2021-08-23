@@ -12,14 +12,12 @@
 #'   in the Lorenz curve provided by the user. Default is 10.
 #' @examples
 #' wbpip:::md_compute_dist_stats(welfare = 1:2000, weight = rep(1, 2000))
-#'
 #' @return data.frame
 #' @keywords internal
 md_compute_dist_stats <- function(welfare, weight,
                                   mean = NULL,
-                                  nbins  = NULL,
+                                  nbins = NULL,
                                   n_quantile = 10) {
-
   if (is.null(mean)) {
     mean <- collapse::fmean(x = welfare, w = weight)
   } else {
@@ -27,24 +25,29 @@ md_compute_dist_stats <- function(welfare, weight,
   }
 
   lorenz <- md_compute_lorenz(
-    welfare = welfare, weight  = weight,
-    nbins = nbins)
+    welfare = welfare, weight = weight,
+    nbins = nbins
+  )
   quantiles <- md_compute_quantiles(
     lwelfare = lorenz[["lorenz_welfare"]],
     lweight = lorenz[["lorenz_weight"]],
-    percentile = lorenz[["welfare"]])
+    percentile = lorenz[["welfare"]]
+  )
   median <- quantiles[["median"]]
 
   gini <- md_compute_gini(
-    welfare = welfare, weight = weight)
+    welfare = welfare, weight = weight
+  )
 
   mld <- md_compute_mld(
-    welfare = welfare, weight = weight)
+    welfare = welfare, weight = weight
+  )
 
   polarization <- md_compute_polarization(
     welfare = welfare, weight = weight,
     gini = gini, weighted_mean = mean,
-    weighted_median = median)
+    weighted_median = median
+  )
 
   return(list(
     mean = mean,
