@@ -1,3 +1,9 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/PIP-Technical-Team/wbpip/workflows/R-CMD-check/badge.svg)](https://github.com/PIP-Technical-Team/wbpip/actions?workflow=R-CMD-check)
+[![test-coverage](https://github.com/PIP-Technical-Team/wbpip/workflows/test-coverage/badge.svg)](https://github.com/PIP-Technical-Team/wbpip/actions)
+[![pkgdown](https://github.com/PIP-Technical-Team/wbpip/workflows/pkgdown/badge.svg)](https://github.com/PIP-Technical-Team/wbpip/actions)
+<!-- badges: end -->
+
 # Basic end-user workflows
 Basic workflows are based on single data files (micro- or grouped-data).
 The assumption for these workflows is that they can be satisfied by feeding a 
