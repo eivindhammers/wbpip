@@ -74,7 +74,7 @@ gd_compute_pip_stats_lq <- function(welfare,
   # Boundary conditions (Why 4?)
   z_min <- requested_mean * derive_lq(0.001, A, B, C) + 4
   z_max <- requested_mean * derive_lq(0.980, A, B, C) - 4
-  z_min <- ifelse(z_min < 0, 0, z_min)
+  z_min <- if (z_min < 0) 0 else z_min
 
   results1 <- list(requested_mean, povline, z_min, z_max, ppp)
   names(results1) <- list("mean", "poverty_line", "z_min", "z_max", "ppp")
@@ -288,8 +288,8 @@ gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
     # P.gi <- (e/2) - tmp1 - (tmp2 * log(abs(tmpnum/tmpden)) / sqrt(m))
   } else {
     tmp4 <- ((2 * m) + n) / r
-    tmp4 <- ifelse(tmp4 < -1, -1, tmp4)
-    tmp4 <- ifelse(tmp4 > 1, 1, tmp4)
+    tmp4 <- if (tmp4 < -1) -1 else tmp4
+    tmp4 <- if (tmp4 > 1) 1 else tmp4
 
     # Formula does not match with paper
     gini <- e2 + (tmp3 / (4 * m)) * e1 - (n * abs(e) / (4 * m)) + (tmp2 * (asin(tmp4) - asin(n / r)) / sqrt(-m))
@@ -316,7 +316,7 @@ value_at_lq <- function(x, A, B, C) {
   m <- (B^2) - (4 * A)
   n <- (2 * B * e) - (4 * C)
   temp <- (m * x^2) + (n * x) + (e^2)
-  temp <- ifelse(temp < 0, 0, temp)
+  temp <- if (temp < 0) 0 else temp
 
   # Solving the equation of the Lorenz curve
   estle <- -0.5 * ((B * x) + e + sqrt(temp))
@@ -558,7 +558,7 @@ gd_compute_poverty_stats_lq <- function(mean,
   headcount <- -(n + ((r * bu) / sqrt(bu^2 - m))) / (2 * m)
 
   tmp0 <- (m * headcount^2) + (n * headcount) + (e^2)
-  tmp0 <- ifelse(tmp0 < 0, 0, tmp0)
+  tmp0 <- if (tmp0 < 0) 0 else tmp0
   tmp0 <- sqrt(tmp0)
 
   # First derivative of the Lorenz curve
