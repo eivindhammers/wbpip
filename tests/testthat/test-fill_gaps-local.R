@@ -12,24 +12,53 @@ ukr1995 <- readRDS("../testdata/local/ukr1995.RDS")
 # ukr1999 <- readRDS('../testdata/local/ukr1999.RDS')
 ukr2002 <- readRDS("../testdata/local/ukr2002.RDS")
 
-# Clean datasets'
-# md_clean_data(ukr2002, welfare = 'welfare', weight = 'weight')$data
-bdi2013 <- md_clean_data(bdi2013,
+# Clean datasets
+ago2008 <- md_clean_data(
+  ago2008,
   welfare = "welfare",
   weight = "weight", quiet = TRUE
 )$data
-zwe2011 <- gd_clean_data(zwe2011,
-  welfare = "welfare", population = "weight",
-  gd_type = 5, quiet = TRUE
-)
-ukr1995 <- gd_clean_data(ukr1995,
-  welfare = "welfare", population = "weight",
-  gd_type = 5, quiet = TRUE
-)
-ukr2002 <- md_clean_data(ukr2002,
+ago2018 <- md_clean_data(
+  ago2018,
   welfare = "welfare",
   weight = "weight", quiet = TRUE
 )$data
+bdi2013 <- md_clean_data(
+  bdi2013,
+  welfare = "welfare",
+  weight = "weight", quiet = TRUE
+)$data
+nga1996 <- md_clean_data(
+  nga1996,
+  welfare = "welfare",
+  weight = "weight", quiet = TRUE
+)$data
+nga2003 <- md_clean_data(
+  nga2003,
+  welfare = "welfare",
+  weight = "weight", quiet = TRUE
+)$data
+ukr1995 <- gd_clean_data(
+  ukr1995,
+  welfare = "welfare", population = "weight",
+  gd_type = 5, quiet = TRUE
+)
+ukr2002 <- md_clean_data(
+  ukr2002,
+  welfare = "welfare",
+  weight = "weight", quiet = TRUE
+)$data
+zwe2011 <- gd_clean_data(
+  zwe2011,
+  welfare = "welfare", population = "weight",
+  gd_type = 5, quiet = TRUE
+)
+zwe2017 <- md_clean_data(
+  zwe2017,
+  welfare = "welfare",
+  weight = "weight", quiet = TRUE
+)$data
+
 # ukr1999$welfare <- ukr1999$welfare * 365
 # ukr1999 <- gd_clean_data(ukr1999, welfare = 'welfare', population = 'weight', data_type = 5)
 # names(ukr1999)[1] <- 'weight'
