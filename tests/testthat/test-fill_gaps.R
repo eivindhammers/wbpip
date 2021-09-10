@@ -4,6 +4,7 @@ data("md_ABC_2010_income")
 data("md_DEF_2000_consumption")
 data("md_GHI_2000_income")
 data("gd_GHI_2009_income")
+data("md_GHI_2000_consumption")
 
 # Clean datasets
 md_ABC_2000_income <-
@@ -30,6 +31,13 @@ md_GHI_2000_income <-
     weight = "weight",
     quiet = TRUE
   )$data
+md_GHI_2000_income <-
+  md_clean_data(md_GHI_2000_consumption,
+                welfare = "welfare",
+                weight = "weight",
+                quiet = TRUE
+  )$data
+
 gd_GHI_2009_income <-
   gd_clean_data(gd_GHI_2009_income,
     welfare = "welfare",
@@ -37,6 +45,8 @@ gd_GHI_2009_income <-
     gd_type = 5,
     quiet = TRUE
   )
+
+
 
 # Output format (named list)
 test_that("fill_gaps() returns the correct output format", {
