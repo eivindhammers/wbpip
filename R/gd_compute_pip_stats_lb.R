@@ -46,7 +46,7 @@ gd_compute_pip_stats_lb <- function(welfare,
   # Boundary conditions (Why 4?)
   z_min <- requested_mean * derive_lb(0.001, A, B, C) + 4
   z_max <- requested_mean * derive_lb(0.980, A, B, C) - 4
-  z_min <- ifelse(z_min < 0, 0, z_min)
+  z_min <- if (z_min < 0) 0 else z_min
 
   results1 <- list(requested_mean, povline, z_min, z_max, ppp)
   names(results1) <- list("mean", "poverty_line", "z_min", "z_max", "ppp")
@@ -815,8 +815,8 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
   pov_gap <- headcount - (u * value_at_lb(headcount, A, B, C))
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty gap
-  pov_gap <- ifelse(headcount < pov_gap, headcount - 0.00001, pov_gap)
-  pov_gap <- ifelse(pov_gap < 0, 0, pov_gap)
+  pov_gap <- if (headcount < pov_gap) headcount - 0.00001 else pov_gap
+  pov_gap <- if (pov_gap < 0) 0 else pov_gap
 
   return(pov_gap)
 }
@@ -853,8 +853,8 @@ gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
   pov_gap_sq <- u1 * (2 * pov_gap - u1 * headcount) + A^2 * u^2 * (B^2 * beta1 - 2 * B * C * beta2 + C^2 * beta3)
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty severity
-  pov_gap_sq <- ifelse(pov_gap < pov_gap_sq, pov_gap - 0.00001, pov_gap_sq)
-  pov_gap_sq <- ifelse(pov_gap_sq < 0, 0, pov_gap_sq)
+  pov_gap_sq <- if (pov_gap < pov_gap_sq) pov_gap - 0.00001 else pov_gap_sq
+  pov_gap_sq <- if (pov_gap_sq < 0) 0 else pov_gap_sq
 
   return(pov_gap_sq)
 }
@@ -988,7 +988,7 @@ rtNewt <- function(mean, povline, A, B, C) {
     dx <- f / df
     rtnewt <- rtnewt - dx
     if ((x1 - rtnewt) * (rtnewt - x2) < 0) {
-      rtnewt <- ifelse(rtnewt < x1, 0.5 * (x2 - x), 0.5 * (x - x1))
+      rtnewt <- if (rtnewt < x1) { 0.5 * (x2 - x) } else { 0.5 * (x - x1) }
     } else {
       if (abs(dx) < xacc) {
         return(rtnewt)
