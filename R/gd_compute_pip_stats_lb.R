@@ -46,7 +46,7 @@ gd_compute_pip_stats_lb <- function(welfare,
   # Boundary conditions (Why 4?)
   z_min <- requested_mean * derive_lb(0.001, A, B, C) + 4
   z_max <- requested_mean * derive_lb(0.980, A, B, C) - 4
-  z_min <- ifelse(z_min < 0, 0, z_min)
+  z_min <- if (z_min < 0) 0 else z_min
 
   results1 <- list(requested_mean, povline, z_min, z_max, ppp)
   names(results1) <- list("mean", "poverty_line", "z_min", "z_max", "ppp")
@@ -995,7 +995,7 @@ rtNewt <- function(mean, povline, A, B, C) {
     dx <- f / df
     rtnewt <- rtnewt - dx
     if ((x1 - rtnewt) * (rtnewt - x2) < 0) {
-      rtnewt <- ifelse(rtnewt < x1, 0.5 * (x2 - x), 0.5 * (x - x1))
+      rtnewt <- if (rtnewt < x1) { 0.5 * (x2 - x) } else { 0.5 * (x - x1) }
     } else {
       if (abs(dx) < xacc) {
         return(rtnewt)
