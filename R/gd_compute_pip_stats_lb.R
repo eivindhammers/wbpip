@@ -812,12 +812,16 @@ BETAICF <- function(a, b, x) {
 #' @return numeric
 #' @keywords internal
 gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
-  pov_gap <- headcount - (u * value_at_lb(headcount, A, B, C))
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty gap
-  if (!anyNA(headcount, pov_gap)) {
-    pov_gap <- if (headcount < pov_gap) headcount - 0.00001 else pov_gap
-    pov_gap <- if (pov_gap < 0) 0 else pov_gap
+  if (!is.na(headcount)) {
+    pov_gap <- headcount - (u * value_at_lb(headcount, A, B, C))
+    if (!anyNA(headcount, pov_gap)) {
+      pov_gap <- if (headcount < pov_gap) headcount - 0.00001 else pov_gap
+      pov_gap <- if (pov_gap < 0) 0 else pov_gap
+    }
+  } else {
+    pov_gap <- NA
   }
 
   return(pov_gap)
@@ -835,32 +839,37 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
 #' @return numeric
 #' @keywords internal
 gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
-  u1 <- 1 - u
-  beta1 <- BETAI(
-    a = 2 * B - 1,
-    b = 2 * C + 1,
-    x = headcount
-  )
-  beta2 <- BETAI(
-    a = 2 * B,
-    b = 2 * C,
-    x = headcount
-  )
-  beta3 <- BETAI(
-    a = 2 * B + 1,
-    b = 2 * C - 1,
-    x = headcount
-  )
 
-  pov_gap_sq <-
-    u1 * (2 * pov_gap - u1 * headcount) + A^2 * u^2 *
-    (B^2 * beta1 - 2 * B * C * beta2 + C^2 * beta3)
+  if (!anyNA(headcount, pov_gap)) {
+    u1 <- 1 - u
+    beta1 <- BETAI(
+      a = 2 * B - 1,
+      b = 2 * C + 1,
+      x = headcount
+    )
+    beta2 <- BETAI(
+      a = 2 * B,
+      b = 2 * C,
+      x = headcount
+    )
+    beta3 <- BETAI(
+      a = 2 * B + 1,
+      b = 2 * C - 1,
+      x = headcount
+    )
 
-  # REVIEW RATIONAL FOR THESE ADJUSTMENTS
-  # Adjust Poverty severity
-  if (!anyNA(pov_gap, pov_gap_sq)) {
-    pov_gap_sq <- if (pov_gap < pov_gap_sq) pov_gap - 0.00001 else pov_gap_sq
-    pov_gap_sq <- if (pov_gap_sq < 0) 0 else pov_gap_sq
+    pov_gap_sq <-
+      u1 * (2 * pov_gap - u1 * headcount) + A^2 * u^2 *
+      (B^2 * beta1 - 2 * B * C * beta2 + C^2 * beta3)
+
+    # REVIEW RATIONAL FOR THESE ADJUSTMENTS
+    # Adjust Poverty severity
+    if (!anyNA(pov_gap, pov_gap_sq)) {
+      pov_gap_sq <- if (pov_gap < pov_gap_sq) pov_gap - 0.00001 else pov_gap_sq
+      pov_gap_sq <- if (pov_gap_sq < 0) 0 else pov_gap_sq
+    }
+  } else {
+    pov_gap_sq <- NA
   }
 
   return(pov_gap_sq)
