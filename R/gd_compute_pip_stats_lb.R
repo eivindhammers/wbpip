@@ -37,7 +37,7 @@ gd_compute_pip_stats_lb <- function(welfare,
 
   # OPTIONAL: Only when popshare is supplied
   # return poverty line if share of population living in poverty is supplied
-  # intead of a poverty line
+  # instead of a poverty line
 
   if (!is.null(popshare)) {
     povline <- derive_lb(popshare, A, B, C) * requested_mean
@@ -815,8 +815,10 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
   pov_gap <- headcount - (u * value_at_lb(headcount, A, B, C))
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty gap
-  pov_gap <- if (headcount < pov_gap) headcount - 0.00001 else pov_gap
-  pov_gap <- if (pov_gap < 0) 0 else pov_gap
+  if (!anyNA(headcount, pov_gap)) {
+    pov_gap <- if (headcount < pov_gap) headcount - 0.00001 else pov_gap
+    pov_gap <- if (pov_gap < 0) 0 else pov_gap
+  }
 
   return(pov_gap)
 }
@@ -850,11 +852,16 @@ gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
     x = headcount
   )
 
-  pov_gap_sq <- u1 * (2 * pov_gap - u1 * headcount) + A^2 * u^2 * (B^2 * beta1 - 2 * B * C * beta2 + C^2 * beta3)
+  pov_gap_sq <-
+    u1 * (2 * pov_gap - u1 * headcount) + A^2 * u^2 *
+    (B^2 * beta1 - 2 * B * C * beta2 + C^2 * beta3)
+
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty severity
-  pov_gap_sq <- if (pov_gap < pov_gap_sq) pov_gap - 0.00001 else pov_gap_sq
-  pov_gap_sq <- if (pov_gap_sq < 0) 0 else pov_gap_sq
+  if (!anyNA(pov_gap, pov_gap_sq)) {
+    pov_gap_sq <- if (pov_gap < pov_gap_sq) pov_gap - 0.00001 else pov_gap_sq
+    pov_gap_sq <- if (pov_gap_sq < 0) 0 else pov_gap_sq
+  }
 
   return(pov_gap_sq)
 }
