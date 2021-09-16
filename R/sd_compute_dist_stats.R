@@ -67,7 +67,7 @@ sd_create_synth_vector <- function(welfare,
   first <- 1 / (2 * nobs)
   last <- 1 - (1 / (2 * nobs))
   n <- c(1:nobs)
-  F <- (n - 1) / (nobs - 1) * ((last) - (first)) + (first)
+  weight_range <- (n - 1) / (nobs - 1) * ((last) - (first)) + (first)
 
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,13 +87,13 @@ sd_create_synth_vector <- function(welfare,
     B <- reg_coef_lq[2]
     C <- reg_coef_lq[3]
     # Compute welfare values
-    welfare_s <- mean * derive_lq(F, A, B, C)
+    welfare_s <- mean * derive_lq(weight_range, A, B, C)
   } else {
     A <- reg_coef_lb[1]
     B <- reg_coef_lb[2]
     C <- reg_coef_lb[3]
     # Compute welfare values
-    welfare_s <- mean * derive_lb(F, A, B, C)
+    welfare_s <- mean * derive_lb(weight_range, A, B, C)
   }
 
   # manage population
