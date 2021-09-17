@@ -471,7 +471,6 @@ test_that("if PPP and default PPP are not null, requested_mean is computed as ex
   expect_equal(try_out$mean, ex_req_mean)
 })
 
-
 test_that("if popshare is not null, povline is computed as expected", {
   gd_ex2 <- readRDS("../testdata/gd_ex2.RDS")
 
@@ -492,8 +491,6 @@ test_that("if popshare is not null, povline is computed as expected", {
   expect_equal(try_out$poverty_line, ex_povline, tolerance = 1e-7)
 })
 
-
-
 test_that("in derive_lb() function, if x = 0 & B >= 0,
           function returns expected values", {
 
@@ -524,7 +521,6 @@ test_that("in derive_lb() function, if x = 0 & B >= 0,
   expect_equal(try_inf, Inf)
 })
 
-
 test_that("in derive_lb() function, if x = 0 & B >= 0,
           function returns expected values", {
 
@@ -554,7 +550,6 @@ test_that("in derive_lb() function, if x = 0 & B >= 0,
 
   expect_equal(try_inf, Inf)
 })
-
 
 test_that("tests for the gd_compute_watts_lb", {
 
@@ -636,14 +631,12 @@ test_that("in gd_compute_mld_lb ensure gap is 0.0005 when x1 <= 0", {
   )
 })
 
-
 test_that("BETAI returns expected values", {
   expect_equal(
     BETAI(a = 0, b = 0, x = 0),
     NaN
   )
 })
-
 
 test_that("GAMMLN returns NA when tmp <= 0", {
   expect_equal(
@@ -657,7 +650,6 @@ test_that("GAMMLN returns NA when tmp <= 0", {
   )
 })
 
-
 test_that("rtSafe assigns xl and xh appropriately when fl < 0", {
   x <- 0.9
   mean <- 51.5660557757944
@@ -670,4 +662,36 @@ test_that("rtSafe assigns xl and xh appropriately when fl < 0", {
     rtSafe(x1 = x, x2 = 0.002, xacc = 1, mean = mean, povline = povline, A = A, B = B, C = C),
     0.451
   )
+})
+
+test_that("gd_compute_pov_gap_lb works when headcount is NA", {
+
+  # constants
+  u <- 0.892274937721028
+  A <- 0.57803721740313529
+  B <- 0.94205090386544987
+  C <- 0.52578600019473676
+
+  res <- gd_compute_pov_gap_lb(u = u, A = A, B = B, C = C,
+                               headcount = NA)
+  expect_true(is.na(res))
+
+})
+
+test_that("gd_compute_pov_severity_lb works when headcount or pov_gap is NA", {
+
+  # constants
+  u <- 0.892274937721028
+  A <- 0.57803721740313529
+  B <- 0.94205090386544987
+  C <- 0.52578600019473676
+
+  res <- gd_compute_pov_severity_lb(u = u, A = A, B = B, C = C,
+                                    headcount = NA, pov_gap = NA)
+  expect_true(is.na(res))
+
+  res <- gd_compute_pov_severity_lb(u = u, A = A, B = B, C = C,
+                                    headcount = 1, pov_gap = NA)
+  expect_true(is.na(res))
+
 })
