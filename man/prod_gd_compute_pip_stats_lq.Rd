@@ -44,26 +44,31 @@ form of the Lorenz qurve.
 }
 \examples{
 # Set initial parameters
-L <- c(0.00208, 0.01013, 0.03122, 0.07083, 0.12808, 0.23498, 0.34887,
-  0.51994, 0.6427, 0.79201, 0.86966, 0.91277, 1)
-P <- c(0.0092, 0.0339, 0.085, 0.164, 0.2609, 0.4133, 0.5497, 0.7196,
-  0.8196, 0.9174, 0.957, 0.9751, 1)
-mu  <- 109.9 # mean
-z   <- 89    # poverty line
+L <- c(
+  0.00208, 0.01013, 0.03122, 0.07083, 0.12808, 0.23498, 0.34887,
+  0.51994, 0.6427, 0.79201, 0.86966, 0.91277, 1
+)
+P <- c(
+  0.0092, 0.0339, 0.085, 0.164, 0.2609, 0.4133, 0.5497, 0.7196,
+  0.8196, 0.9174, 0.957, 0.9751, 1
+)
+mu <- 109.9 # mean
+z <- 89 # poverty line
 
 res <- wbpip:::prod_gd_compute_pip_stats_lq(
   welfare = L,
   population = P,
   requested_mean = mu,
-  povline = z)
+  povline = z
+)
 res$headcount
 
 res2 <- wbpip:::prod_gd_compute_pip_stats_lq(
   welfare = L,
   population = P,
   requested_mean = mu,
-  popshare = res$headcount)
+  popshare = res$headcount
+)
 res2$povline
-
 }
 \keyword{internal}

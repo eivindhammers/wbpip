@@ -12,6 +12,8 @@ prod_md_compute_pip_stats(
   population = NULL,
   requested_mean = NULL,
   svy_mean_lcu = NULL,
+  svy_median_lcu,
+  svy_median_ppp,
   popshare = NULL,
   default_ppp = 1,
   ppp = NULL

@@ -22,20 +22,25 @@ prod_md_compute_pip_stats <- function(welfare,
                                       population = NULL,
                                       requested_mean = NULL,
                                       svy_mean_lcu = NULL,
+                                      svy_median_lcu,
+                                      svy_median_ppp,
                                       popshare = NULL,
                                       default_ppp = 1,
                                       ppp = NULL) {
 
   # Take care of potentially undefined values
-  if (is.null(ppp)) {
-    ppp <- default_ppp
-  }
   if (is.null(requested_mean)) {
     requested_mean <- svy_mean_lcu
   }
 
-  # Adjust values to account for PPP or welfare mean change
-  mean <- requested_mean * ppp / default_ppp
+  # Adjust mean and median if different PPP value is provided
+  if (!is.null(ppp)) {
+    mean <- requested_mean * default_ppp / ppp
+    median <- svy_median_lcu * default_ppp / ppp
+  } else {
+    mean <- requested_mean
+    median <- svy_median_ppp
+  }
 
   # Retrieve poverty line in Local Currency Unit (LCU)
   adjusted_povline <- md_compute_povline_lcu(
@@ -56,6 +61,7 @@ prod_md_compute_pip_stats <- function(welfare,
   return(list(
     poverty_line     = adjusted_povline[["povline"]],
     mean             = mean,
+    median           = median,
     headcount        = pov_stats[["headcount"]],
     poverty_gap      = pov_stats[["poverty_gap"]],
     poverty_severity = pov_stats[["poverty_severity"]],

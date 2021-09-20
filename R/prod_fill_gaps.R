@@ -33,6 +33,8 @@ prod_fg_compute_pip_stats <- function(request_year,
                                       data,
                                       predicted_request_mean,
                                       svy_mean_lcu,
+                                      svy_median_lcu,
+                                      svy_median_ppp,
                                       survey_year,
                                       default_ppp,
                                       ppp,
@@ -53,6 +55,8 @@ prod_fg_compute_pip_stats <- function(request_year,
   params <- prod_fg_create_params(
     predicted_request_mean = predicted_request_mean,
     svy_mean_lcu = svy_mean_lcu,
+    svy_median_lcu = svy_median_lcu,
+    svy_median_ppp = svy_median_ppp,
     data = data,
     poverty_line = poverty_line,
     popshare = popshare,
@@ -103,6 +107,8 @@ prod_fg_select_compute_pip_stats <- list(
 #' @noRd
 prod_fg_create_params <- function(predicted_request_mean,
                                   svy_mean_lcu,
+                                  svy_median_lcu,
+                                  svy_median_ppp,
                                   data,
                                   poverty_line,
                                   popshare,
@@ -121,7 +127,9 @@ prod_fg_create_params <- function(predicted_request_mean,
         default_ppp    = default_ppp[1],
         ppp            = ppp,
         requested_mean = predicted_request_mean[1],
-        svy_mean_lcu   = svy_mean_lcu[1]
+        svy_mean_lcu   = svy_mean_lcu[1],
+        svy_median_lcu = svy_median_lcu[1],
+        svy_median_ppp = svy_median_ppp[1]
       )
     )
     # If two surveys (micro or grouped)
@@ -135,7 +143,9 @@ prod_fg_create_params <- function(predicted_request_mean,
         default_ppp    = default_ppp[1],
         ppp            = ppp,
         requested_mean = predicted_request_mean[1],
-        svy_mean_lcu   = svy_mean_lcu[1]
+        svy_mean_lcu   = svy_mean_lcu[1],
+        svy_median_lcu = svy_median_lcu[1],
+        svy_median_ppp = svy_median_ppp[1]
       ),
       params1 = list(
         welfare        = data$df1$welfare,
@@ -145,7 +155,9 @@ prod_fg_create_params <- function(predicted_request_mean,
         default_ppp    = default_ppp[2],
         ppp            = ppp,
         requested_mean = predicted_request_mean[2],
-        svy_mean_lcu   = svy_mean_lcu[2]
+        svy_mean_lcu   = svy_mean_lcu[2],
+        svy_median_lcu = svy_median_lcu[2],
+        svy_median_ppp = svy_median_ppp[2]
       )
     )
   }
