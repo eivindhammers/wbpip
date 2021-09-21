@@ -29,8 +29,8 @@ wbpip:::md_compute_polarization(
   weight = rep(1, 2000),
   gini = 0.4,
   weighted_mean = 950,
-  weighted_median = 1000)
-
+  weighted_median = 1000
+)
 }
 \references{
 Ravallion, M., S. Chen. 1996.

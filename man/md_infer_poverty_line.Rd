@@ -36,10 +36,13 @@ population (in percentages).
 }
 \examples{
 wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000))
-wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000),
-  popshare = .2)
-wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000),
-  popshare = .6)
-
+wbpip:::md_infer_poverty_line(1:2000,
+  weight = rep(1, 2000),
+  popshare = .2
+)
+wbpip:::md_infer_poverty_line(1:2000,
+  weight = rep(1, 2000),
+  popshare = .6
+)
 }
 \keyword{internal}

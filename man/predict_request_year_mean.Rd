@@ -47,26 +47,29 @@ corresponding survey year.
 predict_request_year_mean(
   survey_year = 2005,
   survey_mean = 2.0,
-  proxy = list(value0 = 1350, req_value = 1500))
+  proxy = list(value0 = 1350, req_value = 1500)
+)
 
 # Interpolate two surveys (monotonic)
 predict_request_year_mean(
   survey_year = c(2000, 2005),
   survey_mean = c(2.0, 3.0),
-  proxy = list(value0 = 1350, value1 = 1600, req_value = 1500))
+  proxy = list(value0 = 1350, value1 = 1600, req_value = 1500)
+)
 
 # Interpolate two surveys (non-monotonic)
 predict_request_year_mean(
   survey_year = c(2000, 2005),
   survey_mean = c(2.0, 3.0),
-  proxy = list(value0 = 1350, value1 = 1500, req_value = 1600))
+  proxy = list(value0 = 1350, value1 = 1500, req_value = 1600)
+)
 
 # Extrapolate a single survey (w/ decimal year)
 predict_request_year_mean(
   survey_year = 2000.3,
   survey_mean = 2.0,
-  proxy = list(value0 = c(1350, 1400), req_value = 1600))
-
+  proxy = list(value0 = c(1350, 1400), req_value = 1600)
+)
 }
 \references{
 Prydz, E. B., D. Jolliffe, C. Lakner, D. G. Mahler, P. Sangraula. 2019.

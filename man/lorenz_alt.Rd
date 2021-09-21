@@ -24,6 +24,5 @@ Lorenz curve and several other related indicators.
 }
 \examples{
 wbpip:::lorenz_alt(welfare = 1:2000, weight = rep(1, 2000))
-
 }
 \keyword{internal}
