@@ -9,7 +9,7 @@ test_that("BETAICF() gives correct results", {
 
 })
 
-test_that("gd_compute_watts_lb_test() gives correct results", {
+test_that("gd_compute_watts_lb() gives correct results", {
 
   res <- gd_compute_watts_lb(
     headcount = 0.4,
@@ -32,5 +32,32 @@ test_that("gd_compute_watts_lb_test() gives correct results", {
     C = 0.4720329161
   )
   expect_equal(res, 0.2883967218)
+
+})
+
+
+test_that("gd_compute_watts_lq() gives correct results", {
+
+  res <- gd_compute_watts_lq(
+    headcount = 0.4,
+    mu = 20,
+    povline = 1.9,
+    dd = 0.005,
+    A = 0.2,
+    B = 0.3,
+    C = 0.4
+  )
+  expect_true(is.na(res))
+
+  res <- gd_compute_watts_lq(
+    headcount = 0.513180957,
+    mu = 78.962,
+    povline = 57.79166667,
+    dd = 0.005,
+    A = 0.7688156902,
+    B = 0.9812052979,
+    C = 0.4720329161
+  )
+  expect_equal(res, 0.4366290738)
 
 })

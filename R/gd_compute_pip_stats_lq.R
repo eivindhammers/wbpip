@@ -412,41 +412,35 @@ gd_compute_quantile_lq <- function(A, B, C, n_quantile = 10) {
 #' @return numeric
 #' @keywords internal
 gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
-  if (headcount <= 0) {
+  if (headcount <= 0 | is.na(headcount)) {
     return(0)
   }
 
-  # x1 = x2 = xstep = xend = gap <- 0
-  x1 <- 0
-  x2 <- 0
-  xstep <- 0
-  xend <- 0
-  gap <- 0
   snw <- headcount * dd
-  watts <- 0
-
   x1 <- derive_lq(snw / 2, A, B, C)
   if (x1 <= 0) {
     gap <- snw / 2
+    watts <- 0
   } else {
+    gap <- 0
     watts <- log(x1) * snw
   }
+
   xend <- headcount - snw
-  x1 <- derive_lq(0, A, B, C)
-  # Number of steps seems to be different from what happens in .Net codebase
-  for (xstep in seq(0, xend, by = snw)) {
-    x2 <- derive_lq(xstep + snw, A, B, C)
-    if ((x1 <= 0) || (x2 <= 0)) {
-      gap <- gap + snw
-      if (gap > 0.05) {
-        return(NA)
-      }
-    } else {
-      gap <- 0
-      watts <- watts + (log(x1) + log(x2)) * snw * 0.5
+  xstep_snw <- seq(0, xend, by = snw) + snw
+  x2 <- vapply(xstep_snw, function(x)
+    derive_lq(x, A, B, C), FUN.VALUE = numeric(1))
+  x1 <- c(derive_lq(0, A, B, C), x2[1:(length(x2) - 1)])
+
+  check <- (x1 <= 0 ) | (x2 <= 0)
+  if ((x1 <= 0) || (x2 <= 0)) {
+    gap <- gap + sum(check) * snw
+    if (gap > 0.05) {
+      return(NA) # Return watts as NA
     }
-    x1 <- x2
   }
+  watts <- sum((log(x1[!check]) + log(x2[!check])) * snw * 0.5) + watts
+
   if ((mu != 0) && (watts != 0)) {
     x1 <- povline / mu
     if (x1 > 0) {
@@ -455,7 +449,7 @@ gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
         return(watts)
       }
     }
-    return(NA) # Negative Watts values will be handled in gd_select_lorenz()
+    return(NA) # Return watts as NA
   } else {
     return(watts)
   }
