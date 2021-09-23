@@ -57,3 +57,14 @@ test_that("md_infer_poverty_line() works in any point of the distribution", {
     # cat(paste("\nhc:", hc, "\nx :", x, "\n"))
   })
 })
+
+test_that("md_infer_poverty_line() correctly handle NAs", {
+  # NAs are not removed as they are supposed to have been removed earlier in
+  # the pipeline. Adding this unit test here to highlight the fact that this is
+  # expected behavior.
+  res <- md_infer_poverty_line(
+    welfare = rep(100, 10001),
+    weight = c(rep(1, 10000), NA))
+
+  expect_equal(res, NaN)
+})
