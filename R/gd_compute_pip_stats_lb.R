@@ -760,40 +760,32 @@ GAMMLN <- function(xx) {
 #'
 #' @return numeric
 #' @noRd
+#'
 BETAICF <- function(a, b, x) {
   eps <- 3e-7
-  # am = bm = az <- 1
   am <- 1
   bm <- 1
   az <- 1
   qab <- a + b
   qap <- a + 1
   qam <- a - 1
-  bz <- 1 - (qab * x / qap)
+  bz <- c( 1 - (qab * x / qap), rep(1, 99))
 
-  # d = app = bpp = ap = bp = aold = em = tem <- 0
-  d <- 0
-  app <- 0
-  bpp <- 0
-  ap <- 0
-  bp <- 0
-  aold <- 0
-  em <- 0
-  tem <- 0
-  for (m in seq(1, 100, by = 1)) {
-    em <- m
-    tem <- sum(em, em)
-    d <- em * (b - m) * x / ((qam + tem) * (a + tem))
-    ap <- az + (d * am)
-    bp <- bz + (d * bm)
-    d <- -(a + em) * (qab + em) * x / ((a + tem) * (qap + tem))
-    app <- ap + (d * az)
-    bpp <- bp + (d * bz)
+  m <- 1:100
+  em <- 1:100
+  tem <- em * 2
+  d <- em * (b - m) * x / ((qam + tem) * (a + tem))
+  d2 <- -(a + em) * (qab + em) * x / ((a + tem) * (qap + tem))
+
+  for (i in seq_len(100)) {
+    ap <- az + (d[i] * am)
+    bp <- bz[i] + (d[i] * bm)
+    app <- ap + (d2[i]  * az)
+    bpp <- bp + (d2[i] * bz[i])
     aold <- az
     am <- ap / bpp
     bm <- bp / bpp
     az <- app / bpp
-    bz <- 1
     if ((abs(az - aold)) < (eps * abs(az))) {
       break
     }
