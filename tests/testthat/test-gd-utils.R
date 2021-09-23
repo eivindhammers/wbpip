@@ -8,3 +8,29 @@ test_that("BETAICF() gives correct results", {
   expect_equal(BETAICF(0.97744306, 1.9339481, 0.25566411), 1.559899929)
 
 })
+
+test_that("gd_compute_watts_lb_test() gives correct results", {
+
+  res <- gd_compute_watts_lb(
+    headcount = 0.4,
+    mean = 20,
+    povline = 1.9,
+    dd = 0.005,
+    A = 0.2,
+    B = 0.3,
+    C = 0.4
+  )
+  expect_true(is.na(res))
+
+  res <- gd_compute_watts_lb(
+    headcount = 0.513180957,
+    mean = 78.962,
+    povline = 57.79166667,
+    dd = 0.005,
+    A = 0.7688156902,
+    B = 0.9812052979,
+    C = 0.4720329161
+  )
+  expect_equal(res, 0.2883967218)
+
+})
