@@ -34,6 +34,5 @@ distributional statistics.
 }
 \examples{
 wbpip:::md_compute_dist_stats(welfare = 1:2000, weight = rep(1, 2000))
-
 }
 \keyword{internal}

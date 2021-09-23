@@ -4,13 +4,7 @@
 \alias{md_infer_poverty_line}
 \title{Infer poverty line}
 \usage{
-md_infer_poverty_line(
-  welfare,
-  weight,
-  popshare = 0.5,
-  na.rm = FALSE,
-  include = FALSE
-)
+md_infer_poverty_line(welfare, weight, popshare = 0.5, include = FALSE)
 }
 \arguments{
 \item{welfare}{numeric: A vector of income or consumption values.}
@@ -19,8 +13,6 @@ md_infer_poverty_line(
 
 \item{popshare}{numeric: Share of population for which the corresponding.
 quantile is desired. Default .5 (i.e., weighted median).}
-
-\item{na.rm}{logical: Set to TRUE to remove missing from computations.}
 
 \item{include}{logical: \strong{TO BE DOCUMENTED}.}
 }
@@ -36,10 +28,13 @@ population (in percentages).
 }
 \examples{
 wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000))
-wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000),
-  popshare = .2)
-wbpip:::md_infer_poverty_line(1:2000, weight = rep(1, 2000),
-  popshare = .6)
-
+wbpip:::md_infer_poverty_line(1:2000,
+  weight = rep(1, 2000),
+  popshare = .2
+)
+wbpip:::md_infer_poverty_line(1:2000,
+  weight = rep(1, 2000),
+  popshare = .6
+)
 }
 \keyword{internal}

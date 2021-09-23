@@ -20,6 +20,5 @@ Mean Log Deviation (MLD).
 }
 \examples{
 wbpip:::md_compute_mld(welfare = 1:2000, weight = rep(1, 2000))
-
 }
 \keyword{internal}

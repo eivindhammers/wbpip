@@ -47,5 +47,4 @@ str(bins)
 
 bins <- get_bins(df, welfare, weight, output = "full")
 str(bins)
-
 }

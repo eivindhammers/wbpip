@@ -40,9 +40,11 @@ of each percentile (\code{percentile}).
 }
 \examples{
 lz <- wbpip:::md_compute_lorenz(welfare = 1:2000, weight = rep(1, 2000))
-wbpip:::md_compute_quantiles(lwelfare   = lz$welfare,
-                     lweight    = lz$lorenz_weight,
-                     percentile = lz$lorenz_welfare,
-                     n_quantile = 10)
+wbpip:::md_compute_quantiles(
+  lwelfare = lz$welfare,
+  lweight = lz$lorenz_weight,
+  percentile = lz$lorenz_welfare,
+  n_quantile = 10
+)
 }
 \keyword{internal}
