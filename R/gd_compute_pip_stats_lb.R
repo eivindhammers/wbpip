@@ -46,7 +46,7 @@ gd_compute_pip_stats_lb <- function(welfare,
   # Boundary conditions (Why 4?)
   z_min <- requested_mean * derive_lb(0.001, A, B, C) + 4
   z_max <- requested_mean * derive_lb(0.980, A, B, C) - 4
-  z_min <- if (z_min < 0) 0 else z_min
+  z_min <- if (z_min < 0) 0L else z_min
 
   results1 <- list(requested_mean, povline, z_min, z_max, ppp)
   names(results1) <- list("mean", "poverty_line", "z_min", "z_max", "ppp")
@@ -82,10 +82,10 @@ gd_compute_pip_stats_lb <- function(welfare,
 #' @keywords internal
 create_functional_form_lb <- function(welfare, population) {
   # CHECK inputs
-  assertthat::assert_that(is.numeric(population))
-  assertthat::assert_that(is.numeric(welfare))
-  assertthat::assert_that(length(population) == length(welfare))
-  assertthat::assert_that(length(population) > 1)
+  # assertthat::assert_that(is.numeric(population))
+  # assertthat::assert_that(is.numeric(welfare))
+  # assertthat::assert_that(length(population) == length(welfare))
+  # assertthat::assert_that(length(population) > 1)
 
   # Remove last observation (the functional form for the Lorenz curve already forces
   # it to pass through the point (1, 1)
@@ -96,7 +96,7 @@ create_functional_form_lb <- function(welfare, population) {
   # y
   y <- log(population - welfare)
   # x1
-  x1 <- 1
+  x1 <- 1L
   # x2
   x2 <- log(population)
   # x3
@@ -337,9 +337,9 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
   x1 <- derive_lb(snw / 2, A, B, C)
   if (x1 <= 0) {
     gap <- snw / 2
-    watts <- 0
+    watts <- 0L
   } else {
-    gap <- 0
+    gap <- 0L
     watts <- log(x1) * snw
   }
 
@@ -910,8 +910,8 @@ rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
   f <- funcCall3[[1]]
   df <- funcCall3[[2]]
 
-  temp <- 0
-  for (i in seq(0, 99, by = 1)) {
+  temp <- 0L
+  for (i in seq_len(99)) {
     tmp <- (((rtsafe - xh) * df) - f) * (((rtsafe - xl) * df) - f)
     if (tmp >= 0 || abs(2 * f) > abs(dxold * df)) {
       dxold <- dx
@@ -982,12 +982,12 @@ funcD <- function(x, mean, povline, A, B, C) {
 #' @return numeric
 #' @noRd
 rtNewt <- function(mean, povline, A, B, C) {
-  x1 <- 0
-  x2 <- 1
+  x1 <- 0L
+  x2 <- 1L
   xacc <- 1e-4
   rtnewt <- 0.5 * (x1 + x2)
 
-  for (i in seq(0, 19, by = 1)) {
+  for (i in seq_len(19)) {
     x <- rtnewt
     v1 <- (x^B) * ((1 - x)^C)
     f <- A * v1 * ((B / x) - C / (1 - x)) + (povline / mean) - 1
