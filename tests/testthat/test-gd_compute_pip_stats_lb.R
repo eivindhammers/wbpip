@@ -724,3 +724,17 @@ test_that("gd_compute_pov_severity_lb works when headcount or pov_gap is NA", {
   expect_true(is.na(res))
 
 })
+
+
+test_that("GAMMLN works as expected", {
+
+  expect_equal(GAMMLN(-1), NA)
+  expect_equal(GAMMLN(1), -3.4136249e-11)
+  expect_equal(GAMMLN(10), 12.80182748)
+  expect_equal(GAMMLN(100), 359.1342054)
+
+})
+
+
+
+

@@ -718,29 +718,19 @@ BETAI <- function(a, b, x) {
 #' @return numeric
 #' @noRd
 GAMMLN <- function(xx) {
-  cof <- list(76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003e-2, -0.536382e-5)
+  cof <- c(76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003e-2, -0.536382e-5)
   stp <- 2.50662827465
-  half <- 0.5
-  one <- 1
   fpf <- 5.5
-  # x = tmp = ser <- 0
-  x <- 0
-  tmp <- 0
-  ser <- 0
-
-  x <- xx - one
+  x <- xx - 1
   tmp <- x + fpf
   if (tmp <= 0) {
     return(NA)
   }
 
-  tmp <- (x + half) * log(tmp) - tmp
-  ser <- one
-
-  for (i in seq(1, 6, by = 1)) {
-    x <- sum(x, one)
-    ser <- sum(ser, cof[[i]] / x)
-  }
+  tmp <- (x + 0.5) * log(tmp) - tmp
+  # ser <- 1L
+  x <-  c(x + 1:6)
+  ser <- sum(cof / x) + 1
 
   if (stp * ser <= 0) {
     return(NA)
