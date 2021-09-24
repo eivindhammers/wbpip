@@ -165,7 +165,9 @@ derive_lq <- function(x, A, B, C) {
   alpha <- (B^2) - (4 * A)
   beta <- (2 * B * e) - (4 * C) # C is called D in original paper, but C in Datt paper
   tmp <- (alpha * x^2) + (beta * x) + (e^2)
-  tmp <- ifelse(tmp < 0, 0, tmp) # Why would we set tmp to 0? It would still fail: division by 0.
+  tmp <- if (!is.na(tmp)) {
+    if (tmp < 0) 0 else tmp # Why would we set tmp to 0? It would still fail: division by 0.
+  }
 
   # Formula for first derivative of GQ Lorenz Curve
   val <- -(B / 2) - ((2 * alpha * x + beta) / (4 * sqrt(tmp)))

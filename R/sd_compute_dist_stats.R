@@ -87,13 +87,20 @@ sd_create_synth_vector <- function(welfare,
     B <- reg_coef_lq[2]
     C <- reg_coef_lq[3]
     # Compute welfare values
-    welfare_s <- mean * derive_lq(weight_range, A, B, C)
+    welfare_s <- purrr::map_dbl(weight_range, .f =
+                                  function(x, mean, A, B, C)  {
+                                    mean * derive_lq(x, A, B, C)
+                                  }, mean, A, B, C)
+
   } else {
     A <- reg_coef_lb[1]
     B <- reg_coef_lb[2]
     C <- reg_coef_lb[3]
     # Compute welfare values
-    welfare_s <- mean * derive_lb(weight_range, A, B, C)
+    welfare_s <- purrr::map_dbl(weight_range, .f =
+                                  function(x, mean, A, B, C)  {
+                                    mean * derive_lq(x, A, B, C)
+                                  }, mean, A, B, C)
   }
 
   # manage population
