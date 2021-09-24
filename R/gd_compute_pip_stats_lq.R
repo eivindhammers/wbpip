@@ -434,7 +434,7 @@ gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
   x1 <- c(derive_lq(0, A, B, C), x2[1:(length(x2) - 1)])
 
   check <- (x1 <= 0 ) | (x2 <= 0)
-  if ((x1 <= 0) || (x2 <= 0)) {
+  if (any(check)) {
     gap <- gap + sum(check) * snw
     if (gap > 0.05) {
       return(NA) # Return watts as NA

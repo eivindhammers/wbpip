@@ -349,7 +349,7 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
     derive_lb(x, A, B, C), FUN.VALUE = numeric(1))
   x1 <- c(derive_lb(0, A, B, C), x2[1:(length(x2) - 1)])
 
-  check <- (x1 <= 0 ) | (x2 <= 0)
+  check <- (x1 <= 0) | (x2 <= 0)
   if (any(check)) {
     gap <- gap + sum(check) * snw
     if (gap > 0.05) {
