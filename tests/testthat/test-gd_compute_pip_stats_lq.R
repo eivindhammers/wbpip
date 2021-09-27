@@ -78,12 +78,13 @@ test_that("create_functional_form_lq works as expected", {
     population = lorenz_pop
   )
 
-  expect_true(is.data.frame(out))
-  expect_equal(dim(out), c(9, 4))
+  expect_true(is.list(out))
+  expect_equal(length(out$y), 9)
+  expect_equal(dim(out$X), c(9, 3))
   expect_equal(out$y, y)
-  expect_equal(out$x1, x1)
-  expect_equal(out$x2, x2)
-  expect_equal(out$x3, x3)
+  expect_equal(out$X[,1], x1)
+  expect_equal(out$X[,2], x2)
+  expect_equal(out$X[,3], x3)
 })
 
 test_that("gd_compute_dist_stats_lq works as expected", {

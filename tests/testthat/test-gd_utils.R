@@ -1,0 +1,47 @@
+gd_ex1 <- readRDS("../testdata/gd_ex1.RDS")
+gd_ex3 <- readRDS("../testdata/gd_ex3.RDS")
+lq_ex1 <- create_functional_form_lq(welfare = gd_ex1$welfare, gd_ex1$weight)
+lb_ex1 <- create_functional_form_lb(welfare = gd_ex1$welfare, gd_ex1$weight)
+lq_ex3 <- create_functional_form_lq(welfare = gd_ex3$welfare, gd_ex3$weight)
+lb_ex3 <- create_functional_form_lb(welfare = gd_ex3$welfare, gd_ex3$weight)
+
+test_that("regres() works", {
+
+  res <- regres(lq_ex1, is_lq = TRUE)
+  expect_equal(res$ymean, 0.1423648673)
+  expect_equal(res$sst, 0.06131875796)
+  expect_equal(res$coef, c(0.6951457910, -0.4481437233, 0.1784659802))
+  expect_equal(res$sse, 8.589541793e-06)
+  expect_equal(res$r2, 0.9998599198)
+  expect_equal(res$mse, 1.431590299e-06)
+  expect_equal(res$se, c(0.007725617915, 0.050189870336, 0.014458193253))
+
+  res <- regres(lb_ex1, is_lq = FALSE)
+  expect_equal(res$ymean, -1.382819939)
+  expect_equal(res$sst, 1.973224295)
+  expect_equal(res$coef, c(0.8001315617, 0.9631087066, 0.3546529133))
+  expect_equal(res$sse, 4.655787755e-05)
+  expect_equal(res$r2, 0.9999764052)
+  expect_equal(res$mse, 7.759646258e-06)
+  expect_equal(res$se, c(0.004414500033, 0.002553254076, 0.002553254076))
+
+  res <- regres(lq_ex3, is_lq = TRUE)
+  expect_equal(res$ymean, 0.1138134513)
+  expect_equal(res$sst, 0.06546978054)
+  expect_equal(res$coef, c(1.0145428774, 2.1263064632, 0.1831536767))
+  expect_equal(res$sse, 7.269070078e-05)
+  expect_equal(res$r2, 0.9988897061)
+  expect_equal(res$mse, 1.21151168e-05)
+  expect_equal(res$se, c(0.02504565517, 0.25429529749, 0.02950304005))
+
+  res <- regres(lb_ex3, is_lq = FALSE)
+  expect_equal(res$ymean, -1.206863112)
+  expect_equal(res$sst, 2.248688168)
+  expect_equal(res$coef, c(1.0516892577, 1.0368934752, 0.3915525591))
+  expect_equal(res$sse, 0.000934652173)
+  expect_equal(res$r2, 0.9995843567)
+  expect_equal(res$mse, 0.0001557753622)
+  expect_equal(res$se, c(0.01977925582, 0.01143990603, 0.01143990603))
+
+})
+

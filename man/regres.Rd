@@ -4,10 +4,10 @@
 \alias{regres}
 \title{Perform linear regression on Lorenz formatted input}
 \usage{
-regres(df, is_lq = TRUE)
+regres(data, is_lq = TRUE)
 }
 \arguments{
-\item{df}{data.frame: Output of \code{create_functional_form_lq()} or
+\item{data}{list: Output of \code{create_functional_form_lq()} or
 \code{create_functional_form_lb()}.}
 
 \item{is_lq}{logical: TRUE if Lorenz Quadratic, FALSE if Beta Lorenz.}

@@ -134,9 +134,8 @@ create_functional_form_lq <- function(welfare,
   # P-L
   x3 <- population - welfare
 
-  out <- data.frame(y, x1, x2, x3, stringsAsFactors = FALSE)
+  return(list(y = y, X = cbind(x1, x2, x3)))
 
-  return(out)
 }
 
 
