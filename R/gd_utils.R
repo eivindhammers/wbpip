@@ -43,3 +43,6 @@ regres <- function(data, is_lq = TRUE) {
     se = se
   ))
 }
+}
+
+
