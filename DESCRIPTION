@@ -49,11 +49,7 @@ Imports:
     assertthat,
     cli,
     collapse,
-    compiler,
-    Rcpp
+    compiler
 VignetteBuilder: knitr
 ByteCompile: true
 Config/testthat/edition: 3
-LinkingTo: 
-    RcppArmadillo,
-    Rcpp

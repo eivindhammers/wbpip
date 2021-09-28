@@ -12,20 +12,25 @@
 #' @keywords internal
 regres <- function(data, is_lq = TRUE) {
 
-  y = data$y
-  X = data$X
+  y <- data$y
+  X <- data$X
+
+  n <- length(y)
+  k <- ncol(X)
 
   # Run regression
-  res <- fast_lm(y = y, X = X)
+  res <- stats::.lm.fit(y = y, x = X)
 
   # Calculate stats
-  ymean <- sum(y) / length(y)
+  ymean <- sum(y) / n
   sst <- sum((y - ymean)^2) # sum of square total
-  coef <- as.vector(res$coefficients) # regression coefs
-  sse <- sum(res$residuals^2) # sum of square error
+  coef <- res$coefficients # regression coefs
+  residuals <- res$residuals # residulas
+  sse <- sum(residuals^2) # sum of square error
   r2 <- 1 - sse / sst # R-square (This is the R2 formula for models with an intercept)
-  mse <- sse / (length(y) - length(coef)) # Mean squared error
-  se <- as.vector(res$stderr) # Standard error
+  mse <- sse / (n - k) # Mean squared error
+  s2 <- as.vector((residuals %*% residuals) / (n - k))
+  se <- sqrt(s2 * (diag(MASS::ginv(t(X) %*% X)))) # Standard error
 
   # REVIEW:
   # Why exp() if isLQ == FALSE?
@@ -42,7 +47,6 @@ regres <- function(data, is_lq = TRUE) {
     mse = mse,
     se = se
   ))
-}
 }
 
 
