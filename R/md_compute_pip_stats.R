@@ -38,7 +38,7 @@ md_compute_pip_stats <- function(welfare,
   data_mean <- dist_stats[["mean"]]
 
   # Adjust values to account for PPP or welfare mean change
-  mean <- requested_mean * ppp / default_ppp
+  mean <- requested_mean * default_ppp / ppp
   median <- dist_stats[["median"]] / (data_mean / requested_mean)
 
   # Retrieve poverty line in Local Currency Unit (LCU)
