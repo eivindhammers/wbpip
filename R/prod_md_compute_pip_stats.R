@@ -35,7 +35,7 @@ prod_md_compute_pip_stats <- function(welfare,
   }
 
   # Adjust values to account for PPP or welfare mean change
-  mean <- requested_mean * ppp / default_ppp
+  mean <- requested_mean * default_ppp / ppp
 
   # Retrieve poverty line in Local Currency Unit (LCU)
   adjusted_povline <- md_compute_povline_lcu(
