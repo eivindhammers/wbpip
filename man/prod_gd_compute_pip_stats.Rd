@@ -13,7 +13,7 @@ prod_gd_compute_pip_stats(
   svy_median_lcu,
   svy_median_ppp,
   popshare = NULL,
-  default_ppp = 1,
+  default_ppp,
   ppp = NULL,
   p0 = 0.5
 )

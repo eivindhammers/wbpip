@@ -17,6 +17,8 @@
 #' @param predicted_request_mean numeric: A vector with one or two predicted
 #' survey means. See details.
 #' @param svy_mean_lcu numeric: A vector with one or two survey means.
+#' @param svy_median_lcu numeric: A vector with one or two survey median in LCU
+#' @param svy_median_ppp numeric: A vector with one or two survey median in PPP
 #' @param survey_year numeric: A vector with one or two survey years.
 #' @param poverty_line numeric: Daily poverty line in international dollars.
 #' @param popshare numeric: Share of the population living below the poverty line.

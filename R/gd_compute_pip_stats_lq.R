@@ -22,7 +22,8 @@
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   povline = z
+#'   povline = z,
+#'   default_ppp = 1
 #' )
 #' res$headcount
 #'
@@ -30,7 +31,8 @@
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   popshare = res$headcount
+#'   popshare = res$headcount,
+#'   default_ppp = 1
 #' )
 #' res2$povline
 #' @return list

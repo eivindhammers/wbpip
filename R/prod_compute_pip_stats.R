@@ -10,6 +10,8 @@
 #' of 1s if not specified.
 #' @param requested_mean numeric: Welfare mean in international dollars
 #' @param svy_mean_lcu numeric: Welfare mean in Local Currency Unit
+#' @param svy_median_lcu numeric: Welfare median in Local Currency Unit
+#' @param svy_median_ppp numeric: Welfare median in PPP
 #' @param popshare numeric: Share of population for which the corresponding
 #' quantile is desired. Default .5 (i.e., weighted median)
 #' @param default_ppp numeric: Default purchasing power parity
