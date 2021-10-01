@@ -27,7 +27,7 @@ prod_compute_pip_stats <- function(welfare,
                                    svy_median_lcu,
                                    svy_median_ppp,
                                    popshare = NULL,
-                                   default_ppp = 1,
+                                   default_ppp,
                                    ppp = NULL,
                                    p0 = 0.5,
                                    distribution_type = c(

@@ -12,7 +12,7 @@ prod_gd_compute_pip_stats_lb <- function(welfare,
                                          population,
                                          requested_mean,
                                          popshare = NULL,
-                                         default_ppp = NULL,
+                                         default_ppp,
                                          ppp = NULL,
                                          p0 = 0.5) {
 
