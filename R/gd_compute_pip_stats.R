@@ -21,7 +21,7 @@ gd_compute_pip_stats <- function(welfare,
                                  population,
                                  requested_mean,
                                  popshare = NULL,
-                                 default_ppp = NULL,
+                                 default_ppp = 1,
                                  ppp = NULL,
                                  p0 = 0.5) {
 

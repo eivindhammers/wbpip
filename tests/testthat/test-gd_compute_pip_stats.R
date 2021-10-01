@@ -3,7 +3,8 @@ gd_ex2 <- readRDS("../testdata/gd_ex2.RDS")
 test_that("gd_compute_pip_stats() returns correct results", {
   res <- gd_compute_pip_stats(
     gd_ex2$welfare, gd_ex2$weight,
-    requested_mean = 2.911786, povline = 1.9
+    requested_mean = 2.911786, povline = 1.9,
+    default_ppp = 1
   )
   expect_equal(res$mean, 2.911786)
   expect_equal(res$median, 2.29062, tolerance = 1.5e-06)
