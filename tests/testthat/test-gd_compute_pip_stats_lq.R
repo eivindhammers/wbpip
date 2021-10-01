@@ -78,12 +78,13 @@ test_that("create_functional_form_lq works as expected", {
     population = lorenz_pop
   )
 
-  expect_true(is.data.frame(out))
-  expect_equal(dim(out), c(9, 4))
+  expect_true(is.list(out))
+  expect_equal(length(out$y), 9)
+  expect_equal(dim(out$X), c(9, 3))
   expect_equal(out$y, y)
-  expect_equal(out$x1, x1)
-  expect_equal(out$x2, x2)
-  expect_equal(out$x3, x3)
+  expect_equal(out$X[,1], x1)
+  expect_equal(out$X[,2], x2)
+  expect_equal(out$X[,3], x3)
 })
 
 test_that("gd_compute_dist_stats_lq works as expected", {
@@ -297,4 +298,30 @@ test_that("gd_estimate_lq works as expected", {
     ),
     empty_gd_compute_pip_stats_response
   )
+})
+
+test_that("gd_compute_watts_lq() gives correct results", {
+
+  res <- gd_compute_watts_lq(
+    headcount = 0.4,
+    mu = 20,
+    povline = 1.9,
+    dd = 0.005,
+    A = 0.2,
+    B = 0.3,
+    C = 0.4
+  )
+  expect_true(is.na(res))
+
+  res <- gd_compute_watts_lq(
+    headcount = 0.513180957,
+    mu = 78.962,
+    povline = 57.79166667,
+    dd = 0.005,
+    A = 0.7688156902,
+    B = 0.9812052979,
+    C = 0.4720329161
+  )
+  expect_equal(res, 0.4366290738)
+
 })

@@ -32,8 +32,7 @@ Calculate points on the Lorenz curve. \strong{TO BE DOCUMENTED}.
 }
 \examples{
 data("md_ABC_2000_income")
-df     <- md_ABC_2000_income
+df <- md_ABC_2000_income
 lorenz <- get_lorenz(df, welfare, weight)
 str(lorenz)
-
 }

@@ -25,6 +25,5 @@ Lorenz curve.
 }
 \examples{
 wbpip:::md_compute_lorenz(welfare = 1:2000, weight = rep(1, 2000))
-
 }
 \keyword{internal}

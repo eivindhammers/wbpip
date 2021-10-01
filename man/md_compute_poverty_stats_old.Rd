@@ -28,7 +28,7 @@ poverty severity and the watts index.
 wbpip:::md_compute_poverty_stats_old(
   welfare = 1:2000,
   weight = rep(1, 2000),
-  povline_lcu = 10)
-
+  povline_lcu = 10
+)
 }
 \keyword{internal}

@@ -22,13 +22,12 @@ md_compute_poverty_stats <- function(welfare, weight, povline_lcu) {
 
   pov_status <- (welfare < povline_lcu)
   relative_distance <- (1 - (welfare[pov_status] / povline_lcu))
-  non_pov <- rep(0, collapse::fsum(!pov_status))
+  weight_pov <- weight[pov_status]
+  weight_total <- sum(weight)
 
-  fgt0 <- collapse::fmean(x = pov_status, w = weight)
-
-  fgt1 <- collapse::fmean(x = c(relative_distance, non_pov), w = weight)
-
-  fgt2 <- collapse::fmean(x = c(relative_distance^2, non_pov), w = weight)
+  fgt0 <- sum(weight_pov) / weight_total
+  fgt1 <- sum(relative_distance * weight_pov) / weight_total
+  fgt2 <- sum(relative_distance^2 * weight_pov) / weight_total
 
   #--------- Watts index ---------
 
@@ -38,8 +37,9 @@ md_compute_poverty_stats <- function(welfare, weight, povline_lcu) {
   # watts              <- collapse::fmean(x = c(sensitive_distance, non_pov),
   #                                       w = weight[welfare > 0])
   #--------- Old Watts ---------
-  watts <- collapse::fsum(sensitive_distance * weight[welfare > 0 & pov_status]) /
-    collapse::fsum(weight)
+
+  watts <- sum(sensitive_distance * weight[welfare > 0 & pov_status]) /
+    weight_total
 
   # Handle cases where Watts is numeric(0)
   if (identical(watts, numeric(0))) {

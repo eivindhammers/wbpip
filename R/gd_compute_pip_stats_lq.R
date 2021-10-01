@@ -74,7 +74,7 @@ gd_compute_pip_stats_lq <- function(welfare,
   # Boundary conditions (Why 4?)
   z_min <- requested_mean * derive_lq(0.001, A, B, C) + 4
   z_max <- requested_mean * derive_lq(0.980, A, B, C) - 4
-  z_min <- if (z_min < 0) 0 else z_min
+  z_min <- if (z_min < 0) 0L else z_min
 
   results1 <- list(requested_mean, povline, z_min, z_max, ppp)
   names(results1) <- list("mean", "poverty_line", "z_min", "z_max", "ppp")
@@ -114,10 +114,10 @@ gd_compute_pip_stats_lq <- function(welfare,
 create_functional_form_lq <- function(welfare,
                                       population) {
   # CHECK inputs
-  assertthat::assert_that(is.numeric(population))
-  assertthat::assert_that(is.numeric(welfare))
-  assertthat::assert_that(length(population) == length(welfare))
-  assertthat::assert_that(length(population) > 1)
+  # assertthat::assert_that(is.numeric(population))
+  # assertthat::assert_that(is.numeric(welfare))
+  # assertthat::assert_that(length(population) == length(welfare))
+  # assertthat::assert_that(length(population) > 1)
 
   # Remove last observation (the functional form for the Lorenz curve already forces
   # it to pass through the point (1, 1)
@@ -134,9 +134,8 @@ create_functional_form_lq <- function(welfare,
   # P-L
   x3 <- population - welfare
 
-  out <- data.frame(y, x1, x2, x3, stringsAsFactors = FALSE)
+  return(list(y = y, X = cbind(x1, x2, x3)))
 
-  return(out)
 }
 
 
@@ -165,7 +164,9 @@ derive_lq <- function(x, A, B, C) {
   alpha <- (B^2) - (4 * A)
   beta <- (2 * B * e) - (4 * C) # C is called D in original paper, but C in Datt paper
   tmp <- (alpha * x^2) + (beta * x) + (e^2)
-  tmp <- ifelse(tmp < 0, 0, tmp) # Why would we set tmp to 0? It would still fail: division by 0.
+  tmp <- if (!is.na(tmp)) {
+    if (tmp < 0) 0L else tmp # Why would we set tmp to 0? It would still fail: division by 0.
+  }
 
   # Formula for first derivative of GQ Lorenz Curve
   val <- -(B / 2) - ((2 * alpha * x + beta) / (4 * sqrt(tmp)))
@@ -284,7 +285,8 @@ gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 
     # Formula from Datt paper
     # CHECK that code matches formulas in paper
-    gini <- e2 + (tmp3 / (4 * m)) * e1 - (n * abs(e) / (4 * m)) - ((r^2) / (8 * sqrt(m)^3)) * log(abs(((tmp3 + (2 * sqrt(m) * e1))) / (n + (2 * sqrt(m) * abs(e)))))
+    gini <- e2 + (tmp3 / (4 * m)) * e1 - (n * abs(e) / (4 * m)) - ((r^2) / (8 * sqrt(m)^3)) *
+      log(abs(((tmp3 + (2 * sqrt(m) * e1))) / (n + (2 * sqrt(m) * abs(e)))))
     # P.gi <- (e/2) - tmp1 - (tmp2 * log(abs(tmpnum/tmpden)) / sqrt(m))
   } else {
     tmp4 <- ((2 * m) + n) / r
@@ -316,7 +318,7 @@ value_at_lq <- function(x, A, B, C) {
   m <- (B^2) - (4 * A)
   n <- (2 * B * e) - (4 * C)
   temp <- (m * x^2) + (n * x) + (e^2)
-  temp <- if (temp < 0) 0 else temp
+  temp <- if (temp < 0) 0L else temp
 
   # Solving the equation of the Lorenz curve
   estle <- -0.5 * ((B * x) + e + sqrt(temp))
@@ -338,8 +340,8 @@ value_at_lq <- function(x, A, B, C) {
 #' @keywords internal
 gd_compute_mld_lq <- function(dd, A, B, C) {
   x1 <- derive_lq(0.0005, A, B, C)
-  gap <- 0
-  mld <- 0
+  gap <- 0L
+  mld <- 0L
   if (x1 == 0) {
     gap <- 0.0005
   } else {
@@ -354,7 +356,7 @@ gd_compute_mld_lq <- function(dd, A, B, C) {
         return(-1)
       }
     } else {
-      gap <- 0
+      gap <- 0L
       mld <- mld + (log(x1) + log(x2)) * 0.0005
     }
     x1 <- x2
@@ -376,8 +378,8 @@ gd_compute_mld_lq <- function(dd, A, B, C) {
 gd_compute_quantile_lq <- function(A, B, C, n_quantile = 10) {
   vec <- vector(mode = "numeric", length = n_quantile)
   x1 <- 1 / n_quantile
-  q <- 0
-  lastq <- 0
+  q <- 0L
+  lastq <- 0L
   for (i in seq_len(n_quantile - 1)) {
     q <- value_at_lq(x1, A, B, C)
     v <- q - lastq
@@ -410,41 +412,35 @@ gd_compute_quantile_lq <- function(A, B, C, n_quantile = 10) {
 #' @return numeric
 #' @keywords internal
 gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
-  if (headcount <= 0) {
+  if (headcount <= 0 | is.na(headcount)) {
     return(0)
   }
 
-  # x1 = x2 = xstep = xend = gap <- 0
-  x1 <- 0
-  x2 <- 0
-  xstep <- 0
-  xend <- 0
-  gap <- 0
   snw <- headcount * dd
-  watts <- 0
-
   x1 <- derive_lq(snw / 2, A, B, C)
   if (x1 <= 0) {
     gap <- snw / 2
+    watts <- 0L
   } else {
+    gap <- 0L
     watts <- log(x1) * snw
   }
+
   xend <- headcount - snw
-  x1 <- derive_lq(0, A, B, C)
-  # Number of steps seems to be different from what happens in .Net codebase
-  for (xstep in seq(0, xend, by = snw)) {
-    x2 <- derive_lq(xstep + snw, A, B, C)
-    if ((x1 <= 0) || (x2 <= 0)) {
-      gap <- gap + snw
-      if (gap > 0.05) {
-        return(NA)
-      }
-    } else {
-      gap <- 0
-      watts <- watts + (log(x1) + log(x2)) * snw * 0.5
+  xstep_snw <- seq(0, xend, by = snw) + snw
+  x2 <- vapply(xstep_snw, function(x)
+    derive_lq(x, A, B, C), FUN.VALUE = numeric(1))
+  x1 <- c(derive_lq(0, A, B, C), x2[1:(length(x2) - 1)])
+
+  check <- (x1 <= 0 ) | (x2 <= 0)
+  if (any(check)) {
+    gap <- gap + sum(check) * snw
+    if (gap > 0.05) {
+      return(NA) # Return watts as NA
     }
-    x1 <- x2
   }
+  watts <- sum((log(x1[!check]) + log(x2[!check])) * snw * 0.5) + watts
+
   if ((mu != 0) && (watts != 0)) {
     x1 <- povline / mu
     if (x1 > 0) {
@@ -453,7 +449,7 @@ gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
         return(watts)
       }
     }
-    return(NA) # Negative Watts values will be handled in gd_select_lorenz()
+    return(NA) # Return watts as NA
   } else {
     return(watts)
   }
@@ -558,7 +554,7 @@ gd_compute_poverty_stats_lq <- function(mean,
   headcount <- -(n + ((r * bu) / sqrt(bu^2 - m))) / (2 * m)
 
   tmp0 <- (m * headcount^2) + (n * headcount) + (e^2)
-  tmp0 <- if (tmp0 < 0) 0 else tmp0
+  tmp0 <- if (tmp0 < 0) 0L else tmp0
   tmp0 <- sqrt(tmp0)
 
   # First derivative of the Lorenz curve
@@ -568,18 +564,21 @@ gd_compute_poverty_stats_lq <- function(mean,
   ddl <- r^2 / (tmp0^3 * 8)
 
   if (headcount < 0) {
-    headcount <- pov_gap <- pov_gap_sq <- watts <- 0
-    eh <- epg <- ep <- gh <- gpg <- gp <- 0
+    headcount <- pov_gap <- pov_gap_sq <- watts <- 0L
+    eh <- epg <- ep <- gh <- gpg <- gp <- 0L
   } else {
 
+    # HC value at LQ
+    hc_lq <- value_at_lq(headcount, A, B, C)
+
     # Poverty gap index (P.pg)
-    pov_gap <- headcount - (u * value_at_lq(headcount, A, B, C))
+    pov_gap <- headcount - (u * hc_lq)
 
     # P.p2 - Distributionally sensitive FGT poverty measure
     # P.p2 <- (2*P.pg) - P.h - u^2 * (A*P.h + B*value_at_lq(P.h, A, B, C) - (r/16 *log((1 - P.h/s1))/(1 - P.h/s2)))
     # Poverty severity
     pov_gap_sq <- (2 * pov_gap) - headcount -
-      (u^2 * (A * headcount + B * value_at_lq(headcount, A, B, C) -
+      (u^2 * (A * headcount + B * hc_lq -
         ((r / 16) * log((1 - headcount / s1) / (1 - headcount / s2)))))
 
     # Elasticity of headcount index w.r.t mean (P.eh)
@@ -716,11 +715,11 @@ gd_compute_fit_lq <- function(welfare,
     ))
   }
 
-  lasti <- 0
-  sse <- 0 # Sum of square error
-  ssez <- 0
+  lasti <- 0L
+  sse <- 0L # Sum of square error
+  ssez <- 0L
 
-  for (i in seq_along(welfare[-1])) {
+  for (i in seq_len(length(welfare) - 1)) {
     residual <- welfare[i] - value_at_lq(population[i], A, B, C)
     residual_sq <- residual^2
     sse <- sse + residual_sq

@@ -49,12 +49,13 @@ named \emph{weight} if welfare values are to be weighted.
 }
 \examples{
 # Load example data
-data('md_ABC_2000_income')
-data('md_ABC_2010_income')
+data("md_ABC_2000_income")
+data("md_ABC_2010_income")
 md_ABC_2010_income <-
-   wbpip:::md_clean_data(md_ABC_2010_income,
-     welfare = 'welfare',
-     weight = 'weight')$data
+  wbpip:::md_clean_data(md_ABC_2010_income,
+    welfare = "welfare",
+    weight = "weight"
+  )$data
 
 # Extrapolation
 res <- fill_gaps(
@@ -63,8 +64,9 @@ res <- fill_gaps(
   data = list(df0 = md_ABC_2000_income),
   predicted_request_mean = 13,
   default_ppp = 1,
-  distribution_type = 'micro',
-  poverty_line = 1.9)
+  distribution_type = "micro",
+  poverty_line = 1.9
+)
 
 # Interpolation (monotonic)
 res <- fill_gaps(
@@ -73,8 +75,9 @@ res <- fill_gaps(
   data = list(df0 = md_ABC_2000_income, df1 = md_ABC_2010_income),
   predicted_request_mean = c(13, 13),
   default_ppp = c(1, 1),
-  distribution_type = 'micro',
-  poverty_line = 1.9)
+  distribution_type = "micro",
+  poverty_line = 1.9
+)
 
 # Interpolation (non-monotonic)
 res <- fill_gaps(
@@ -83,9 +86,9 @@ res <- fill_gaps(
   data = list(df0 = md_ABC_2000_income, df1 = md_ABC_2010_income),
   predicted_request_mean = c(14, 17),
   default_ppp = c(1, 1),
-  distribution_type = 'micro',
-  poverty_line = 1.9)
-
+  distribution_type = "micro",
+  poverty_line = 1.9
+)
 }
 \seealso{
 \code{\link[=deflate_welfare_mean]{deflate_welfare_mean()}} \code{\link[=predict_request_year_mean]{predict_request_year_mean()}}

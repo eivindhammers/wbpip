@@ -47,10 +47,13 @@ group is small, tabulate afterwards to check the results. you may use \verb{tp <
 }
 \examples{
 wbpip:::md_compute_bins(welfare = 1:2000, weight = rep(1, 2000))
-wbpip:::md_compute_bins(welfare = 1:2000, weight = rep(1, 2000),
- output = 'full')
-wbpip:::md_compute_bins(welfare = 1:2000, weight = rep(1, 2000),
-  output = c('cum_pop', 'cum_prop_pop'))
-
+wbpip:::md_compute_bins(
+  welfare = 1:2000, weight = rep(1, 2000),
+  output = "full"
+)
+wbpip:::md_compute_bins(
+  welfare = 1:2000, weight = rep(1, 2000),
+  output = c("cum_pop", "cum_prop_pop")
+)
 }
 \keyword{internal}

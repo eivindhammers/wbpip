@@ -238,6 +238,13 @@ test_that("BETAICF returns expected results", {
     x = x
   )
   expect_equal(out, benchmarck)
+
+  expect_equal(BETAICF(1, 2, 3),  -0.125)
+  expect_equal(BETAICF(0.1, 0.2, 0.3),  1.1014918, tolerance = 1e-7)
+  expect_equal(BETAICF(-0.1, -0.2, -0.3),  1.0905613, tolerance = 1e-7)
+  expect_equal(BETAICF(0.9352649, 2.060105, 0.3706313), 2.106916911)
+  expect_equal(BETAICF(1.9440658, 0.9624106, 0.48681904), 1.92934409)
+  expect_equal(BETAICF(0.97744306, 1.9339481, 0.25566411), 1.559899929)
 })
 
 test_that("gd_compute_headcount_lb returns expected results", {
@@ -293,7 +300,7 @@ test_that("gd_compute_pov_severity_lb returns expected results", {
   expect_equal(out, benchmarck)
 })
 
-test_that("gd_compute_watts_index_lb returns expected results", {
+test_that("gd_compute_watts_lb returns expected results", {
   headcount <- 0.71833938360214233
   mean <- 51.5660557757944
   povline <- 57.791666666666664
@@ -313,6 +320,28 @@ test_that("gd_compute_watts_index_lb returns expected results", {
     C = C
   )
   expect_equal(out, benchmarck, tolerance = 1.1e-03) # 1e-03
+
+  res <- gd_compute_watts_lb(
+    headcount = 0.4,
+    mean = 20,
+    povline = 1.9,
+    dd = 0.005,
+    A = 0.2,
+    B = 0.3,
+    C = 0.4
+  )
+  expect_true(is.na(res))
+
+  res <- gd_compute_watts_lb(
+    headcount = 0.513180957,
+    mean = 78.962,
+    povline = 57.79166667,
+    dd = 0.005,
+    A = 0.7688156902,
+    B = 0.9812052979,
+    C = 0.4720329161
+  )
+  expect_equal(res, 0.2883967218)
 })
 
 test_that("gd_compute_poverty_stats_lb works as expected", {
@@ -696,3 +725,17 @@ test_that("gd_compute_pov_severity_lb works when headcount or pov_gap is NA", {
   expect_true(is.na(res))
 
 })
+
+
+test_that("GAMMLN works as expected", {
+
+  expect_equal(GAMMLN(-1), NA)
+  expect_equal(GAMMLN(1), -3.4136249e-11)
+  expect_equal(GAMMLN(10), 12.80182748)
+  expect_equal(GAMMLN(100), 359.1342054)
+
+})
+
+
+
+
