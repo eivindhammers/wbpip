@@ -4,27 +4,34 @@
 #' Quadratic). There is no intercept in the regression. The coefficients of
 #' regressions are estimated by ordinary least squares.
 #'
-#' @param df data.frame: Output of `create_functional_form_lq()` or
+#' @param data list: Output of `create_functional_form_lq()` or
 #' `create_functional_form_lb()`.
 #' @param is_lq logical: TRUE if Lorenz Quadratic, FALSE if Beta Lorenz.
 #'
 #' @return list
 #' @keywords internal
-regres <- function(df, is_lq = TRUE) {
+regres <- function(data, is_lq = TRUE) {
 
-  # CHECK inputs
-  assertthat::are_equal(ncol(df), 4)
-  assertthat::are_equal(names(df), c("y", "x1", "x2", "x3"))
+  y <- data$y
+  X <- data$X
 
-  res <- stats::lm(y ~ x1 + x2 + x3 - 1, data = df)
+  n <- length(y)
+  k <- ncol(X)
 
-  ymean <- mean(df[["y"]])
-  sst <- sum((df[["y"]] - ymean)^2) # sum of square total
-  coef <- unname(res[["coefficients"]]) # regression coefs
-  sse <- sum(res$residuals^2) # sum of square error
+  # Run regression
+  res <- stats::.lm.fit(y = y, x = X)
+
+  # Calculate stats
+  ymean <- sum(y) / n
+  sst <- sum((y - ymean)^2) # sum of square total
+  coef <- res$coefficients # regression coefs
+  residuals <- res$residuals # residulas
+  sse <- sum(residuals^2) # sum of square error
   r2 <- 1 - sse / sst # R-square (This is the R2 formula for models with an intercept)
-  mse <- sse / (nrow(df) - length(coef)) # Mean squared error
-  se <- unname(sqrt(diag(stats::vcov(res)))) # Standard error
+  mse <- sse / (n - k) # Mean squared error
+  s2 <- as.vector((residuals %*% residuals) / (n - k))
+  se <- sqrt(s2 * (diag(MASS::ginv(t(X) %*% X)))) # Standard error
+
   # REVIEW:
   # Why exp() if isLQ == FALSE?
   if (!is_lq) {
@@ -41,3 +48,5 @@ regres <- function(df, is_lq = TRUE) {
     se = se
   ))
 }
+
+

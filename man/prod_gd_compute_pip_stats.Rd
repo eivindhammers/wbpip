@@ -10,8 +10,10 @@ prod_gd_compute_pip_stats(
   povline,
   population,
   requested_mean,
+  svy_median_lcu,
+  svy_median_ppp,
   popshare = NULL,
-  default_ppp = NULL,
+  default_ppp,
   ppp = NULL,
   p0 = 0.5
 )

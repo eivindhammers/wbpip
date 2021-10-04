@@ -13,11 +13,13 @@ test_that("gd_compute_poverty_stats() returns correct results", {
   )
   res1 <- gd_compute_pip_stats(
     welfare = df$welfare, population = df$weight,
-    povline = 1.9 * 365 / 12, requested_mean = mean
+    povline = 1.9 * 365 / 12, requested_mean = mean,
+    default_ppp = 1
   )
   res2 <- gd_compute_poverty_stats(
     welfare = df$welfare, population = df$weight,
-    povline = 1.9 * 365 / 12, requested_mean = mean
+    povline = 1.9 * 365 / 12, requested_mean = mean,
+    default_ppp = 1
   )
   expect_equal(res1$headcount, res2$headcount)
   expect_equal(res1$poverty_gap, res2$poverty_gap)

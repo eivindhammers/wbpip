@@ -11,7 +11,7 @@ gd_compute_pip_stats_lb <- function(welfare,
                                     population,
                                     requested_mean,
                                     popshare = NULL,
-                                    default_ppp = NULL,
+                                    default_ppp,
                                     ppp = NULL,
                                     p0 = 0.5) {
 
@@ -46,7 +46,7 @@ gd_compute_pip_stats_lb <- function(welfare,
   # Boundary conditions (Why 4?)
   z_min <- requested_mean * derive_lb(0.001, A, B, C) + 4
   z_max <- requested_mean * derive_lb(0.980, A, B, C) - 4
-  z_min <- if (z_min < 0) 0 else z_min
+  z_min <- if (z_min < 0) 0L else z_min
 
   results1 <- list(requested_mean, povline, z_min, z_max, ppp)
   names(results1) <- list("mean", "poverty_line", "z_min", "z_max", "ppp")
@@ -82,10 +82,10 @@ gd_compute_pip_stats_lb <- function(welfare,
 #' @keywords internal
 create_functional_form_lb <- function(welfare, population) {
   # CHECK inputs
-  assertthat::assert_that(is.numeric(population))
-  assertthat::assert_that(is.numeric(welfare))
-  assertthat::assert_that(length(population) == length(welfare))
-  assertthat::assert_that(length(population) > 1)
+  # assertthat::assert_that(is.numeric(population))
+  # assertthat::assert_that(is.numeric(welfare))
+  # assertthat::assert_that(length(population) == length(welfare))
+  # assertthat::assert_that(length(population) > 1)
 
   # Remove last observation (the functional form for the Lorenz curve already forces
   # it to pass through the point (1, 1)
@@ -96,15 +96,14 @@ create_functional_form_lb <- function(welfare, population) {
   # y
   y <- log(population - welfare)
   # x1
-  x1 <- 1
+  x1 <- 1L
   # x2
   x2 <- log(population)
   # x3
   x3 <- log(1 - population)
 
-  out <- data.frame(y, x1, x2, x3, stringsAsFactors = FALSE)
+  return(list(y = y, X = cbind(x1, x2, x3)))
 
-  return(out)
 }
 
 #' Returns the first derivative of the beta Lorenz
@@ -326,42 +325,41 @@ gd_compute_quantile_lb <- function(A, B, C, n_quantile = 10) {
 #'
 #' @return numeric
 #' @keywords internal
+#'
 gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
+
   if (headcount <= 0 | is.na(headcount)) {
     return(0)
   }
 
-  # x1 = x2 = xstep = xend = gap <- 0
-  x1 <- 0
-  x2 <- 0
-  xstep <- 0
-  xend <- 0
-  gap <- 0
   snw <- headcount * dd
-  watts <- 0
-
   x1 <- derive_lb(snw / 2, A, B, C)
   if (x1 <= 0) {
     gap <- snw / 2
+    watts <- 0L
   } else {
+    gap <- 0L
     watts <- log(x1) * snw
   }
+
   xend <- headcount - snw
-  x1 <- derive_lb(0, A, B, C)
-  # Number of steps seems to be different from what happens in .Net codebase
-  for (xstep in seq(0, xend, by = snw)) {
-    x2 <- derive_lb(xstep + snw, A, B, C)
-    if ((x1 <= 0) || (x2 <= 0)) {
-      gap <- gap + snw
-      if (gap > 0.05) {
-        return(NA)
-      }
-    } else {
-      gap <- 0
-      watts <- watts + (log(x1) + log(x2)) * snw * 0.5
+  xstep_snw <- seq(0, xend, by = snw) + snw
+  x2 <- vapply(xstep_snw, function(x)
+    derive_lb(x, A, B, C), FUN.VALUE = numeric(1))
+  x1 <- c(derive_lb(0, A, B, C), x2[1:(length(x2) - 1)])
+
+  check <- (x1 <= 0) | (x2 <= 0)
+  if (any(check)) {
+    gap <- gap + sum(check) * snw
+    if (gap > 0.05) {
+      return(NA) # Return watts as NA
     }
-    x1 <- x2
   }
+  watts <- sum(
+    (log(x1[!check]) + log(x2[!check])) *
+      snw * 0.5) +
+    watts
+
   if ((mean != 0) && (watts != 0)) {
     x1 <- povline / mean
     if (x1 > 0) {
@@ -370,7 +368,7 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
         return(watts)
       }
     }
-    return(NA) # Negative Watts values will be handled in gd_select_lorenz()
+    return(NA)
   } else {
     return(watts)
   }
@@ -719,29 +717,19 @@ BETAI <- function(a, b, x) {
 #' @return numeric
 #' @noRd
 GAMMLN <- function(xx) {
-  cof <- list(76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003e-2, -0.536382e-5)
+  cof <- c(76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003e-2, -0.536382e-5)
   stp <- 2.50662827465
-  half <- 0.5
-  one <- 1
   fpf <- 5.5
-  # x = tmp = ser <- 0
-  x <- 0
-  tmp <- 0
-  ser <- 0
-
-  x <- xx - one
+  x <- xx - 1
   tmp <- x + fpf
   if (tmp <= 0) {
     return(NA)
   }
 
-  tmp <- (x + half) * log(tmp) - tmp
-  ser <- one
-
-  for (i in seq(1, 6, by = 1)) {
-    x <- sum(x, one)
-    ser <- sum(ser, cof[[i]] / x)
-  }
+  tmp <- (x + 0.5) * log(tmp) - tmp
+  # ser <- 1L
+  x <-  c(x + 1:6)
+  ser <- sum(cof / x) + 1
 
   if (stp * ser <= 0) {
     return(NA)
@@ -760,40 +748,32 @@ GAMMLN <- function(xx) {
 #'
 #' @return numeric
 #' @noRd
+#'
 BETAICF <- function(a, b, x) {
   eps <- 3e-7
-  # am = bm = az <- 1
   am <- 1
   bm <- 1
   az <- 1
   qab <- a + b
   qap <- a + 1
   qam <- a - 1
-  bz <- 1 - (qab * x / qap)
+  bz <- c( 1 - (qab * x / qap), rep(1, 99))
 
-  # d = app = bpp = ap = bp = aold = em = tem <- 0
-  d <- 0
-  app <- 0
-  bpp <- 0
-  ap <- 0
-  bp <- 0
-  aold <- 0
-  em <- 0
-  tem <- 0
-  for (m in seq(1, 100, by = 1)) {
-    em <- m
-    tem <- sum(em, em)
-    d <- em * (b - m) * x / ((qam + tem) * (a + tem))
-    ap <- az + (d * am)
-    bp <- bz + (d * bm)
-    d <- -(a + em) * (qab + em) * x / ((a + tem) * (qap + tem))
-    app <- ap + (d * az)
-    bpp <- bp + (d * bz)
+  m <- 1:100
+  em <- 1:100
+  tem <- em * 2
+  d <- em * (b - m) * x / ((qam + tem) * (a + tem))
+  d2 <- -(a + em) * (qab + em) * x / ((a + tem) * (qap + tem))
+
+  for (i in seq_len(100)) {
+    ap <- az + (d[i] * am)
+    bp <- bz[i] + (d[i] * bm)
+    app <- ap + (d2[i]  * az)
+    bpp <- bp + (d2[i] * bz[i])
     aold <- az
     am <- ap / bpp
     bm <- bp / bpp
     az <- app / bpp
-    bz <- 1
     if ((abs(az - aold)) < (eps * abs(az))) {
       break
     }
@@ -919,8 +899,8 @@ rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
   f <- funcCall3[[1]]
   df <- funcCall3[[2]]
 
-  temp <- 0
-  for (i in seq(0, 99, by = 1)) {
+  temp <- 0L
+  for (i in seq_len(99)) {
     tmp <- (((rtsafe - xh) * df) - f) * (((rtsafe - xl) * df) - f)
     if (tmp >= 0 || abs(2 * f) > abs(dxold * df)) {
       dxold <- dx
@@ -991,12 +971,12 @@ funcD <- function(x, mean, povline, A, B, C) {
 #' @return numeric
 #' @noRd
 rtNewt <- function(mean, povline, A, B, C) {
-  x1 <- 0
-  x2 <- 1
+  x1 <- 0L
+  x2 <- 1L
   xacc <- 1e-4
   rtnewt <- 0.5 * (x1 + x2)
 
-  for (i in seq(0, 19, by = 1)) {
+  for (i in seq_len(19)) {
     x <- rtnewt
     v1 <- (x^B) * ((1 - x)^C)
     f <- A * v1 * ((B / x) - C / (1 - x)) + (povline / mean) - 1
