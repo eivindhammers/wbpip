@@ -508,7 +508,8 @@ test_that("if popshare is not null, povline is computed as expected", {
     population = gd_ex2$weight,
     povline = 1.9,
     requested_mean = 2.911786,
-    popshare = 0.3
+    popshare = 0.3,
+    default_ppp = 1
   )
 
   # just a heads up that I dont have an intuitive sense for A, B and C values so I

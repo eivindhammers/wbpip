@@ -45,12 +45,6 @@ prod_gd_compute_pip_stats_lq <- function(welfare,
                                          ppp = NULL,
                                          p0 = 0.5) {
 
-  # Adjust mean if different PPP value is provided
-  if (!is.null(ppp)) {
-    requested_mean <- requested_mean * default_ppp / ppp
-  } else {
-    ppp <- default_ppp
-  }
   # STEP 1: Prep data to fit functional form
   prepped_data <- create_functional_form_lq(
     welfare = welfare,

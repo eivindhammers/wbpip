@@ -22,7 +22,8 @@
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   povline = z
+#'   povline = z,
+#'   default_ppp = 1
 #' )
 #' res$headcount
 #'
@@ -30,7 +31,8 @@
 #'   welfare = L,
 #'   population = P,
 #'   requested_mean = mu,
-#'   popshare = res$headcount
+#'   popshare = res$headcount,
+#'   default_ppp = 1
 #' )
 #' res2$povline
 #' @return list
@@ -40,7 +42,7 @@ gd_compute_pip_stats_lq <- function(welfare,
                                     population,
                                     requested_mean,
                                     popshare = NULL,
-                                    default_ppp = NULL,
+                                    default_ppp,
                                     ppp = NULL,
                                     p0 = 0.5) {
 

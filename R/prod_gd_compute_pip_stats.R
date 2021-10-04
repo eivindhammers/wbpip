@@ -21,13 +21,23 @@ prod_gd_compute_pip_stats <- function(welfare,
                                       povline,
                                       population,
                                       requested_mean,
+                                      svy_median_lcu,
+                                      svy_median_ppp,
                                       popshare = NULL,
-                                      default_ppp = NULL,
+                                      default_ppp,
                                       ppp = NULL,
                                       p0 = 0.5) {
 
+  # Adjust mean and median if different PPP value is provided
+  if (!is.null(ppp)) {
+    requested_mean <- requested_mean * default_ppp / ppp
+    median <- svy_median_lcu * default_ppp / ppp
+  } else {
+    ppp <- default_ppp
+    median <- svy_median_ppp
+  }
 
-  # Apply Lorenz quadratic fit ----------------------------------------------
+   # Apply Lorenz quadratic fit ----------------------------------------------
   results_lq <- prod_gd_compute_pip_stats_lq(
     welfare = welfare,
     population = population,
@@ -58,10 +68,14 @@ prod_gd_compute_pip_stats <- function(welfare,
     lb = results_lb
   )
 
-  # Retun only subset of variables
+  # Add median to response
+  out$median <- median
+
+  # Return only subset of variables
   out <- out[c(
     "poverty_line",
     "mean",
+    "median",
     "headcount",
     "poverty_gap",
     "poverty_severity",
