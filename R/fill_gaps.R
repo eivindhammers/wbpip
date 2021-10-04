@@ -250,7 +250,7 @@ fg_adjust_poverty_stats <- function(stats0, stats1, survey_year, request_year) {
 
   # Set distributional statistics to missing
   # It does not make sense to interpolate these values
-  out[c("polarization", "gini", "mld", "median", "deciles")] <- NA
+  out[c("polarization", "gini", "mld", "median", "deciles")] <- NA_real_
 
   return(out)
 }

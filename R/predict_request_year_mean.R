@@ -90,7 +90,7 @@ compute_predicted_mean <- function(survey_mean, proxy) {
     if (is_one_point_adjusted(survey_mean, proxy$value0, proxy$req_value)) {
       pred_mean <- extrapolate_survey_mean(survey_mean, proxy)
     } else {
-      pred_mean <- NA
+      pred_mean <- NA_real_
     }
   } else {
     proxy_values <- c(proxy$value0, proxy$value1)
@@ -100,7 +100,7 @@ compute_predicted_mean <- function(survey_mean, proxy) {
       pred_mean <- interpolate_survey_mean(survey_mean, proxy)
       pred_mean <- rep(pred_mean, length(survey_mean))
     } else {
-      pred_mean <- NA
+      pred_mean <- NA_real_
     }
   }
   return(pred_mean)

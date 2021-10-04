@@ -34,17 +34,17 @@ test_that("retrieve_distributional() returns correct results", {
   is_valid <- FALSE
   use_lq_for_dist <- "not_used"
   expected <- list(
-    z_min         = NA,
-    z_max         = NA,
-    gini          = NA,
-    median        = NA,
-    # rmed          = NA
-    rmhalf        = NA,
-    polarization  = NA,
-    ris           = NA,
-    mld           = NA,
-    deciles       = rep(NA, length(lq[["deciles"]])),
-    sse           = NA
+    z_min         = NA_real_,
+    z_max         = NA_real_,
+    gini          = NA_real_,
+    median        = NA_real_,
+    # rmed          = NA_real_
+    rmhalf        = NA_real_,
+    polarization  = NA_real_,
+    ris           = NA_real_,
+    mld           = NA_real_,
+    deciles       = rep(NA_real_, length(lq[["deciles"]])),
+    sse           = NA_real_
   )
 
   expect_equal(

@@ -203,5 +203,7 @@ prod_fg_adjust_poverty_stats <- function(stats0, stats1, survey_year, request_ye
       }, survey_year, request_year
     )
 
+  out[["median"]] <- NA_real_
+
   return(out)
 }

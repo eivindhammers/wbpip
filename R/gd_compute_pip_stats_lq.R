@@ -712,8 +712,8 @@ gd_compute_fit_lq <- function(welfare,
                               C) {
   if (is.na(headcount)) {
     return(list(
-      sse  = NA,
-      ssez = NA
+      sse  = NA_real_,
+      ssez = NA_real_
     ))
   }
 

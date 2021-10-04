@@ -602,7 +602,7 @@ gd_compute_fit_lb <- function(welfare,
     out <- list(sse, ssez)
     names(out) <- list("sse", "ssez")
   } else {
-    out <- list(sse = NA, ssez = NA)
+    out <- list(sse = NA_real_, ssez = NA_real_)
   }
 
   return(out)
@@ -697,12 +697,12 @@ BETAI <- function(a, b, x) {
     if (x < (a + 1) / (a + b + 2)) {
       betai <- bt * BETAICF(a, b, x) / a
     } else if (is.na(GAMMLN(a)) || is.na(GAMMLN(b)) || is.na(GAMMLN(a + b))) {
-      betai <- NA
+      betai <- NA_real_
     } else {
       betai <- exp(GAMMLN(a) + GAMMLN(b) - GAMMLN(a + b)) - (bt * BETAICF(b, a, 1 - x) / b)
     }
   } else {
-    betai <- NA
+    betai <- NA_real_
   }
 
   return(betai)
@@ -801,7 +801,7 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
       pov_gap <- if (pov_gap < 0) 0 else pov_gap
     }
   } else {
-    pov_gap <- NA
+    pov_gap <- NA_real_
   }
 
   return(pov_gap)
@@ -849,7 +849,7 @@ gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
       pov_gap_sq <- if (pov_gap_sq < 0) 0 else pov_gap_sq
     }
   } else {
-    pov_gap_sq <- NA
+    pov_gap_sq <- NA_real_
   }
 
   return(pov_gap_sq)

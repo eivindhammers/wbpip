@@ -75,7 +75,7 @@ get_bins <- function(.data,
     )
   } else if (distribution_type == "group") {
     rlang::inform("process for group data not ready yet")
-    gini <- NA
+    gini <- NA_real_
   } else {
     msg <- "Wrong `distribution_type`"
     hint <- "Make sure `distribution_type` is either 'micro' or 'group'"

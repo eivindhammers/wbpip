@@ -218,7 +218,7 @@ retrieve_distributional <- function(lq,
           mld <- lb[["mld"]]
         }
       } else {
-        mld <- NA
+        mld <- NA_real_
       }
     } else {
       sse <- lb[["sse"]]
@@ -242,21 +242,21 @@ retrieve_distributional <- function(lq,
           mld <- lq[["mld"]]
         }
       } else {
-        mld <- NA
+        mld <- NA_real_
       }
     }
   } else {
-    z_min <- NA
-    z_max <- NA
-    gini <- NA
-    median <- NA
-    rmed <- NA
-    rmhalf <- NA
-    polarization <- NA
-    ris <- NA
-    mld <- NA
-    deciles <- rep(NA, length(lq[["deciles"]]))
-    sse <- NA
+    z_min <- NA_real_
+    z_max <- NA_real_
+    gini <- NA_real_
+    median <- NA_real_
+    rmed <- NA_real_
+    rmhalf <- NA_real_
+    polarization <- NA_real_
+    ris <- NA_real_
+    mld <- NA_real_
+    deciles <- rep(NA_real_, length(lq[["deciles"]]))
+    sse <- NA_real_
   }
 
   return(
@@ -293,17 +293,17 @@ retrieve_poverty <- function(lq,
                              use_lq_for_pov) {
   if (!is_normal) {
     return(list(
-      poverty_line     = NA,
-      headcount        = NA,
-      poverty_gap      = NA,
-      poverty_severity = NA,
-      eh               = NA,
-      epg              = NA,
-      ep               = NA,
-      gh               = NA,
-      gpg              = NA,
-      gp               = NA,
-      watts            = NA
+      poverty_line     = NA_real_,
+      headcount        = NA_real_,
+      poverty_gap      = NA_real_,
+      poverty_severity = NA_real_,
+      eh               = NA_real_,
+      epg              = NA_real_,
+      ep               = NA_real_,
+      gh               = NA_real_,
+      gpg              = NA_real_,
+      gp               = NA_real_,
+      watts            = NA_real_
     ))
   }
   if (use_lq_for_pov) {
@@ -323,7 +323,7 @@ retrieve_poverty <- function(lq,
     } else if (!is.na(lb[["watts"]])) {
       watts <- lb[["watts"]]
     } else {
-      watts <- NA
+      watts <- NA_real_
     }
   } else {
     poverty_line <- lb[["poverty_line"]]
@@ -341,14 +341,14 @@ retrieve_poverty <- function(lq,
     } else if (!is.na(lq[["watts"]])) {
       watts <- lq[["watts"]]
     } else {
-      watts <- NA
+      watts <- NA_real_
     }
   }
   # fix abnormal values
   if (headcount < 0) {
-    headcount <- NA
-    poverty_gap <- NA
-    poverty_severity <- NA
+    headcount <- NA_real_
+    poverty_gap <- NA_real_
+    poverty_severity <- NA_real_
   }
 
   if (headcount > 1) {

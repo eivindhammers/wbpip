@@ -207,43 +207,43 @@ test_that("compute_predicted_mean() returns NA if no matching method is found", 
     compute_predicted_mean(
       survey_mean = 100, proxy = list(value0 = 990, req_value = NA)
     ),
-    NA
+    NA_real_
   )
   expect_identical(
     compute_predicted_mean(
       survey_mean = 100, proxy = list(value0 = NA, req_value = 1000)
     ),
-    NA
+    NA_real_
   )
   expect_identical(
     compute_predicted_mean(
       survey_mean = c(100, 105), proxy = list(value0 = 990, value1 = NA, req_value = 1000)
     ),
-    NA
+    NA_real_
   )
   expect_identical(
     compute_predicted_mean(
       survey_mean = c(100, 105), proxy = list(value0 = 990, value1 = 995, req_value = NA)
     ),
-    NA
+    NA_real_
   )
   expect_identical(
     compute_predicted_mean(
       survey_mean = c(100, 105), proxy = list(value0 = NA, value1 = 995, req_value = 1000)
     ),
-    NA
+    NA_real_
   )
   expect_identical(
     compute_predicted_mean(
       survey_mean = NA, proxy = list(value0 = 990, req_value = 1000)
     ),
-    NA
+    NA_real_
   )
   expect_identical(
     compute_predicted_mean(
       survey_mean = c(100, NA), proxy = list(value0 = 990, value1 = 995, req_value = 1000)
     ),
-    NA
+    NA_real_
   )
 })
 

@@ -60,7 +60,7 @@ get_gini <- function(.data, welfare, weight,
     gini <- md_compute_gini(df[[welfare]], df[[weight]])
   } else if (distribution_type == "group") {
     rlang::inform("process for group data not ready yet")
-    gini <- NA
+    gini <- NA_real_
   } else {
     msg <- "Wrong `distribution_type`"
     hint <- "Make sure `distribution_type` is either 'micro' or 'group'"

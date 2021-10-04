@@ -46,7 +46,7 @@ ag_compute_pip_stats <- function(welfare,
     {
       if (out[["urban"]]$poverty_severity < 0) # Same for urban
         {
-          out_headcount <- out_poverty_gap <- out_poverty_severity <- NA
+          out_headcount <- out_poverty_gap <- out_poverty_severity <- NA_real_
         } else {
         out_headcount <- out[["urban"]]$headcount
         out_poverty_gap <- out[["urban"]]$poverty_gap
@@ -73,20 +73,20 @@ ag_compute_pip_stats <- function(welfare,
     out_watts <- wgt_rural * out[["rural"]]$watts +
       wgt_urban * out[["urban"]]$watts
   } else {
-    out_watts <- NA
+    out_watts <- NA_real_
   }
 
   return(list(
     poverty_line = povline,
     mean = out_mean,
-    median = NA,
+    median = NA_real_,
     headcount = out_headcount,
     poverty_gap = out_poverty_gap,
     poverty_severity = out_poverty_severity,
     watts = out_watts,
-    gini = NA,
-    mld = NA,
-    polarization = NA,
-    deciles = rep(NA, 10)
+    gini = NA_real_,
+    mld = NA_real_,
+    polarization = NA_real_,
+    deciles = rep(NA_real_, 10)
   ))
 }

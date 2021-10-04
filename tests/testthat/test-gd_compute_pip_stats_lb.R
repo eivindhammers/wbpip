@@ -462,7 +462,7 @@ test_that("check_curve_validity_lb works as expected", {
   )
 
 
-  headcount <- NA
+  headcount <- NA_real_
   A <- 1
   B <- 0.3
   C <- 0.2
