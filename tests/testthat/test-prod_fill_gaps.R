@@ -153,14 +153,12 @@ test_that("prod_fg_compute_pip_stats() interpolates correctly (monotonic) for mi
 
   dist_stats0 <- md_compute_dist_stats(
     welfare    = md_ABC_2000_income$welfare,
-    weight     = md_ABC_2000_income$weight,
-    mean       = predicted_request_means[1]
+    weight     = md_ABC_2000_income$weight
   )
 
   dist_stats1 <- md_compute_dist_stats(
     welfare    = md_ABC_2010_income$welfare,
-    weight     = md_ABC_2010_income$weight,
-    mean       = predicted_request_means[2]
+    weight     = md_ABC_2010_income$weight
   )
 
   median_ppp0 <- dist_stats0$median / (dist_stats0$mean / predicted_request_means[1])
@@ -176,7 +174,7 @@ test_that("prod_fg_compute_pip_stats() interpolates correctly (monotonic) for mi
     default_ppp = c(1, 1),
     distribution_type = "micro",
     poverty_line = 1.9,
-    svy_mean_lcu = c(3436146, 7186782),
+    svy_mean_lcu = c(dist_stats0$mean, dist_stats1$mean),
     svy_median_lcu = c(dist_stats0$median, dist_stats1$median),
     svy_median_ppp = c(median_ppp0, median_ppp1),
     ppp = NULL,
