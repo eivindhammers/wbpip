@@ -88,7 +88,7 @@ test_that("fill_gaps() works correctly on production microdata examples", {
   expect_equal(res$poverty_gap, 0.3385979, tolerance = 1.5e-7)
   expect_equal(res$poverty_severity, 0.18495, tolerance = 2e-7)
   expect_equal(res$watts, 0.5118873, tolerance = 1.5e-7)
-  # expect_equal(res$polarization, NA) # Polarization not available for microdata in PovcalNet
+  # expect_equal(res$polarization, NA_real_) # Polarization not available for microdata in PovcalNet
   expect_equal(res$deciles[1], 0.02763, tolerance = 1.1e-04)
   expect_equal(res$deciles[2], 0.04097, tolerance = 1e-04)
   expect_equal(res$deciles[3], 0.05043, tolerance = 1e-04)
@@ -118,15 +118,15 @@ test_that("fill_gaps() works correctly on production microdata examples", {
     poverty_line = 1.9 * 365 / 12
   )
   expect_equal(res$mean, 107.4058, tolerance = 1.5e-7)
-  expect_identical(res$median, NA)
+  expect_identical(res$median, NA_real_)
   expect_equal(res$headcount, 0.3592129, tolerance = 1.5e-7)
-  expect_identical(res$gini, NA)
-  expect_identical(res$mld, NA)
+  expect_identical(res$gini, NA_real_)
+  expect_identical(res$mld, NA_real_)
   expect_equal(res$poverty_gap, 0.1257778, tolerance = 1.5e-7)
   expect_equal(res$poverty_severity, 0.06015346, tolerance = 2e-7)
   expect_equal(res$watts, 0.1789202, tolerance = 1.5e-7)
-  expect_identical(res$polarization, NA)
-  expect_identical(res$deciles, NA)
+  expect_identical(res$polarization, NA_real_)
+  expect_identical(res$deciles, NA_real_)
 
   # Calculate poverty stats (interpolation, non-monotonic)
 
@@ -143,15 +143,15 @@ test_that("fill_gaps() works correctly on production microdata examples", {
     poverty_line = 1.9 * 365 / 12
   )
   # expect_equal(res$mean, 66.11046, tolerance = 1.5e-7) # Note: res = 66.11036 ; PCN = 66.11046.
-  expect_identical(res$median, NA)
+  expect_identical(res$median, NA_real_)
   expect_equal(res$headcount, 0.5821605, tolerance = 2e-7)
-  expect_identical(res$gini, NA)
-  expect_identical(res$mld, NA)
+  expect_identical(res$gini, NA_real_)
+  expect_identical(res$mld, NA_real_)
   expect_equal(res$poverty_gap, 0.2504737, tolerance = 5e-7)
   expect_equal(res$poverty_severity, 0.1391416, tolerance = 7e-7)
   expect_equal(res$watts, 0.3884209, tolerance = 1e-6)
-  expect_identical(res$polarization, NA)
-  expect_identical(res$deciles, NA)
+  expect_identical(res$polarization, NA_real_)
+  expect_identical(res$deciles, NA_real_)
 })
 
 test_that("fill_gaps() works correctly on production grouped data examples", {
@@ -207,15 +207,15 @@ test_that("fill_gaps() works correctly on production grouped data examples", {
   #   distribution_type = c('group', 'micro'),
   #   poverty_line = 1.9 * 365/12)
   # expect_equal(res$mean, 194.1712, tolerance = 1.5e-7)
-  # expect_identical(res$median, NA)
+  # expect_identical(res$median, NA_real_)
   # expect_equal(res$headcount, 0.04500877, tolerance = 1.5e-7)
-  # expect_identical(res$gini, NA)
-  # expect_identical(res$mld, NA)
+  # expect_identical(res$gini, NA_real_)
+  # expect_identical(res$mld, NA_real_)
   # expect_equal(res$poverty_gap, 0.01156786, tolerance = 1.5e-7)
   # expect_equal(res$poverty_severity, 0.004754342, tolerance = 1.5e-7)
   # expect_equal(res$watts, 0.0151301, tolerance = 1.5e-7)
-  # expect_identical(res$polarization, NA)
-  # expect_identical(res$deciles, NA)
+  # expect_identical(res$polarization, NA_real_)
+  # expect_identical(res$deciles, NA_real_)
 
   # Calculate poverty stats (interpolation, non-monotonic)
 
@@ -232,13 +232,13 @@ test_that("fill_gaps() works correctly on production grouped data examples", {
     poverty_line = 1.9 * 365 / 12
   )
   expect_equal(round(res$mean, 3), 151.559, tolerance = 1.5e-7)
-  expect_identical(res$median, NA)
+  expect_identical(res$median, NA_real_)
   expect_equal(res$headcount, 0.2247359, tolerance = 8e-5)
-  expect_identical(res$gini, NA)
-  expect_identical(res$mld, NA)
+  expect_identical(res$gini, NA_real_)
+  expect_identical(res$mld, NA_real_)
   expect_equal(res$poverty_gap, 0.05612637, tolerance = 1.5e-7)
   expect_equal(res$poverty_severity, 0.01933052, tolerance = 1.5e-7)
   expect_equal(res$watts, 0.06982316, tolerance = 1.5e-7)
-  expect_identical(res$polarization, NA)
-  expect_identical(res$deciles, NA)
+  expect_identical(res$polarization, NA_real_)
+  expect_identical(res$deciles, NA_real_)
 })
