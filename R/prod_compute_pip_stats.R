@@ -71,6 +71,6 @@ prod_compute_pip_stats <- function(welfare,
 
     return(out)
   } else {
-    return(NA)
+    return(NA_real_)
   }
 }
