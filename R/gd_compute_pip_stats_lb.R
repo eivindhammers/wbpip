@@ -267,7 +267,7 @@ gd_compute_mld_lb <- function(dd, A, B, C) {
     if ((x1 <= 0) || (x2 <= 0)) {
       gap <- gap + 0.001
       if (gap > 0.5) {
-        return(NA)
+        return(NA_real_)
       }
     } else {
       gap <- 0
@@ -352,7 +352,7 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
   if (any(check)) {
     gap <- gap + sum(check) * snw
     if (gap > 0.05) {
-      return(NA) # Return watts as NA
+      return(NA_real_) # Return watts as NA
     }
   }
   watts <- sum(
@@ -368,7 +368,7 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
         return(watts)
       }
     }
-    return(NA)
+    return(NA_real_)
   } else {
     return(watts)
   }
@@ -648,7 +648,7 @@ gd_compute_headcount_lb <- function(mean, povline, A, B, C) {
   )
   # Check headcount invalidity conditions
   if (headcount < 0 | is.na(headcount)) {
-    return(NA)
+    return(NA_real_)
   }
 
   condition1 <- is.na(BETAI(
@@ -668,7 +668,7 @@ gd_compute_headcount_lb <- function(mean, povline, A, B, C) {
   ))
 
   if (condition1 | condition2 | condition3) {
-    return(NA)
+    return(NA_real_)
   }
 
   return(headcount)
@@ -723,7 +723,7 @@ GAMMLN <- function(xx) {
   x <- xx - 1
   tmp <- x + fpf
   if (tmp <= 0) {
-    return(NA)
+    return(NA_real_)
   }
 
   tmp <- (x + 0.5) * log(tmp) - tmp
@@ -732,7 +732,7 @@ GAMMLN <- function(xx) {
   ser <- sum(cof / x) + 1
 
   if (stp * ser <= 0) {
-    return(NA)
+    return(NA_real_)
   }
 
   return(tmp + log(stp * ser))
@@ -931,7 +931,7 @@ rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
     }
   }
 
-  return(NA)
+  return(NA_real_)
 }
 
 #' funcD
@@ -991,5 +991,5 @@ rtNewt <- function(mean, povline, A, B, C) {
       }
     }
   }
-  return(NA)
+  return(NA_real_)
 }

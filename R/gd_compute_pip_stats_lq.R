@@ -438,7 +438,7 @@ gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
   if (any(check)) {
     gap <- gap + sum(check) * snw
     if (gap > 0.05) {
-      return(NA) # Return watts as NA
+      return(NA_real_) # Return watts as NA
     }
   }
   watts <- sum((log(x1[!check]) + log(x2[!check])) * snw * 0.5) + watts
@@ -451,7 +451,7 @@ gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
         return(watts)
       }
     }
-    return(NA) # Return watts as NA
+    return(NA_real_) # Return watts as NA
   } else {
     return(watts)
   }

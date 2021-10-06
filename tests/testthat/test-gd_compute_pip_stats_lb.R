@@ -194,12 +194,12 @@ test_that("GAMMLN returns expected results", {
 test_that("GAMMLN returns NA when tmp <= 0", {
   expect_equal(
     GAMMLN(xx = -100),
-    NA
+    NA_real_
   )
 
   expect_equal(
     GAMMLN(xx = -4.4),
-    NA
+    NA_real_
   )
 })
 
@@ -275,7 +275,7 @@ test_that("gd_compute_headcount_lb will return NAs, headcount is negative or NA"
       B = 0,
       C = 1
     ),
-    NA
+    NA_real_
   )
 })
 
@@ -625,7 +625,7 @@ test_that("tests for the gd_compute_watts_lb", {
       B = 0.9676324,
       C = 1
     ),
-    NA
+    NA_real_
   )
 
   ## first, testing on the initial if statement to ensure x == 0 & B = 1 will return 1 - A
@@ -671,12 +671,12 @@ test_that("BETAI returns expected values", {
 test_that("GAMMLN returns NA when tmp <= 0", {
   expect_equal(
     GAMMLN(xx = -100),
-    NA
+    NA_real_
   )
 
   expect_equal(
     GAMMLN(xx = -4.4),
-    NA
+    NA_real_
   )
 })
 
@@ -729,7 +729,7 @@ test_that("gd_compute_pov_severity_lb works when headcount or pov_gap is NA", {
 
 test_that("GAMMLN works as expected", {
 
-  expect_equal(GAMMLN(-1), NA)
+  expect_equal(GAMMLN(-1), NA_real_)
   expect_equal(GAMMLN(1), -3.4136249e-11)
   expect_equal(GAMMLN(10), 12.80182748)
   expect_equal(GAMMLN(100), 359.1342054)
