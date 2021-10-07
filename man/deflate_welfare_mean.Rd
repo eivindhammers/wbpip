@@ -28,7 +28,12 @@ survey as well as currency changes between surveys must already have been
 made.
 }
 \examples{
+# Simple examples
 deflate_welfare_mean(100, ppp = 5, cpi = 1.5)
+deflate_welfare_mean(10.3, ppp = 1.2, cpi = 0.1)
+
+# Works on vectors as well
+deflate_welfare_mean(c(100, 10.3), ppp = c(5, 1.2), cpi = c(1.5, 0.1))#'
 }
 \references{
 Azevedo, J. P., P. A. Corral, D. Jolliffe, C. Lakner, D. G. Mahler,
