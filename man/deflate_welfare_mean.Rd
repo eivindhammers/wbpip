@@ -27,6 +27,9 @@ that adjustments to account for temporal and spatial factors within the
 survey as well as currency changes between surveys must already have been
 made.
 }
+\examples{
+deflate_welfare_mean(100, ppp = 5, cpi = 1.5)
+}
 \references{
 Azevedo, J. P., P. A. Corral, D. Jolliffe, C. Lakner, D. G. Mahler,
 J. Montes, M. C. Nguyen, E. B. Prydz. 2018.

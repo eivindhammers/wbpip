@@ -23,4 +23,14 @@ list
 Compute distributional statistics for grouped data by selecting the best
 functional fit for the Lorenz curve (either beta or quadratic).
 }
+\examples{
+# Load example data
+data("gd_GHI_2009_income")
+
+# Compute distributional statistics
+res <- wbpip:::gd_compute_dist_stats(
+ welfare = df$welfare, population = df$weight,
+  mean = 50)
+
+}
 \keyword{internal}

@@ -8,6 +8,16 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Load example data
+#' p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
+#' df <- readRDS(p)
+#'
+#' # Compute poverty stats
+#' res <- wbpip:::gd_compute_poverty_stats(
+#'  welfare = df$welfare, population = df$weight,
+#'  povline = 1.9 * 365 / 12, requested_mean = 50,
+#'  default_ppp = 1)
 gd_compute_poverty_stats <- function(welfare,
                                      povline,
                                      population,

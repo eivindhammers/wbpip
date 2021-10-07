@@ -8,6 +8,15 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Load example data
+#' data("gd_GHI_2009_income")
+#'
+#' # Compute distributional statistics
+#' res <- wbpip:::gd_compute_dist_stats(
+#'  welfare = df$welfare, population = df$weight,
+#'   mean = 50)
+#'
 gd_compute_dist_stats <- function(welfare,
                                   population,
                                   mean,

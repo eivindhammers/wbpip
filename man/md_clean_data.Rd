@@ -37,4 +37,16 @@ Prefixes are:
 \item ing: Index of obs with negative values
 }
 }
+\examples{
+# Load example data
+data("md_GHI_2000_income")
+
+# Clean microdata
+res <- wbpip:::md_clean_data(
+  md_GHI_2000_income,
+  welfare = "welfare",
+  weight = "weight")
+res$data
+
+}
 \keyword{internal}

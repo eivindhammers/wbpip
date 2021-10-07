@@ -9,6 +9,21 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Load example data
+#' p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
+#' df <- readRDS(p)
+#'
+#' # Create synthetic dataset
+#' res <- wbpip:::sd_create_synth_vector(
+#'   welfare = df$welfare,
+#'   population = df$weight,
+#'   mean = 8,
+#'   pop = NULL,
+#'   p0 = 0.5,
+#'   nobs = 1e5)
+#' str(res)
+#'
 sd_create_synth_vector <- function(welfare,
                                    population,
                                    mean,

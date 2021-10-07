@@ -18,6 +18,15 @@
 #'
 #' @return data.table
 #' @keywords internal
+#' @examples
+#' # Load example data
+#' data("gd_GHI_2009_income")
+#'
+#' # Standardize dataset
+#' wbpip:::gd_clean_data(
+#'   gd_GHI_2009_income, welfare = "welfare",
+#'   population = "weight", gd_type = 5)
+#'
 gd_clean_data <- function(dt, welfare, population,
                           gd_type, quiet = FALSE) {
 

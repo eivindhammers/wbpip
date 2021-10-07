@@ -21,6 +21,8 @@
 #' Global Poverty Monitoring Technical Note 3.
 #' World Bank, Washington, DC.
 #'
+#' @examples
+#' deflate_welfare_mean(100, ppp = 5, cpi = 1.5)
 #' @export
 deflate_welfare_mean <- function(welfare_mean, ppp, cpi) {
   deflated_welfare_mean <- welfare_mean / ppp / cpi

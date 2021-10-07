@@ -12,6 +12,22 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#'
+#' # Load and clean example data
+#' data("md_ABC_2000_income")
+#' df <- wbpip:::md_clean_data(
+#'   md_ABC_2000_income,
+#'   welfare = 'welfare',
+#'   weight = 'weight')$data
+#'
+#' # Compute LCU poverty line
+#' res <-  wbpip:::md_compute_povline_lcu(
+#'   df$welfare, df$weight,
+#'   popshare = NULL,
+#'   requested_mean = 5000,
+#'   data_mean = 4000)
+#' str(res)
 md_compute_povline_lcu <- function(welfare,
                                    povline,
                                    weight,

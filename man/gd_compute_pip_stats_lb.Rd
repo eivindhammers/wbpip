@@ -41,4 +41,31 @@ list
 Compute poverty statistics for grouped data using the beta functional form of
 the Lorenz qurve.
 }
+\keyword{"wbpip")}
+\keyword{#}
+\keyword{1)}
+\keyword{1.9,}
+\keyword{50,}
+\keyword{<-}
+\keyword{=}
+\keyword{Beta}
+\keyword{Estimate}
+\keyword{Load}
+\keyword{Lorenz}
+\keyword{data}
+\keyword{default_ppp}
+\keyword{df}
+\keyword{df$weight,}
+\keyword{df$welfare,}
+\keyword{example}
 \keyword{internal}
+\keyword{lb}
+\keyword{p}
+\keyword{package}
+\keyword{population}
+\keyword{povline}
+\keyword{readRDS(p)}
+\keyword{requested_mean}
+\keyword{system.file("tests/testdata/gd_ex2.RDS",}
+\keyword{wbpip:::gd_compute_pip_stats_lb(}
+\keyword{welfare}
