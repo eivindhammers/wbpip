@@ -6,7 +6,6 @@ test_that("gd_compute_dist_stats() returns correct results", {
 
   # Test vs gd_compute_pip_stats()
   df <- gd_GHI_2009_income
-  mean <- stats::weighted.mean(df$welfare, w = df$weight)
   df <- gd_clean_data(df,
     welfare = "welfare",
     population = "weight",
@@ -15,12 +14,12 @@ test_that("gd_compute_dist_stats() returns correct results", {
   )
   res1 <- gd_compute_pip_stats(
     welfare = df$welfare, population = df$weight,
-    povline = 1.9 * 365 / 12, requested_mean = mean,
+    povline = 1.9 * 365 / 12, requested_mean = 50,
     default_ppp = 1
   )
   res2 <- gd_compute_dist_stats(
     welfare = df$welfare, population = df$weight,
-    mean = mean
+    mean = 50
   )
   expect_equal(res1$mean, res2$mean)
   expect_equal(res1$median, res2$median)
