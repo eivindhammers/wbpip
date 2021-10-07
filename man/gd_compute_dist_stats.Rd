@@ -25,7 +25,8 @@ functional fit for the Lorenz curve (either beta or quadratic).
 }
 \examples{
 # Load example data
-data("gd_GHI_2009_income")
+p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
+df <- readRDS(p)
 
 # Compute distributional statistics
 res <- wbpip:::gd_compute_dist_stats(
