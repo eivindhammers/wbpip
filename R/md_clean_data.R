@@ -31,6 +31,17 @@ if (getRversion() >= "2.15.1") {
 #' @param quiet logical: If TRUE output messages are suppressed.
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Load example data
+#' data("md_GHI_2000_income")
+#'
+#' # Clean microdata
+#' res <- wbpip:::md_clean_data(
+#'   md_GHI_2000_income,
+#'   welfare = "welfare",
+#'   weight = "weight")
+#' res$data
+#'
 md_clean_data <- function(dt, welfare, weight = NULL, quiet = FALSE) {
 
   # Convert to data.table

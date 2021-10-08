@@ -6,6 +6,14 @@
 #' @inheritParams gd_compute_pip_stats
 #' @return list
 #' @keywords internal
+#' # Estimate Lorenz Beta
+#' lb <- wbpip:::gd_compute_pip_stats_lb(
+#'   welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight,
+#'   requested_mean = 50,
+#'   povline = 1.9,
+#'   default_ppp = 1)
+#'
 gd_compute_pip_stats_lb <- function(welfare,
                                     povline,
                                     population,

@@ -16,6 +16,15 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Compute PIP stats
+#' res <- wbpip:::gd_compute_pip_stats(
+#'          grouped_data_ex2$welfare,
+#'          grouped_data_ex2$weight,
+#'          requested_mean = 2.911786,
+#'          povline = 1.9,
+#'          default_ppp = 1)
+#'
 gd_compute_pip_stats <- function(welfare,
                                  povline,
                                  population,

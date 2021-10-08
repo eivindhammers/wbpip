@@ -1,4 +1,7 @@
-
+# Load list of synthetic test datasets
+grouped_data_ex1 <- readRDS("tests/testdata/gd_ex1.RDS")
+grouped_data_ex2 <- readRDS("tests/testdata/gd_ex2.RDS")
+grouped_data_ex3 <- readRDS("tests/testdata/gd_ex3.RDS")
 
 # National grouped data (type 5)
 gd_GHI_2009_income <- data.frame(
@@ -8,4 +11,8 @@ gd_GHI_2009_income <- data.frame(
   welfare = c(18.10, 27.50, 35.20, 43.30, 51.61, 56.15, 75.17, 93.39, 128.30, 260.90),
   area = ""
 )
-usethis::use_data(gd_GHI_2009_income, overwrite = TRUE)
+usethis::use_data(grouped_data_ex1,
+                  grouped_data_ex2,
+                  grouped_data_ex3,
+                  gd_GHI_2009_income,
+                  overwrite = TRUE)

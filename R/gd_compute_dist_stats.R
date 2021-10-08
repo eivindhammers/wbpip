@@ -8,6 +8,13 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Compute distributional statistics
+#' res <- wbpip:::gd_compute_dist_stats(
+#'  welfare = grouped_data_ex2$welfare,
+#'  population = grouped_data_ex2$weight,
+#'  mean = 50)
+#'
 gd_compute_dist_stats <- function(welfare,
                                   population,
                                   mean,

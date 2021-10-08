@@ -8,6 +8,14 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Compute poverty stats
+#' res <- wbpip:::gd_compute_poverty_stats(
+#'  welfare = grouped_data_ex2$welfare,
+#'  population = grouped_data_ex2$weight,
+#'  povline = 1.9 * 365 / 12,
+#'  requested_mean = 50,
+#'  default_ppp = 1)
 gd_compute_poverty_stats <- function(welfare,
                                      povline,
                                      population,

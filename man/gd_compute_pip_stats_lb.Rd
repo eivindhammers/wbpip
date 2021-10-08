@@ -41,4 +41,22 @@ list
 Compute poverty statistics for grouped data using the beta functional form of
 the Lorenz qurve.
 }
+\keyword{#}
+\keyword{1)}
+\keyword{1.9,}
+\keyword{50,}
+\keyword{<-}
+\keyword{=}
+\keyword{Beta}
+\keyword{Estimate}
+\keyword{Lorenz}
+\keyword{default_ppp}
+\keyword{grouped_data_ex2$weight,}
+\keyword{grouped_data_ex2$welfare,}
 \keyword{internal}
+\keyword{lb}
+\keyword{population}
+\keyword{povline}
+\keyword{requested_mean}
+\keyword{wbpip:::gd_compute_pip_stats_lb(}
+\keyword{welfare}

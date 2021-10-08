@@ -19,4 +19,25 @@ list
 \description{
 Select best Lorenz fit and adjust the returned statistics if needed.
 }
+\examples{
+# Estimate Quadratic Lorenz
+lq <- wbpip:::gd_compute_pip_stats_lq(
+    welfare = grouped_data_ex2$welfare,
+    population = grouped_data_ex2$weight,
+    requested_mean = 80,
+    povline = 1.9,
+    default_ppp = 1)
+
+# Estimate Lorenz Beta
+lb <- wbpip:::gd_compute_pip_stats_lb(
+  welfare = grouped_data_ex2$welfare,
+  population = grouped_data_ex2$weight,
+  requested_mean = 50,
+  povline = 1.9,
+  default_ppp = 1)
+
+# Select Lorenz
+res <- wbpip:::gd_select_lorenz(lq, lb)
+
+}
 \keyword{internal}

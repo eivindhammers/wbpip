@@ -20,4 +20,16 @@ list
 Quadratic). There is no intercept in the regression. The coefficients of
 regressions are estimated by ordinary least squares.
 }
+\examples{
+# Beta Lorenz
+lb_data <- wbpip:::create_functional_form_lb(grouped_data_ex2$welfare,
+grouped_data_ex2$weight)
+lb_res <- wbpip:::regres(lb_data)
+
+# Quadratic Lorenz
+lq_data <- wbpip:::create_functional_form_lq(grouped_data_ex2$welfare,
+grouped_data_ex2$weight)
+lq_res <- wbpip:::regres(lq_data)
+
+}
 \keyword{internal}

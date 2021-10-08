@@ -10,6 +10,17 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Beta Lorenz
+#' lb_data <- wbpip:::create_functional_form_lb(grouped_data_ex2$welfare,
+#' grouped_data_ex2$weight)
+#' lb_res <- wbpip:::regres(lb_data)
+#'
+#' # Quadratic Lorenz
+#' lq_data <- wbpip:::create_functional_form_lq(grouped_data_ex2$welfare,
+#' grouped_data_ex2$weight)
+#' lq_res <- wbpip:::regres(lq_data)
+#'
 regres <- function(data, is_lq = TRUE) {
 
   y <- data$y

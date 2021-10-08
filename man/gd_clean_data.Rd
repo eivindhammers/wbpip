@@ -32,4 +32,14 @@ proportion of income. If \code{gd_type = 5}, then \code{population} must be the
 Percentage of the population in a given interval of incomes, whereas
 \code{welfare} must be the mean income of that interval.
 }
+\examples{
+# Load example data
+data("gd_GHI_2009_income")
+
+# Standardize dataset
+wbpip:::gd_clean_data(
+  gd_GHI_2009_income, welfare = "welfare",
+  population = "weight", gd_type = 5)
+
+}
 \keyword{internal}

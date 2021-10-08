@@ -11,7 +11,8 @@ A data frame with 10 rows and 5 variables:
 \item{survey_year}{The year of the survey.}
 \item{weight}{The weight of each indvidual's welfare value.}
 \item{welfare}{The welfare of each indvidual. Can represent either income or consumption.}
-\item{area}{Geographical location; urban or rural.} }
+\item{area}{Geographical location; urban or rural.}
+}
 }
 \source{
 Worldbank internal.

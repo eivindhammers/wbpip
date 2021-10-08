@@ -41,4 +41,13 @@ list
 Compute poverty statistics for grouped data by selecting the best functional
 fit for the Lorenz curve (either beta or quadratic).
 }
+\examples{
+# Compute poverty stats
+res <- wbpip:::gd_compute_poverty_stats(
+ welfare = grouped_data_ex2$welfare,
+ population = grouped_data_ex2$weight,
+ povline = 1.9 * 365 / 12,
+ requested_mean = 50,
+ default_ppp = 1)
+}
 \keyword{internal}

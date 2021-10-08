@@ -9,6 +9,17 @@
 #'
 #' @return list
 #' @keywords internal
+#' @examples
+#' # Create synthetic dataset
+#' res <- wbpip:::sd_create_synth_vector(
+#'   welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight,
+#'   mean = 8,
+#'   pop = NULL,
+#'   p0 = 0.5,
+#'   nobs = 1e5)
+#' str(res)
+#'
 sd_create_synth_vector <- function(welfare,
                                    population,
                                    mean,
