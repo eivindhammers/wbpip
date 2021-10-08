@@ -24,14 +24,11 @@ Compute distributional statistics for grouped data by selecting the best
 functional fit for the Lorenz curve (either beta or quadratic).
 }
 \examples{
-# Load example data
-p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
-df <- readRDS(p)
-
 # Compute distributional statistics
 res <- wbpip:::gd_compute_dist_stats(
- welfare = df$welfare, population = df$weight,
-  mean = 50)
+ welfare = grouped_data_ex2$welfare,
+ population = grouped_data_ex2$weight,
+ mean = 50)
 
 }
 \keyword{internal}

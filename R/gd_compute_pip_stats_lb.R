@@ -6,14 +6,10 @@
 #' @inheritParams gd_compute_pip_stats
 #' @return list
 #' @keywords internal
-#' # Load example data
-#' p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
-#' df <- readRDS(p)
-#'
 #' # Estimate Lorenz Beta
 #' lb <- wbpip:::gd_compute_pip_stats_lb(
-#'   welfare = df$welfare,
-#'   population = df$weight,
+#'   welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight,
 #'   requested_mean = 50,
 #'   povline = 1.9,
 #'   default_ppp = 1)

@@ -17,13 +17,10 @@
 #' @return list
 #' @keywords internal
 #' @examples
-#' # Load example data
-#' p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
-#' df <- readRDS(p)
-#'
 #' # Compute PIP stats
 #' res <- wbpip:::gd_compute_pip_stats(
-#'          df$welfare, df$weight,
+#'          grouped_data_ex2$welfare,
+#'          grouped_data_ex2$weight,
 #'          requested_mean = 2.911786,
 #'          povline = 1.9,
 #'          default_ppp = 1)

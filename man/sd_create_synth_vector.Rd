@@ -33,14 +33,10 @@ Compute distributional statistics for grouped data by selecting the best
 functional fit for the Lorenz curve (either beta or quadratic).
 }
 \examples{
-# Load example data
-p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
-df <- readRDS(p)
-
 # Create synthetic dataset
 res <- wbpip:::sd_create_synth_vector(
-  welfare = df$welfare,
-  population = df$weight,
+  welfare = grouped_data_ex2$welfare,
+  population = grouped_data_ex2$weight,
   mean = 8,
   pop = NULL,
   p0 = 0.5,

@@ -21,16 +21,14 @@ Quadratic). There is no intercept in the regression. The coefficients of
 regressions are estimated by ordinary least squares.
 }
 \examples{
-# Load example data
-p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
-df <- readRDS(p)
-
 # Beta Lorenz
-lb_data <- wbpip:::create_functional_form_lb(df$welfare, df$weight)
+lb_data <- wbpip:::create_functional_form_lb(grouped_data_ex2$welfare,
+grouped_data_ex2$weight)
 lb_res <- wbpip:::regres(lb_data)
 
 # Quadratic Lorenz
-lq_data <- wbpip:::create_functional_form_lq(df$welfare, df$weight)
+lq_data <- wbpip:::create_functional_form_lq(grouped_data_ex2$welfare,
+grouped_data_ex2$weight)
 lq_res <- wbpip:::regres(lq_data)
 
 }

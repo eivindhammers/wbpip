@@ -9,14 +9,11 @@
 #' @return list
 #' @keywords internal
 #' @examples
-#' # Load example data
-#' p <- system.file("tests/testdata/gd_ex2.RDS", package = "wbpip")
-#' df <- readRDS(p)
-#'
 #' # Compute distributional statistics
 #' res <- wbpip:::gd_compute_dist_stats(
-#'  welfare = df$welfare, population = df$weight,
-#'   mean = 50)
+#'  welfare = grouped_data_ex2$welfare,
+#'  population = grouped_data_ex2$weight,
+#'  mean = 50)
 #'
 gd_compute_dist_stats <- function(welfare,
                                   population,
