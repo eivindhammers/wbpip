@@ -3,6 +3,7 @@
 export(compute_pip_stats)
 export(deflate_welfare_mean)
 export(fill_gaps)
+export(gd_estimate_distribution)
 export(get_bins)
 export(get_gini)
 export(get_lorenz)
