@@ -116,3 +116,37 @@
 #'   }
 #' @source Worldbank internal.
 "gd_GHI_2009_income"
+
+#' A dataset containing fake group data distribution
+#'
+#'
+#' @format A data frame with 10 rows and 2 variables:
+#' \describe{
+#'   \item{welfare}{A vector of welfate values}
+#'   \item{weight}{A vector of population weight}
+#'   }
+#' @source Worldbank internal.
+"grouped_data_ex1"
+
+#' A dataset containing fake group data distribution
+#'
+#'
+#' @format A data frame with 10 rows and 2 variables:
+#' \describe{
+#'   \item{welfare}{A vector of welfate values}
+#'   \item{weight}{A vector of population weight}
+#'   }
+#' @source Worldbank internal.
+"grouped_data_ex2"
+
+#' A dataset containing fake group data distribution
+#'
+#'
+#' @format A data frame with 10 rows and 2 variables:
+#' \describe{
+#'   \item{area}{A vector of area code (urban / rural)}
+#'   \item{welfare}{A vector of welfate values}
+#'   \item{weight}{A vector of population weight}
+#'   }
+#' @source Worldbank internal.
+"grouped_data_ex3"
