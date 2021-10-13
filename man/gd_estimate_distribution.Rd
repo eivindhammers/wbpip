@@ -2,7 +2,7 @@
 % Please edit documentation in R/gd_estimate_distribution.R
 \name{gd_estimate_distribution}
 \alias{gd_estimate_distribution}
-\title{Title}
+\title{Estimate distribution (grouped data)}
 \usage{
 gd_estimate_distribution(
   welfare,
@@ -38,7 +38,7 @@ Optional.}
 data.frame
 }
 \description{
-Title
+Estimate distribution (grouped data)
 }
 \examples{
 welfare <- c(24.84, 35.8, 45.36, 55.1, 64.92, 77.08, 91.75, 110.64, 134.9,

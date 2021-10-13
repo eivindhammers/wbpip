@@ -1,4 +1,4 @@
-#' Title
+#' Estimate distribution (grouped data)
 #'
 #' @param welfare numeric: vector of welfare values
 #' @param population numeric: vector of weight values
@@ -69,12 +69,9 @@ gd_estimate_distribution <- function(welfare,
     welfare = res$welfare
   )
 
-  population <- res$population
-  welfare    <- res$welfare
-
   # STEP 2: Estimate distribution
-  out <- gd_compute_pip_stats(welfare = welfare,
-                              population = population,
+  out <- gd_compute_pip_stats(welfare = res$welfare,
+                              population = res$population,
                               povline = povline,
                               requested_mean = mean,
                               popshare = popshare)
