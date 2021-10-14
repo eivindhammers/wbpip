@@ -10,7 +10,8 @@ sd_create_synth_vector(
   mean,
   pop = NULL,
   p0 = 0.5,
-  nobs = 1e+05
+  nobs = 100000,
+  selected_model = NULL
 )
 }
 \arguments{
@@ -24,6 +25,10 @@ proportion of the population (Lorenz Curve).}
 \item{p0}{numeric: \strong{TO BE DOCUMENTED}.}
 
 \item{nobs}{numeric: Number of observations to be used in synthetic vector}
+
+\item{selected_model}{character or NULL: force to use one model, either
+quadratic (q) or Beta (b). If NULL (default), the methodological protocol
+will select the model. This argument is only useful for testing purposes.}
 }
 \value{
 list
