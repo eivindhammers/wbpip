@@ -126,6 +126,7 @@ sd_create_synth_vector <- function(welfare,
     vderive_lq <- Vectorize(derive_lq, vectorize.args = "x")
     welfare_s <- vderive_lq(weight_range, A, B, C) * mean
 
+    model_used <- "quadratic Lorenz"
 
   } else {
     A <- reg_coef_lb[1]
@@ -137,6 +138,12 @@ sd_create_synth_vector <- function(welfare,
     vderive_lb <- Vectorize(derive_lb, vectorize.args = "x")
     welfare_s <- vderive_lb(weight_range, A, B, C) * mean
 
+    model_used <- "Beta Lorenz"
+  }
+
+  if (verbose) {
+    cli::cli_alert("Parameters used in {.field {model_used}} model")
+    cli::cli_dl(c(A = A, B = B, C = C, mean = mean))
   }
 
 
