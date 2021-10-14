@@ -29,7 +29,8 @@ sd_create_synth_vector <- function(welfare,
                                    pop            = NULL,
                                    p0             = 0.5,
                                    nobs           = 1e5,
-                                   selected_model = NULL) {
+                                   selected_model = NULL,
+                                   verbose        = getOption("wbpip.verbose")) {
 
 
   # Check arguments
