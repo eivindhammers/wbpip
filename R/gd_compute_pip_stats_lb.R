@@ -145,7 +145,7 @@ derive_lb <- function(x, A, B, C) {
   }
 
   # Formula for first derivative of GQ Lorenz Curve
-  val <- 1 - (A * x^B * (1 - x)^C * ((B / x) - C / (1 - x)))
+  val <- 1 - ((A * x^B) * ((1 - x)^C) * ((B / x) -( C / (1 - x)) ) )
 
   return(val)
 }
