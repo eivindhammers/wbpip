@@ -1,4 +1,4 @@
-# wbpip (development version)
+# wbpip 0.0.3
 
 # wbpip 0.0.2
 
