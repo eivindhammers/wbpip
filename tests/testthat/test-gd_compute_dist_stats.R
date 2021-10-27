@@ -53,3 +53,29 @@ test_that("gd_compute_gini_lq returns correct results", {
   res <- gd_compute_dist_stats(gd_ex3$welfare, gd_ex3$weight, mean = 1.180057)
   expect_equal(res$gini, 0.61330745577995316)
 })
+
+# Added after fixing lorenz selection issue in gd_compute_dist_stats
+# Incorrect SSE was used in selection
+test_that("gd_compute_dist_stats select correct Lorenz curve", {
+  welfare <- c(0.005529081,
+               0.035269317,
+               0.092114651,
+               0.199049919,
+               0.358258694,
+               0.636638488,
+               1.000000000)
+
+  weight <- c(0.0340034,
+              0.1381138,
+              0.2738274,
+              0.4541454,
+              0.6462646,
+              0.8671867,
+              1.0000000)
+  res <- gd_compute_dist_stats(welfare = welfare,
+                               population = weight,
+                               mean = 6.095571)
+  expect_equal(res$gini, 0.40235114)
+})
+
+
