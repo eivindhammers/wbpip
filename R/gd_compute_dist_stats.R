@@ -30,13 +30,23 @@ gd_compute_dist_stats <- function(welfare,
 
   # STEP 2: Estimate regression coefficients using LQ parameterization
   reg_results_lq <- regres(prepped_data, is_lq = TRUE)
-  reg_coef_lq <- reg_results_lq$coef
+  A <- reg_results_lq$coef[1]
+  B <- reg_results_lq$coef[2]
+  C <- reg_results_lq$coef[3]
+
+  # STEP 3: Compute Sum of Squared Error
+  reg_results_lq[["sse"]] <- gd_compute_dist_fit_lq(welfare = welfare,
+                                                    population = population,
+                                                    A = A,
+                                                    B = B,
+                                                    C = C)
 
   # STEP 3: Calculate distributional stats
-  results_lq <- gd_estimate_dist_stats_lq(
-    mean = mean, p0 = p0, A = reg_coef_lq[1],
-    B = reg_coef_lq[2], C = reg_coef_lq[3]
-  )
+  results_lq <- gd_estimate_dist_stats_lq(mean = mean,
+                                          p0 = p0,
+                                          A = A,
+                                          B = B,
+                                          C = C)
 
   results_lq <- append(results_lq, reg_results_lq)
 
@@ -49,13 +59,23 @@ gd_compute_dist_stats <- function(welfare,
 
   # STEP 2: Estimate regression coefficients using LB parameterization
   reg_results_lb <- regres(prepped_data, is_lq = FALSE)
-  reg_coef_lb <- reg_results_lb$coef
+  A <- reg_results_lb$coef[1]
+  B <- reg_results_lb$coef[2]
+  C <- reg_results_lb$coef[3]
+
+  # STEP 3: Compute Sum of Squared Error
+  reg_results_lb[["sse"]] <- gd_compute_dist_fit_lb(welfare = welfare,
+                                                    population = population,
+                                                    A = A,
+                                                    B = B,
+                                                    C = C)
 
   # STEP 3: Calculate distributional stats
-  results_lb <- gd_estimate_dist_stats_lb(
-    mean = mean, p0 = p0, A = reg_coef_lb[1],
-    B = reg_coef_lb[2], C = reg_coef_lb[3]
-  )
+  results_lb <- gd_estimate_dist_stats_lb(mean = mean,
+                                          p0 = p0,
+                                          A = A,
+                                          B = B,
+                                          C = C)
 
   results_lb <- append(results_lb, reg_results_lb)
 
@@ -218,4 +238,61 @@ check_curve_validity_dist_lb <- function(A, B, C) {
   return(list(
     is_valid = is_valid
   ))
+}
+
+#' Computes the sum of squares of error
+#'
+#' Measures the fit of the model to the data for distributional statistics.
+#'
+#' @param welfare numeric: Welfare vector (grouped).
+#' @param population numeric: Population vector (grouped).
+#' @param A numeric: Lorenz curve coefficient.
+#' @param B numeric: Lorenz curve coefficient.
+#' @param C numeric: Lorenz curve coefficient.
+#'
+#' @return list
+#' @keywords internal
+gd_compute_dist_fit_lq <- function(welfare,
+                                   population,
+                                   A,
+                                   B,
+                                   C) {
+
+  sse <- 0L # Sum of square error
+
+  for (i in seq_len(length(welfare) - 1)) {
+    residual <- welfare[i] - value_at_lq(population[i], A, B, C)
+    residual_sq <- residual^2
+    sse <- sse + residual_sq
+  }
+
+  return(sse)
+}
+
+#' Computes the sum of squares of error
+#' Measures the fit of the model to the data for distributional statistics.
+#'
+#' @param welfare numeric: Welfare vector (grouped).
+#' @param population numeric: Population vector (grouped).
+#' @param A numeric: Lorenz curve coefficient.
+#' @param B numeric: Lorenz curve coefficient.
+#' @param C numeric: Lorenz curve coefficient.
+#'
+#' @return list
+#' @keywords internal
+gd_compute_dist_fit_lb <- function(welfare,
+                                   population,
+                                   A,
+                                   B,
+                                   C) {
+
+  sse <- 0 # Sum of square error
+
+  for (i in seq_along(welfare[-1])) {
+    residual <- welfare[i] - value_at_lb(population[i], A, B, C)
+    residual_sq <- residual^2
+    sse <- sse + residual_sq
+  }
+
+  return(sse)
 }
