@@ -1,4 +1,7 @@
 # wbpip 0.0.3
+* Fix the selection of Lorenz curve for distributional statistics by adding ad-hoc function to compute correct SSE
+
+* change creation of synth vectors 
 
 # wbpip 0.0.2
 
