@@ -6,6 +6,9 @@
 #' @inheritParams gd_compute_pip_stats
 #' @inheritParams gd_compute_dist_stats_lb
 #' @param nobs numeric: Number of observations to be used in synthetic vector
+#' @param selected_model character or NULL: force to use one model, either
+#'   quadratic (q) or Beta (b). If NULL (default), the methodological protocol
+#'   will select the model. This argument is only useful for testing purposes.
 #'
 #' @return list
 #' @keywords internal
@@ -23,9 +26,19 @@
 sd_create_synth_vector <- function(welfare,
                                    population,
                                    mean,
-                                   pop = NULL,
-                                   p0 = 0.5,
-                                   nobs = 1e5) {
+                                   pop            = NULL,
+                                   p0             = 0.5,
+                                   nobs           = 1e5,
+                                   selected_model = NULL,
+                                   verbose        = getOption("wbpip.verbose")) {
+
+
+  # Check arguments
+  if (!is.null(selected_model) && !selected_model  %in% c("q", "b") ) {
+      cli::cli_abort(c("Incorrect selected model",
+                       "must be either {.field 'q'} or {.field 'b'},
+                       not {.val {selected_model}}"))
+  }
 
 
   # Apply Lorenz quadratic fit ----------------------------------------------
@@ -86,10 +99,20 @@ sd_create_synth_vector <- function(welfare,
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # 3 Selection of Lorenz fit for distributional statistics ----
-  use_lq_for_dist <- use_lq_for_distributional(
-    lq = results_lq,
-    lb = results_lb
-  )
+  if (is.null(selected_model)) {
+
+    use_lq_for_dist <- use_lq_for_distributional(
+      lq = results_lq,
+      lb = results_lb
+    )
+
+  } else {
+    if (selected_model == "q") {
+      use_lq_for_dist <- TRUE
+    } else {
+      use_lq_for_dist <- FALSE
+    }
+  }
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## apply correct lorenz --------
@@ -98,21 +121,31 @@ sd_create_synth_vector <- function(welfare,
     B <- reg_coef_lq[2]
     C <- reg_coef_lq[3]
     # Compute welfare values
-    welfare_s <- purrr::map_dbl(weight_range, .f =
-                                  function(x, mean, A, B, C)  {
-                                    mean * derive_lq(x, A, B, C)
-                                  }, mean, A, B, C)
+
+    # Vectorize is faster than purrr
+    vderive_lq <- Vectorize(derive_lq, vectorize.args = "x")
+    welfare_s <- vderive_lq(weight_range, A, B, C) * mean
+
+    model_used <- "quadratic Lorenz"
 
   } else {
     A <- reg_coef_lb[1]
     B <- reg_coef_lb[2]
     C <- reg_coef_lb[3]
+
     # Compute welfare values
-    welfare_s <- purrr::map_dbl(weight_range, .f =
-                                  function(x, mean, A, B, C)  {
-                                    mean * derive_lq(x, A, B, C)
-                                  }, mean, A, B, C)
+
+    vderive_lb <- Vectorize(derive_lb, vectorize.args = "x")
+    welfare_s <- vderive_lb(weight_range, A, B, C) * mean
+
+    model_used <- "Beta Lorenz"
   }
+
+  if (verbose) {
+    cli::cli_alert("Parameters used in {.field {model_used}} model")
+    cli::cli_dl(c(A = A, B = B, C = C, mean = mean))
+  }
+
 
   # manage population
   if (is.null(pop)) {
