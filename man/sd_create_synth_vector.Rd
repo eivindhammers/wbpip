@@ -10,8 +10,9 @@ sd_create_synth_vector(
   mean,
   pop = NULL,
   p0 = 0.5,
-  nobs = 100000,
-  selected_model = NULL
+  nobs = 1e+05,
+  selected_model = NULL,
+  verbose = getOption("wbpip.verbose")
 )
 }
 \arguments{
