@@ -44,8 +44,8 @@ md_compute_dist_stats <- function(welfare, weight,
 
   polarization <- md_compute_polarization(
     welfare = welfare, weight = weight,
-    gini = gini, weighted_mean = mean,
-    weighted_median = median
+    gini = gini, mean = mean,
+    median = median
   )
 
   return(list(
