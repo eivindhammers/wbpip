@@ -12,7 +12,7 @@ sd_create_synth_vector(
   p0 = 0.5,
   nobs = 1e+05,
   selected_model = NULL,
-  verbose = getOption("wbpip.verbose")
+  verbose = FALSE
 )
 }
 \arguments{
