@@ -7,7 +7,7 @@
 md_compute_pip_stats(
   welfare,
   povline,
-  population = NULL,
+  population,
   requested_mean = NULL,
   popshare = NULL,
   default_ppp = 1,
