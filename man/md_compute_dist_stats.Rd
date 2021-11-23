@@ -9,6 +9,7 @@ md_compute_dist_stats(
   weight,
   mean = NULL,
   nbins = NULL,
+  lorenz = NULL,
   n_quantile = 10
 )
 }
@@ -19,7 +20,11 @@ md_compute_dist_stats(
 
 \item{mean}{numeric: A value with the mean. Optional.}
 
-\item{nbins}{numeric: number of points on the Lorenz curve.}
+\item{nbins}{numeric: number of points on the Lorenz curve. Optional. Only
+used if \code{lorenz} is NULL}
+
+\item{lorenz}{data.frame: A table with points on the Lorenz curve. Output of
+\code{md_compute_lorenz()}. Optional.}
 
 \item{n_quantile}{numeric: Number of quantiles for which share of total
 income is desired. It can't be larger that the total number of percentiles
