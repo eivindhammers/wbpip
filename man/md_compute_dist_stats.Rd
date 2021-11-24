@@ -18,7 +18,7 @@ md_compute_dist_stats(
 
 \item{weight}{numeric: A vector of weights.}
 
-\item{mean}{numeric: A value with the (weighted) mean. Optional.}
+\item{mean}{numeric: A value with the mean. Optional.}
 
 \item{nbins}{numeric: number of points on the Lorenz curve. Optional. Only
 used if \code{lorenz} is NULL}
