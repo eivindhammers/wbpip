@@ -11,7 +11,7 @@ md_compute_mld(welfare, weight, mean = NULL)
 
 \item{weight}{numeric: A vector of weights.}
 
-\item{mean}{numeric: A value with the (weighted) mean. Optional.}
+\item{mean}{numeric: A value with the mean. Optional.}
 }
 \value{
 numeric
