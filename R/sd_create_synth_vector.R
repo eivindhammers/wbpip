@@ -30,7 +30,7 @@ sd_create_synth_vector <- function(welfare,
                                    p0             = 0.5,
                                    nobs           = 1e5,
                                    selected_model = NULL,
-                                   verbose        = getOption("wbpip.verbose")) {
+                                   verbose        = FALSE) {
 
 
   # Check arguments
@@ -145,7 +145,6 @@ sd_create_synth_vector <- function(welfare,
     cli::cli_alert("Parameters used in {.field {model_used}} model")
     cli::cli_dl(c(A = A, B = B, C = C, mean = mean))
   }
-
 
   # manage population
   if (is.null(pop)) {

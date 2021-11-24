@@ -4,12 +4,14 @@
 \alias{md_compute_mld}
 \title{Mean Log Deviation}
 \usage{
-md_compute_mld(welfare, weight)
+md_compute_mld(welfare, weight, mean = NULL)
 }
 \arguments{
-\item{welfare}{numeric: vector of welfare measures}
+\item{welfare}{numeric: A vector of income or consumption values.}
 
-\item{weight}{numeric: vector of weights}
+\item{weight}{numeric: A vector of weights.}
+
+\item{mean}{numeric: A value with the (weighted) mean. Optional.}
 }
 \value{
 numeric

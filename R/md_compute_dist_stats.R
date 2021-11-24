@@ -24,8 +24,6 @@ md_compute_dist_stats <- function(welfare, weight,
                                   n_quantile = 10) {
   if (is.null(mean)) {
     mean <- collapse::fmean(x = welfare, w = weight)
-  } else {
-    mean <- mean
   }
 
   if (is.null(lorenz)) {
@@ -47,13 +45,14 @@ md_compute_dist_stats <- function(welfare, weight,
   )
 
   mld <- md_compute_mld(
-    welfare = welfare, weight = weight
+    welfare = welfare, weight = weight,
+    mean = mean
   )
 
   polarization <- md_compute_polarization(
     welfare = welfare, weight = weight,
-    gini = gini, weighted_mean = mean,
-    weighted_median = median
+    gini = gini, mean = mean,
+    median = median
   )
 
   return(list(
