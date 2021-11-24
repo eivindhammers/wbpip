@@ -31,8 +31,8 @@ test_that("md_compute_polarization() computations are correct", {
       welfare = df$welfare,
       weight = df$weight,
       gini = gini,
-      weighted_mean = weighted_mean,
-      weighted_median = weighted_median
+      mean = weighted_mean,
+      median = weighted_median
     )
     return(pol)
   })

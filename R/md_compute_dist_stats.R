@@ -5,7 +5,7 @@
 #'
 #' @param welfare numeric: A vector of income or consumption values.
 #' @param weight numeric: A vector of weights.
-#' @param mean numeric: A value with the mean. Optional.
+#' @param mean numeric: A value with the (weighted) mean. Optional.
 #' @param nbins numeric: number of points on the Lorenz curve.
 #' @param n_quantile numeric: Number of quantiles for which share of total
 #'   income is desired. It can't be larger that the total number of percentiles
@@ -20,8 +20,6 @@ md_compute_dist_stats <- function(welfare, weight,
                                   n_quantile = 10) {
   if (is.null(mean)) {
     mean <- collapse::fmean(x = welfare, w = weight)
-  } else {
-    mean <- mean
   }
 
   lorenz <- md_compute_lorenz(
@@ -40,13 +38,14 @@ md_compute_dist_stats <- function(welfare, weight,
   )
 
   mld <- md_compute_mld(
-    welfare = welfare, weight = weight
+    welfare = welfare, weight = weight,
+    mean = mean
   )
 
   polarization <- md_compute_polarization(
     welfare = welfare, weight = weight,
-    gini = gini, weighted_mean = mean,
-    weighted_median = median
+    gini = gini, mean = mean,
+    median = median
   )
 
   return(list(
