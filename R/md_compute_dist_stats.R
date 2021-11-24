@@ -5,8 +5,11 @@
 #'
 #' @param welfare numeric: A vector of income or consumption values.
 #' @param weight numeric: A vector of weights.
-#' @param mean numeric: A value with the (weighted) mean. Optional.
-#' @param nbins numeric: number of points on the Lorenz curve.
+#' @param mean numeric: A value with the mean. Optional.
+#' @param lorenz data.frame: A table with points on the Lorenz curve. Output of
+#'   `md_compute_lorenz()`. Optional.
+#' @param nbins numeric: number of points on the Lorenz curve. Optional. Only
+#'   used if `lorenz` is NULL
 #' @param n_quantile numeric: Number of quantiles for which share of total
 #'   income is desired. It can't be larger that the total number of percentiles
 #'   in the Lorenz curve provided by the user. Default is 10.
@@ -17,15 +20,19 @@
 md_compute_dist_stats <- function(welfare, weight,
                                   mean = NULL,
                                   nbins = NULL,
+                                  lorenz = NULL,
                                   n_quantile = 10) {
   if (is.null(mean)) {
     mean <- collapse::fmean(x = welfare, w = weight)
   }
 
-  lorenz <- md_compute_lorenz(
-    welfare = welfare, weight = weight,
-    nbins = nbins
-  )
+  if (is.null(lorenz)) {
+    lorenz <- md_compute_lorenz(
+      welfare = welfare, weight = weight,
+      nbins = nbins
+    )
+  }
+
   quantiles <- md_compute_quantiles(
     lwelfare = lorenz[["lorenz_welfare"]],
     lweight = lorenz[["lorenz_weight"]],
