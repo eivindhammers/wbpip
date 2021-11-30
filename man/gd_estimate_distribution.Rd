@@ -14,9 +14,10 @@ gd_estimate_distribution(
 )
 }
 \arguments{
-\item{welfare}{numeric: vector of welfare values}
+\item{welfare}{numeric: Cumulative proportion of welfare held by that
+proportion of the population (Lorenz Curve).}
 
-\item{population}{numeric: vector of weight values}
+\item{population}{numeric: Cumulative proportion of population.}
 
 \item{gd_type}{integer: Type of data distribution
 If \code{gd_type = 1} \code{population} must be the cumulative proportion of
@@ -29,7 +30,7 @@ Percentage of the population in a given interval of incomes, whereas
 
 \item{mean}{numeric: Data mean}
 
-\item{povline}{numeric: Poverty line}
+\item{povline}{numeric: Poverty line.}
 
 \item{popshare}{numeric: Share of population living below the poverty line.
 Optional.}

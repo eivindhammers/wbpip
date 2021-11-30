@@ -7,11 +7,14 @@
 gd_compute_gini_lb(A, B, C, nbins = 499)
 }
 \arguments{
-\item{A}{numeric: First regression coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Second regression coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Third regression coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 
 \item{nbins}{numeric: Number of bins used to compute Gini.}
 }

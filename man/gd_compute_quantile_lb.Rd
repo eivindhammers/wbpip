@@ -7,11 +7,14 @@
 gd_compute_quantile_lb(A, B, C, n_quantile = 10)
 }
 \arguments{
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 
 \item{n_quantile}{numeric: Number of quantiles to return.}
 }

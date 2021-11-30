@@ -7,11 +7,14 @@
 check_curve_validity_lq(A, B, C, e, m, n, r)
 }
 \arguments{
-\item{A}{numeric: First regression coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Second regression coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Third regression coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 
 \item{e}{numeric: e = -(A + B + C + 1): condition for the curve to go through
 (1, 1).}

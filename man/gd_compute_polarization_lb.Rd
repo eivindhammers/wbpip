@@ -9,15 +9,18 @@ gd_compute_polarization_lb(mean, p0, dcm, A, B, C)
 \arguments{
 \item{mean}{numeric: Welfare mean.}
 
-\item{p0}{numeric: \strong{TO BE DOCUMENTED}}
+\item{p0}{numeric: \strong{TO BE DOCUMENTED}.}
 
-\item{dcm}{numeric: \strong{TO BE DOCUMENTED}}
+\item{dcm}{numeric: Distribution corrected mean}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 }
 \value{
 numeric

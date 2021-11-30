@@ -6,8 +6,7 @@
 #' `md_compute_poverty_stats()` computes poverty headcount, poverty gap,
 #' poverty severity and the watts index.
 #'
-#' @param welfare numeric: A vector of income or consumption values.
-#' @param weight numeric: A vector of weights.
+#' @inheritParams compute_pip_stats
 #' @param povline_lcu numeric: Poverty line in Local Currency Unit (LCU).
 #'
 #' @examples

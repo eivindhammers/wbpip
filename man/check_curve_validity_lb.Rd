@@ -7,14 +7,16 @@
 check_curve_validity_lb(headcount, A, B, C)
 }
 \arguments{
-\item{headcount}{numeric: Poverty rate computed by
-gd_compute_poverty_stats_lb().}
+\item{headcount}{numeric: Headcount index.}
 
-\item{A}{numeric: First regression coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Second regression coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Third regression coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 }
 \value{
 list

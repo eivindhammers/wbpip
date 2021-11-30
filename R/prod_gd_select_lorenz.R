@@ -1,13 +1,10 @@
-#' Select best Lorenz fit
-#' Version used in production
+#' Select best Lorenz fit (prod)
 #'
 #' Select best Lorenz fit and adjust the returned statistics if needed.
 #'
-#' @param lq list: Results from Lorenz Quadratic functional form. output of
-#'   `gd_compute_pip_stats_lq()`.
-#' @param lb list: Results from Lorenz Beta functional form. output of
-#'   `gd_compute_pip_stats_lb()`.
+#' Version used in production.
 #'
+#' @inheritParams gd_select_lorenz
 #' @return list
 #' @keywords internal
 prod_gd_select_lorenz <- function(lq, lb) {

@@ -7,9 +7,7 @@
 md_compute_mld(welfare, weight, mean = NULL)
 }
 \arguments{
-\item{welfare}{numeric: A vector of income or consumption values.}
-
-\item{weight}{numeric: A vector of weights.}
+\item{welfare}{numeric: A vector of income or consumption values}
 
 \item{mean}{numeric: A value with the mean. Optional.}
 }

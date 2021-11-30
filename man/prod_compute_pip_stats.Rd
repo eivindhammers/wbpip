@@ -2,9 +2,7 @@
 % Please edit documentation in R/prod_compute_pip_stats.R
 \name{prod_compute_pip_stats}
 \alias{prod_compute_pip_stats}
-\title{Compute default PIP statistics (microdata)
-Version used in production. Does not re-compute all distributional stats.
-Distributional stats are pre-computed as they are not sensitive to the poverty line.}
+\title{Compute default PIP statistics (microdata, prod)}
 \usage{
 prod_compute_pip_stats(
   welfare,
@@ -24,7 +22,7 @@ prod_compute_pip_stats(
 \arguments{
 \item{welfare}{numeric: A vector of income or consumption values}
 
-\item{povline}{numeric: Monthly poverty line in international dollars}
+\item{povline}{numeric: Poverty line in international dollars}
 
 \item{population}{numeric: A vector of population weights, optional, a vector
 of 1s if not specified.}
@@ -54,4 +52,8 @@ list
 }
 \description{
 Compute poverty and distributional statistics for microdata.
+}
+\details{
+Version used in production. Does not re-compute all distributional stats.
+Distributional stats are pre-computed as they are not sensitive to the poverty line.
 }

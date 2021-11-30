@@ -1,7 +1,5 @@
 #' Estimate distribution (grouped data)
 #'
-#' @param welfare numeric: vector of welfare values
-#' @param population numeric: vector of weight values
 #' @param gd_type integer: Type of data distribution
 #' If `gd_type = 1` `population` must be the cumulative proportion of
 #' population and `welfare` must be the cumulative proportion of income held by
@@ -11,9 +9,7 @@
 #' Percentage of the population in a given interval of incomes, whereas
 #' `welfare` must be the mean income of that interval.
 #' @param mean numeric: Data mean
-#' @param povline numeric: Poverty line
-#' @param popshare numeric: Share of population living below the poverty line.
-#' Optional.
+#' @inheritParams gd_compute_pip_stats
 #'
 #' @return data.frame
 #' @export

@@ -81,8 +81,7 @@ predict_request_year_mean <- function(survey_year, survey_mean,
 }
 
 #' compute_predicted_mean
-#' @param survey_mean numeric: A vector with one or two survey means.
-#' @param proxy list: A list with proxy values.
+#' @inheritParams predict_request_year_mean
 #' @return numeric
 #' @noRd
 compute_predicted_mean <- function(survey_mean, proxy) {
@@ -110,8 +109,7 @@ compute_predicted_mean <- function(survey_mean, proxy) {
 #'
 #' Extrapolate or or two survey means based on an external growth factor.
 #'
-#' @param survey_mean numeric: A vector with survey means.
-#' @param proxy list: A list with proxy values.
+#' @inheritParams predict_request_year_mean
 #' @return numeric
 #' @noRd
 extrapolate_survey_mean <- function(survey_mean, proxy) {
@@ -137,8 +135,7 @@ extrapolate_survey_mean <- function(survey_mean, proxy) {
 #' Interpolate two survey means based on the difference between the two means
 #' and an external growth factor.
 #'
-#' @param survey_mean numeric: A vector with survey means.
-#' @param proxy list: A list with proxy values.
+#' @inheritParams predict_request_year_mean
 #' @return numeric
 #' @noRd
 interpolate_survey_mean <- function(survey_mean, proxy) {
@@ -153,7 +150,7 @@ interpolate_survey_mean <- function(survey_mean, proxy) {
 }
 
 #' is_non_monotonic
-#' @param survey_mean numeric: A vector with one or two survey means.
+#' @inheritParams predict_request_year_mean
 #' @param proxy_value numeric: A vector with one or two proxy values,
 #'   corresponding to year of the survey means.
 #' @param proxy_value numeric: Proxy value for the request year.
@@ -181,10 +178,7 @@ is_non_monotonic <- function(survey_mean, proxy_value, req_value) {
 }
 
 #' is_same_direction_interpolated
-#' @param survey_mean numeric: A vector with one or two survey means.
-#' @param proxy_value numeric: A vector with one or two proxy values,
-#'   corresponding to year of the survey means.
-#' @param proxy_value numeric: Proxy value for the request year.
+#' @inheritParams is_non_monotonic
 #' @return logical
 #' @noRd
 is_same_direction_interpolated <- function(survey_mean, proxy_value, req_value) {
@@ -209,10 +203,7 @@ is_same_direction_interpolated <- function(survey_mean, proxy_value, req_value) 
 }
 
 #' is_one_point_adjusted
-#' @param survey_mean numeric: A vector with one or two survey means.
-#' @param proxy_value numeric: A vector with one or two proxy values,
-#'   corresponding to year of the survey means.
-#' @param proxy_value numeric: Proxy value for the request year.
+#' @inheritParams is_non_monotonic
 #' @return logical
 #' @noRd
 is_one_point_adjusted <- function(survey_mean, proxy_value, req_value) {
@@ -249,7 +240,7 @@ is_same_direction <- function(x, y) {
 }
 
 #' adjust_decimal
-#' @param survey_year numeric: A vector with one or two survey means.
+#' @inheritParams predict_request_year_mean
 #' @param x list: A list with proxy values.
 #' @return numeric: A vector with one or two survey years.
 #' @noRd

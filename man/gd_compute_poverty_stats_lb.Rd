@@ -11,11 +11,14 @@ gd_compute_poverty_stats_lb(mean, povline, A, B, C)
 
 \item{povline}{numeric: Poverty line.}
 
-\item{A}{numeric: First regression coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Second regression coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Third regression coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 }
 \value{
 list

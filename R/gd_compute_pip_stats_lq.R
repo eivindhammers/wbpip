@@ -150,9 +150,7 @@ create_functional_form_lq <- function(welfare,
 #' \sqrt(\alpha x^2 + \beta x + e^2)}
 #'
 #' @param x numeric: Point on curve.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lq
 #'
 #' @references
 #' Villasenor, J., B. C. Arnold. 1989.
@@ -180,9 +178,7 @@ derive_lq <- function(x, A, B, C) {
 #'
 #' `check_curve_validity_lq()` checks the validity of the Lorenz Quadratic fit
 #'
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
+#' @inheritParams gd_estimate_lq
 #' @param e numeric: e = -(A + B + C + 1): condition for the curve to go through
 #' (1, 1).
 #' @param m numeric: m = (B^2) - (4 * A). m < 0: condition for the curve to be
@@ -251,15 +247,8 @@ check_curve_validity_lq <- function(A, B, C, e, m, n, r) {
 #'
 #' `gd_compute_gini_lq()` computes the gini index from a Lorenz Quadratic fit
 #'
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
-#' @param e numeric: e = -(A + B + C + 1): condition for the curve to go through
-#' (1, 1).
-#' @param m numeric: m = (B^2) - (4 * A). m < 0: condition for the curve to be
-#' an ellipse (m is called alpha in paper).
-#' @param n numeric: n = (2 * B * e) - (4 * C). n is called Beta in paper.
-#' @param r numeric: r = (n^2) - (4 * m * e^2). r is called K in paper.
+#' @inheritParams gd_estimate_lq
+#' @inheritParams check_curve_validity_lq
 #'
 #' @references
 #' Datt, G. 1998. "[Computational Tools For Poverty Measurement And
@@ -309,9 +298,7 @@ gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 #' General quadratic form: ax^2 + bxy + cy^2 + dx + ey + f = 0
 #'
 #' @param x numeric: Point on curve.
-#' @param A numeric: First Lorenz curve coefficient.
-#' @param B numeric: Second Lorenz curve coefficient.
-#' @param C numeric: Third Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
 #' @keywords internal
@@ -334,9 +321,7 @@ value_at_lq <- function(x, A, B, C) {
 #' Quadratic fit
 #'
 #' @param dd numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
 #' @keywords internal
@@ -370,9 +355,7 @@ gd_compute_mld_lq <- function(dd, A, B, C) {
 #'
 #' `gd_compute_quantile_lq()` computes quantiles from a Lorenz Quadratic fit.
 #'
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lq
 #' @param n_quantile numeric: Number of quantiles to return.
 #'
 #' @return numeric
@@ -403,13 +386,10 @@ gd_compute_quantile_lq <- function(A, B, C, n_quantile = 10) {
 #' where the mean is formed over the whole population, counting the nonpoor as
 #' having a zero poverty gap.
 #'
-#' @param headcount numeric: headcount index
+#' @inheritParams gd_compute_fit_lq
 #' @param mu numeric: **TO BE DOCUMENTED**.
-#' @param povline numeric: poverty line
 #' @param dd numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
 #' @keywords internal
@@ -461,12 +441,8 @@ gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
 #'
 #' Used for grouped data computations
 #'
-#' @param mean numeric: Welfare mean.
-#' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param dcm numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @param dcm numeric: Distribution corrected mean
+#' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
 #' @keywords internal
@@ -484,17 +460,8 @@ gd_compute_polarization_lq <- function(mean,
 
 #' Computes distributional stats from Lorenz Quadratic fit
 #'
-#' @param mean numeric: Welfare mean.
-#' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
-#' @param e numeric: e = -(A + B + C + 1): condition for the curve to go through
-#' (1, 1).
-#' @param m numeric: m = (B^2) - (4 * A). m < 0: condition for the curve to be
-#' an ellipse (m is called alpha in paper).
-#' @param n numeric: n = (2 * B * e) - (4 * C). n is called Beta in paper.
-#' @param r numeric:r = (n^2) - (4 * m * e^2). r is called K in paper.
+#' @inheritParams gd_estimate_lq
+#' @inheritParams check_curve_validity_lq
 #'
 #' @return list
 #' @keywords internal
@@ -522,17 +489,8 @@ gd_compute_dist_stats_lq <- function(mean, p0, A, B, C, e, m, n, r) {
 
 #' Computes poverty stats from Lorenz Quadratic fit
 #'
-#' @param mean numeric: Welfare mean.
-#' @param povline numeric: Poverty line.
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
-#' @param e numeric: e = -(A + B + C + 1): condition for the curve to go through
-#' (1, 1).
-#' @param m numeric: m = (B^2) - (4 * A). m < 0: condition for the curve to be
-#' an ellipse (m is called alpha in paper).
-#' @param n numeric: n = (2 * B * e) - (4 * C). n is called Beta in paper.
-#' @param r numeric:r = (n^2) - (4 * m * e^2). r is called K in paper.
+#' @inheritParams gd_estimate_lq
+#' @inheritParams check_curve_validity_lq
 #' @param s1 numeric: **TO BE DOCUMENTED**.
 #' @param s2 numeric: **TO BE DOCUMENTED**.
 #'
@@ -627,13 +585,7 @@ gd_compute_poverty_stats_lq <- function(mean,
 #' @param mean numeric: Welfare mean.
 #' @param povline numeric: Poverty line.
 #' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient. Output of
-#'   `regres_lq()$coef[1]`.
-#' @param B numeric: Lorenz curve coefficient. Output of
-#'   `regres_lq()$coef[2]`.
-#' @param C numeric: Lorenz curve coefficient. Output of
-#'   `regres_lq()$coef[3]`.
-#'
+#' @inheritParams gd_compute_fit_lq
 #' @return list
 #' @keywords internal
 gd_estimate_lq <- function(mean, povline, p0, A, B, C) {
@@ -698,9 +650,12 @@ gd_estimate_lq <- function(mean, povline, p0, A, B, C) {
 #' @param welfare numeric: Welfare vector (grouped).
 #' @param population numeric: Population vector (grouped).
 #' @param headcount numeric: Headcount index.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @param A numeric: Lorenz curve coefficient. Output of
+#'   `regres_lq()$coef[1]`.
+#' @param B numeric: Lorenz curve coefficient. Output of
+#'   `regres_lq()$coef[2]`.
+#' @param C numeric: Lorenz curve coefficient. Output of
+#'   `regres_lq()$coef[3]`.
 #'
 #' @return list
 #' @keywords internal

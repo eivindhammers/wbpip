@@ -14,9 +14,7 @@ get_gini(
 \arguments{
 \item{.data}{Household survey data frame with at least a welfare variable.}
 
-\item{welfare}{numeric: A vector of income or consumption values.}
-
-\item{weight}{numeric: A vector of weights.}
+\item{welfare}{numeric: A vector of income or consumption values}
 
 \item{distribution_type}{character: Type of distribution, either micro,
 group, aggregate or imputed.}

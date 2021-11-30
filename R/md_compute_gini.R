@@ -5,9 +5,7 @@
 #' Given a vector of income or consumption values and their respective weights
 #' `md_compute_gini()` computes the Gini coefficient for the distribution.
 #'
-#' @param welfare numeric: A vector of income or consumption values.
-#' @param weight numeric: A vector of weights.
-#'
+#' @inheritParams compute_pip_stats
 #' @examples
 #' wbpip:::md_compute_gini(welfare = 1:2000, weight = rep(1, 2000))
 #' @return numeric

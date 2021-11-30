@@ -2,8 +2,7 @@
 % Please edit documentation in R/prod_gd_compute_pip_stats_lb.R
 \name{prod_gd_compute_pip_stats_lb}
 \alias{prod_gd_compute_pip_stats_lb}
-\title{Computes poverty statistics (Lorenz beta)
-Version used in production}
+\title{Computes poverty statistics (Lorenz beta)}
 \usage{
 prod_gd_compute_pip_stats_lb(
   welfare,
@@ -39,6 +38,9 @@ Optional.}
 list
 }
 \description{
+Version used in production.
+}
+\details{
 Compute poverty statistics for grouped data using the beta functional form of
 the Lorenz qurve.
 }

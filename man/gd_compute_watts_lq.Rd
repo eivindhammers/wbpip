@@ -7,19 +7,22 @@
 gd_compute_watts_lq(headcount, mu, povline, dd, A, B, C)
 }
 \arguments{
-\item{headcount}{numeric: headcount index}
+\item{headcount}{numeric: Headcount index.}
 
 \item{mu}{numeric: \strong{TO BE DOCUMENTED}.}
 
-\item{povline}{numeric: poverty line}
+\item{povline}{numeric: Poverty line.}
 
 \item{dd}{numeric: \strong{TO BE DOCUMENTED}.}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 }
 \value{
 numeric

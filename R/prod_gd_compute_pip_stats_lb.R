@@ -1,5 +1,6 @@
 #' Computes poverty statistics (Lorenz beta)
-#' Version used in production
+#'
+#' Version used in production.
 #'
 #' Compute poverty statistics for grouped data using the beta functional form of
 #' the Lorenz qurve.
@@ -58,18 +59,10 @@ prod_gd_compute_pip_stats_lb <- function(welfare,
 }
 
 #' Estimates poverty and inequality stats from beta Lorenz fit
+#'
 #' Version used in production
 #'
-#' @param mean numeric: Welfare mean.
-#' @param povline numeric: Poverty line.
-#' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient. Output of
-#'   `regres()$coef[1]`.
-#' @param B numeric: Lorenz curve coefficient. Output of
-#'   `regres()$coef[2]`.
-#' @param C numeric: Lorenz curve coefficient. Output of
-#'   `regres()$coef[3]`.
-#'
+#' @inheritParams gd_estimate_lb
 #' @return list
 #' @keywords internal
 prod_gd_estimate_lb <- function(mean, povline, p0, A, B, C) {
