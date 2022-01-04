@@ -14,16 +14,14 @@ md_compute_povline_lcu(
 )
 }
 \arguments{
-\item{welfare}{numeric: A vector of income or consumption values.}
+\item{welfare}{numeric: A vector of income or consumption values}
 
-\item{povline}{numeric: Poverty line in international dollars (PPP).}
+\item{povline}{numeric: Poverty line in international dollars}
 
-\item{weight}{numeric: A vector of weights.}
+\item{popshare}{numeric: Share of population for which the corresponding
+quantile is desired. Default .5 (i.e., weighted median)}
 
-\item{popshare}{numeric: Share of population for which the corresponding.
-quantile is desired. Default .5 (i.e., weighted median).}
-
-\item{requested_mean}{numeric: requested mean (adjusted with PPPs).}
+\item{requested_mean}{numeric: Welfare mean in international dollars}
 
 \item{data_mean}{numeric: Data mean.}
 }

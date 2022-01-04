@@ -2,9 +2,7 @@
 % Please edit documentation in R/prod_md_compute_pip_stats.R
 \name{prod_md_compute_pip_stats}
 \alias{prod_md_compute_pip_stats}
-\title{Compute default PIP statistics
-Version used in production. Does not re-compute all distributional stats.
-Distributional stats are pre-computed as they are not sensitive to the poverty line.}
+\title{Compute default PIP statistics (prod)}
 \usage{
 prod_md_compute_pip_stats(
   welfare,
@@ -20,9 +18,9 @@ prod_md_compute_pip_stats(
 )
 }
 \arguments{
-\item{welfare}{numeric: A vector of income or consumption values.}
+\item{welfare}{numeric: A vector of income or consumption values}
 
-\item{povline}{numeric: Monthly poverty line in international dollars.}
+\item{povline}{numeric: Poverty line in international dollars}
 
 \item{population}{numeric: A vector of population weights, optional, a vector
 of 1s if not specified.}
@@ -32,16 +30,20 @@ of 1s if not specified.}
 \item{svy_mean_lcu}{numeric: Welfare mean in Local Currency Unit}
 
 \item{popshare}{numeric: Share of population for which the corresponding
-quantile is desired. Default .5 (i.e., weighted median).}
+quantile is desired. Default .5 (i.e., weighted median)}
 
-\item{default_ppp}{numeric: Default purchasing power parity.}
+\item{default_ppp}{numeric: Default purchasing power parity}
 
-\item{ppp}{numeric: PPP requested by user.}
+\item{ppp}{numeric: PPP requested by user}
 }
 \value{
 list
 }
 \description{
 Compute poverty and distributional statistics for microdata.
+}
+\details{
+Version used in production. Does not re-compute all distributional stats.
+Distributional stats are pre-computed as they are not sensitive to the poverty line.
 }
 \keyword{internal}

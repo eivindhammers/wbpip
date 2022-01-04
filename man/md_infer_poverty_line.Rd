@@ -7,12 +7,10 @@
 md_infer_poverty_line(welfare, weight, popshare = 0.5, include = FALSE)
 }
 \arguments{
-\item{welfare}{numeric: A vector of income or consumption values.}
+\item{welfare}{numeric: A vector of income or consumption values}
 
-\item{weight}{numeric: A vector of weights.}
-
-\item{popshare}{numeric: Share of population for which the corresponding.
-quantile is desired. Default .5 (i.e., weighted median).}
+\item{popshare}{numeric: Share of population for which the corresponding
+quantile is desired. Default .5 (i.e., weighted median)}
 
 \item{include}{logical: \strong{TO BE DOCUMENTED}.}
 }

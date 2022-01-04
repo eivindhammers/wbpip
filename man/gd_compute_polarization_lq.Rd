@@ -11,13 +11,16 @@ gd_compute_polarization_lq(mean, p0, dcm, A, B, C)
 
 \item{p0}{numeric: \strong{TO BE DOCUMENTED}.}
 
-\item{dcm}{numeric: \strong{TO BE DOCUMENTED}.}
+\item{dcm}{numeric: Distribution corrected mean}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 }
 \value{
 numeric

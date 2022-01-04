@@ -244,12 +244,8 @@ check_curve_validity_dist_lb <- function(A, B, C) {
 #'
 #' Measures the fit of the model to the data for distributional statistics.
 #'
-#' @param welfare numeric: Welfare vector (grouped).
-#' @param population numeric: Population vector (grouped).
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
-#'
+#' @inheritParams gd_compute_fit_lq
+#' @inheritParams gd_estimate_lq
 #' @return list
 #' @keywords internal
 gd_compute_dist_fit_lq <- function(welfare,
@@ -272,11 +268,8 @@ gd_compute_dist_fit_lq <- function(welfare,
 #' Computes the sum of squares of error
 #' Measures the fit of the model to the data for distributional statistics.
 #'
-#' @param welfare numeric: Welfare vector (grouped).
-#' @param population numeric: Population vector (grouped).
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_compute_fit_lb
+#' @inheritParams gd_estimate_lb
 #'
 #' @return list
 #' @keywords internal

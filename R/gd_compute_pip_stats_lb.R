@@ -119,9 +119,7 @@ create_functional_form_lb <- function(welfare, population) {
 #' `derive_lb()` returns the first derivative of a beta Lorenz curve.
 #'
 #' @param x numeric: Point on curve.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @keywords internal
@@ -154,11 +152,8 @@ derive_lb <- function(x, A, B, C) {
 #'
 #' `check_curve_validity_lb()` checks the validity of the Lorenz beta fit
 #'
-#' @param headcount numeric: Poverty rate computed by
-#'   gd_compute_poverty_stats_lb().
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @references
 #' Datt, G. 1998. "[Computational Tools For Poverty Measurement And
@@ -207,9 +202,7 @@ check_curve_validity_lb <- function(headcount, A, B, C) {
 #'
 #' `gd_compute_gini_lb()` computes the gini index from a Lorenz beta fit.
 #'
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
+#' @inheritParams gd_compute_fit_lb
 #' @param nbins numeric: Number of bins used to compute Gini.
 #'
 #' @references Datt, G. 1998. "[Computational Tools For Poverty Measurement And
@@ -236,10 +229,7 @@ gd_compute_gini_lb <- function(A, B, C, nbins = 499) {
 #' `value_at_lb()`solves for beta Lorenz curves.
 #'
 #' @param x numeric: Point on curve.
-#' @param A numeric: First Lorenz curve coefficient.
-#' @param B numeric: Second Lorenz curve coefficient.
-#' @param C numeric: Third Lorenz curve coefficient.
-#'
+#' @inheritParams gd_compute_fit_lb
 #' @return numeric
 #' @keywords internal
 value_at_lb <- function(x, A, B, C) {
@@ -290,9 +280,7 @@ gd_compute_mld_lb <- function(dd, A, B, C) {
 #'
 #' `gd_compute_quantile_lb()` computes quantiles from a Lorenz beta fit.
 #'
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_compute_fit_lb
 #' @param n_quantile numeric: Number of quantiles to return.
 #'
 #' @return numeric
@@ -323,13 +311,9 @@ gd_compute_quantile_lb <- function(A, B, C, n_quantile = 10) {
 #' where the mean is formed over the whole population, counting the nonpoor as
 #' having a zero poverty gap.
 #'
-#' @param headcount numeric: Headcount index.
-#' @param mean numeric: Welfare mean.
-#' @param povline numeric: Poverty line.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #' @param dd numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
 #'
 #' @return numeric
 #' @keywords internal
@@ -384,11 +368,8 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
 
 #' Computes distributional stats from Lorenz beta fit
 #'
-#' @param mean numeric: Welfare mean.
-#' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return list
 #' @keywords internal
@@ -418,12 +399,9 @@ gd_compute_dist_stats_lb <- function(mean, p0, A, B, C) {
 #'
 #' Used for grouped data computations,
 #'
-#' @param mean numeric: Welfare mean.
-#' @param p0 numeric: **TO BE DOCUMENTED**
-#' @param dcm numeric: **TO BE DOCUMENTED**
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @param dcm numeric: Distribution corrected mean
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @keywords internal
@@ -440,11 +418,8 @@ gd_compute_polarization_lb <- function(mean,
 
 #' Computes poverty stats from Lorenz beta fit
 #'
-#' @param mean numeric: Welfare mean.
-#' @param povline numeric: Poverty line.
-#' @param A numeric: First regression coefficient.
-#' @param B numeric: Second regression coefficient.
-#' @param C numeric: Third regression coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return list
 #' @keywords internal
@@ -523,12 +498,7 @@ gd_compute_poverty_stats_lb <- function(mean,
 #' @param mean numeric: Welfare mean.
 #' @param povline numeric: Poverty line.
 #' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient. Output of
-#'   `regres()$coef[1]`.
-#' @param B numeric: Lorenz curve coefficient. Output of
-#'   `regres()$coef[2]`.
-#' @param C numeric: Lorenz curve coefficient. Output of
-#'   `regres()$coef[3]`.
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return list
 #' @keywords internal
@@ -577,9 +547,12 @@ gd_estimate_lb <- function(mean, povline, p0, A, B, C) {
 #' @param welfare numeric: Welfare vector (grouped).
 #' @param population numeric: Population vector (grouped).
 #' @param headcount numeric: Headcount index.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @param A numeric: Lorenz curve coefficient. Output of
+#'   `regres()$coef[1]`.
+#' @param B numeric: Lorenz curve coefficient. Output of
+#'   `regres()$coef[2]`.
+#' @param C numeric: Lorenz curve coefficient. Output of
+#'   `regres()$coef[3]`.
 #'
 #' @return list
 #' @keywords internal
@@ -621,9 +594,7 @@ gd_compute_fit_lb <- function(welfare,
 #' **TO BE DOCUMENTED**
 #'
 #' @param h numeric **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @noRd
@@ -637,11 +608,8 @@ DDLK <- function(h, A, B, C) {
 
 #' Compute the headcount statistic from Lorenz Beta fit
 #'
-#' @param mean numeric: Welfare measure mean (income of consumption).
-#' @param povline numeric: Poverty line.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @keywords internal
@@ -792,10 +760,7 @@ BETAICF <- function(a, b, x) {
 #' Compute poverty gap for Lorenz Beta fit
 #'
 #' @param u numeric: Normalized mean.
-#' @param headcount numeric: Headcount.
-#' @param A numeric: First regression parameter.
-#' @param B numeric: Second regression parameter.
-#' @param C numeric: Third regression parameter.
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @keywords internal
@@ -818,11 +783,8 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
 #' Compute poverty severity for Lorenz Beta fit
 #'
 #' @param u numeric: Mean? **TO BE DOCUMENTED**.
-#' @param headcount numeric: Headcount.
 #' @param pov_gap numeric: Poverty gap.
-#' @param A numeric: First regression parameter.
-#' @param B numeric: Second regression parameter.
-#' @param C numeric: Third regression parameter.
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @keywords internal
@@ -870,11 +832,8 @@ gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
 #' @param x1 numeric: **TO BE DOCUMENTED**
 #' @param x2 numeric: **TO BE DOCUMENTED**
 #' @param xacc numeric: **TO BE DOCUMENTED**
-#' @param mean numeric: Welfare measure mean (income of consumption).
-#' @param povline numeric: Poverty line.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @noRd
@@ -947,11 +906,8 @@ rtSafe <- function(x1, x2, xacc, mean, povline, A, B, C) {
 #' **TO BE DOCUMENTED**
 #'
 #' @param x numeric: **TO BE DOCUMENTED**
-#' @param mean numeric: Welfare measure mean (income of consumption).
-#' @param povline numeric: Poverty line.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return list
 #' @noRd
@@ -970,11 +926,8 @@ funcD <- function(x, mean, povline, A, B, C) {
 #'
 #' **TO BE DOCUMENTED**
 #'
-#' @param mean numeric: Welfare measure mean (income of consumption).
-#' @param povline numeric: Poverty line.
-#' @param A numeric: Lorenz curve coefficient.
-#' @param B numeric: Lorenz curve coefficient.
-#' @param C numeric: Lorenz curve coefficient.
+#' @inheritParams gd_estimate_lb
+#' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
 #' @noRd

@@ -13,11 +13,14 @@ gd_compute_fit_lq(welfare, population, headcount, A, B, C)
 
 \item{headcount}{numeric: Headcount index.}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 }
 \value{
 list

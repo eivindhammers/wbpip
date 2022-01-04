@@ -2,8 +2,7 @@
 % Please edit documentation in R/prod_gd_select_lorenz.R
 \name{prod_gd_select_lorenz}
 \alias{prod_gd_select_lorenz}
-\title{Select best Lorenz fit
-Version used in production}
+\title{Select best Lorenz fit (prod)}
 \usage{
 prod_gd_select_lorenz(lq, lb)
 }
@@ -19,5 +18,8 @@ list
 }
 \description{
 Select best Lorenz fit and adjust the returned statistics if needed.
+}
+\details{
+Version used in production.
 }
 \keyword{internal}

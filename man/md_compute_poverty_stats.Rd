@@ -7,9 +7,7 @@
 md_compute_poverty_stats(welfare, weight, povline_lcu)
 }
 \arguments{
-\item{welfare}{numeric: A vector of income or consumption values.}
-
-\item{weight}{numeric: A vector of weights.}
+\item{welfare}{numeric: A vector of income or consumption values}
 
 \item{povline_lcu}{numeric: Poverty line in Local Currency Unit (LCU).}
 }

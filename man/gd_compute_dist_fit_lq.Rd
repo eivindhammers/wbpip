@@ -11,11 +11,14 @@ gd_compute_dist_fit_lq(welfare, population, A, B, C)
 
 \item{population}{numeric: Population vector (grouped).}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 }
 \value{
 list

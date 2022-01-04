@@ -2,8 +2,7 @@
 % Please edit documentation in R/prod_gd_compute_pip_stats_lq.R
 \name{prod_gd_compute_pip_stats_lq}
 \alias{prod_gd_compute_pip_stats_lq}
-\title{Computes poverty statistics (Lorenz quadratic)
-Version used in production}
+\title{Computes poverty statistics (Lorenz quadratic, prod)}
 \usage{
 prod_gd_compute_pip_stats_lq(
   welfare,
@@ -40,7 +39,10 @@ list
 }
 \description{
 Compute poverty statistics for grouped data using the quadratic functional
-form of the Lorenz qurve.
+form of the Lorenz curve.
+}
+\details{
+Version used in production.
 }
 \examples{
 # Set initial parameters

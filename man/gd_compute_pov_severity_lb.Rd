@@ -9,15 +9,18 @@ gd_compute_pov_severity_lb(u, headcount, pov_gap, A, B, C)
 \arguments{
 \item{u}{numeric: Mean? \strong{TO BE DOCUMENTED}.}
 
-\item{headcount}{numeric: Headcount.}
+\item{headcount}{numeric: Headcount index.}
 
 \item{pov_gap}{numeric: Poverty gap.}
 
-\item{A}{numeric: First regression parameter.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Second regression parameter.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Third regression parameter.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 }
 \value{
 numeric

@@ -5,10 +5,7 @@
 #' This function calculate percentiles corresponding to the specified share of
 #' population (in percentages).
 #'
-#' @param welfare numeric: A vector of income or consumption values.
-#' @param weight numeric: A vector of weights.
-#' @param popshare numeric: Share of population for which the corresponding.
-#' quantile is desired. Default .5 (i.e., weighted median).
+#' @inheritParams compute_pip_stats
 #' @param include logical: **TO BE DOCUMENTED**.
 #'
 #' @examples

@@ -1,20 +1,12 @@
-#' Compute default PIP statistics
-#' Version used in production. Does not re-compute all distributional stats.
-#' Distributional stats are pre-computed as they are not sensitive to the poverty line.
+#' Compute default PIP statistics (prod)
 #'
 #' Compute poverty and distributional statistics for microdata.
 #'
-#' @param welfare numeric: A vector of income or consumption values.
-#' @param povline numeric: Monthly poverty line in international dollars.
-#' @param population numeric: A vector of population weights, optional, a vector
-#' of 1s if not specified.
-#' @param requested_mean numeric: Welfare mean in international dollars
-#' @param svy_mean_lcu numeric: Welfare mean in Local Currency Unit
-#' @param popshare numeric: Share of population for which the corresponding
-#' quantile is desired. Default .5 (i.e., weighted median).
-#' @param default_ppp numeric: Default purchasing power parity.
-#' @param ppp numeric: PPP requested by user.
+#' Version used in production. Does not re-compute all distributional stats.
+#' Distributional stats are pre-computed as they are not sensitive to the poverty line.
 #'
+#' @param svy_mean_lcu numeric: Welfare mean in Local Currency Unit
+#' @inheritParams md_compute_pip_stats
 #' @return list
 #' @keywords internal
 prod_md_compute_pip_stats <- function(welfare,

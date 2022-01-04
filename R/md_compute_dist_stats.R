@@ -3,8 +3,7 @@
 #' Given a vector of weights and welfare, this functions computes the various
 #' distributional statistics.
 #'
-#' @param welfare numeric: A vector of income or consumption values.
-#' @param weight numeric: A vector of weights.
+#' @inheritParams compute_pip_stats
 #' @param mean numeric: A value with the mean. Optional.
 #' @param lorenz data.frame: A table with points on the Lorenz curve. Output of
 #'   `md_compute_lorenz()`. Optional.

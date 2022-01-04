@@ -9,11 +9,14 @@ derive_lb(x, A, B, C)
 \arguments{
 \item{x}{numeric: Point on curve.}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 }
 \value{
 numeric

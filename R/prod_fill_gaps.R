@@ -1,36 +1,19 @@
-#' Compute interpolated stats
-#' Version used in production
+#' Compute interpolated stats (prod)
 #'
 #' A helper function for calculating interpolated or extrapolated poverty
 #' statistics.
 #'
-#' The predicted request year mean(s) must be in comparable international
-#' dollars and adjusted for differences in purchasing-power, and changes in
-#' prices and currencies.
+#' Version used in production.
 #'
-#' The survey data must contain a column named *welfare* and optionally a column
-#' named *weight* if welfare values are to be weighted.
-#'
-#' @param request_year integer: A value with the request year.
-#' @param data list: A list with one or two data frames containing survey data.
-#'   See details.
-#' @param predicted_request_mean numeric: A vector with one or two predicted
-#' survey means. See details.
 #' @param svy_mean_lcu numeric: A vector with one or two survey means.
 #' @param svy_median_lcu numeric: A vector with one or two survey median in LCU
 #' @param svy_median_ppp numeric: A vector with one or two survey median in PPP
-#' @param survey_year numeric: A vector with one or two survey years.
-#' @param poverty_line numeric: Daily poverty line in international dollars.
-#' @param popshare numeric: Share of the population living below the poverty line.
-#' @param default_ppp numeric: Default purchasing power parity.
-#' @param ppp numeric: PPP request by user.
-#' @param distribution_type character: A vector with the type of distribution,
-#'   must be either micro, group, aggregate or imputed.
+#' @inheritParams fill_gaps
+#' @inheritParams compute_pip_stats
 #'
 #' @seealso [deflate_welfare_mean()] [predict_request_year_mean()]
 #' @return data.frame
 #' @noRd
-#'
 prod_fg_compute_pip_stats <- function(request_year,
                                       data,
                                       predicted_request_mean,

@@ -40,7 +40,7 @@ md_compute_polarization <- function(welfare, weight, gini,
   # Calculate distribution corrected mean
   dcm_mean <- (1 - gini) * mean
 
-  # Calculate Wolfson polaratisation index
+  # Calculate Wolfson polarization index
   # Formula: W = 2 * (dcm - mean_b50) / median
   # dcm = distribution corrected mean
   # mean_b50 = the mean of the poorest half

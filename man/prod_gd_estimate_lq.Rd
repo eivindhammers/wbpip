@@ -2,8 +2,7 @@
 % Please edit documentation in R/prod_gd_compute_pip_stats_lq.R
 \name{prod_gd_estimate_lq}
 \alias{prod_gd_estimate_lq}
-\title{Estimates poverty and inequality stats from Quadratic Lorenz fit
-Version used in production}
+\title{Estimates poverty and inequality stats from Quadratic Lorenz fit}
 \usage{
 prod_gd_estimate_lq(mean, povline, p0, A, B, C)
 }
@@ -27,7 +26,6 @@ prod_gd_estimate_lq(mean, povline, p0, A, B, C)
 list
 }
 \description{
-Estimates poverty and inequality stats from Quadratic Lorenz fit
 Version used in production
 }
 \keyword{internal}

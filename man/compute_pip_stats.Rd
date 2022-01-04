@@ -19,7 +19,7 @@ compute_pip_stats(
 \arguments{
 \item{welfare}{numeric: A vector of income or consumption values}
 
-\item{povline}{numeric: Monthly poverty line in international dollars}
+\item{povline}{numeric: Poverty line in international dollars}
 
 \item{population}{numeric: A vector of population weights, optional, a vector
 of 1s if not specified.}

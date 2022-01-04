@@ -9,11 +9,14 @@ gd_compute_mld_lq(dd, A, B, C)
 \arguments{
 \item{dd}{numeric: \strong{TO BE DOCUMENTED}.}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 }
 \value{
 numeric

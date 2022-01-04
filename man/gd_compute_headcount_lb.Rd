@@ -7,15 +7,18 @@
 gd_compute_headcount_lb(mean, povline, A, B, C)
 }
 \arguments{
-\item{mean}{numeric: Welfare measure mean (income of consumption).}
+\item{mean}{numeric: Welfare mean.}
 
 \item{povline}{numeric: Poverty line.}
 
-\item{A}{numeric: Lorenz curve coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[1]}.}
 
-\item{B}{numeric: Lorenz curve coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[2]}.}
 
-\item{C}{numeric: Lorenz curve coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres()$coef[3]}.}
 }
 \value{
 numeric

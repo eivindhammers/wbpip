@@ -2,8 +2,7 @@
 % Please edit documentation in R/prod_gd_compute_pip_stats.R
 \name{prod_gd_compute_pip_stats}
 \alias{prod_gd_compute_pip_stats}
-\title{Computes poverty statistics (grouped)
-Version used in prod}
+\title{Computes poverty statistics (grouped, prod)}
 \usage{
 prod_gd_compute_pip_stats(
   welfare,
@@ -43,5 +42,8 @@ list
 \description{
 Compute poverty statistics for grouped data by selecting the best functional
 fit for the Lorenz curve (either beta or quadratic).
+}
+\details{
+Version used in production.
 }
 \keyword{internal}

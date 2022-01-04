@@ -1,11 +1,11 @@
-#' Computes poverty statistics (Lorenz quadratic)
-#' Version used in production
+#' Computes poverty statistics (Lorenz quadratic, prod)
 #'
 #' Compute poverty statistics for grouped data using the quadratic functional
-#' form of the Lorenz qurve.
+#' form of the Lorenz curve.
+#'
+#' Version used in production.
 #'
 #' @inheritParams gd_compute_pip_stats
-#'
 #' @examples
 #' # Set initial parameters
 #' L <- c(
@@ -86,18 +86,9 @@ prod_gd_compute_pip_stats_lq <- function(welfare,
 }
 
 #' Estimates poverty and inequality stats from Quadratic Lorenz fit
+#'
 #' Version used in production
-#'
-#' @param mean numeric: Welfare mean.
-#' @param povline numeric: Poverty line.
-#' @param p0 numeric: **TO BE DOCUMENTED**.
-#' @param A numeric: Lorenz curve coefficient. Output of
-#'   `regres_lq()$coef[1]`.
-#' @param B numeric: Lorenz curve coefficient. Output of
-#'   `regres_lq()$coef[2]`.
-#' @param C numeric: Lorenz curve coefficient. Output of
-#'   `regres_lq()$coef[3]`.
-#'
+#' @inheritParams gd_estimate_lq
 #' @return list
 #' @keywords internal
 prod_gd_estimate_lq <- function(mean, povline, p0, A, B, C) {

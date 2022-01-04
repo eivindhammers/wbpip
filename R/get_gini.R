@@ -13,7 +13,7 @@ if (getRversion() >= "2.15.1") {
 #' Compute the Gini coefficient.
 #'
 #' @param .data Household survey data frame with at least a welfare variable.
-#' @inheritParams md_compute_gini
+#' @inheritParams compute_pip_stats
 #' @param distribution_type character: Type of distribution, either micro,
 #'   group, aggregate or imputed.
 #'

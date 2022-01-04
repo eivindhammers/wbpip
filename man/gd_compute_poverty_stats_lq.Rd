@@ -11,11 +11,14 @@ gd_compute_poverty_stats_lq(mean, povline, A, B, C, e, m, n, r, s1, s2)
 
 \item{povline}{numeric: Poverty line.}
 
-\item{A}{numeric: First regression coefficient.}
+\item{A}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[1]}.}
 
-\item{B}{numeric: Second regression coefficient.}
+\item{B}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[2]}.}
 
-\item{C}{numeric: Third regression coefficient.}
+\item{C}{numeric: Lorenz curve coefficient. Output of
+\code{regres_lq()$coef[3]}.}
 
 \item{e}{numeric: e = -(A + B + C + 1): condition for the curve to go through
 (1, 1).}
@@ -23,9 +26,9 @@ gd_compute_poverty_stats_lq(mean, povline, A, B, C, e, m, n, r, s1, s2)
 \item{m}{numeric: m = (B^2) - (4 * A). m < 0: condition for the curve to be
 an ellipse (m is called alpha in paper).}
 
-\item{n}{numeric: n = (2 * B * e) - (4 * C). n is called Beta in paper.}
+\item{n}{numeric: n = (2 * B * e) - (4 * C). n is called Beta in paper}
 
-\item{r}{numeric:r = (n^2) - (4 * m * e^2). r is called K in paper.}
+\item{r}{r = (n^2) - (4 * m * e^2). r is called K in paper.}
 
 \item{s1}{numeric: \strong{TO BE DOCUMENTED}.}
 
