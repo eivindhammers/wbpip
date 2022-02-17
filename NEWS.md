@@ -1,7 +1,15 @@
 # wbpip 0.0.3
-* Fix the selection of Lorenz curve for distributional statistics by adding ad-hoc function to compute correct SSE
 
-* change creation of synth vectors 
+Initial release used in the PIP soft-launch on February 9, 2022
+
+## New features
+
+## Enhancements
+
+## Bug fixes
+
+* Fix the selection of Lorenz curve for distributional statistics by adding ad-hoc function to compute correct SSE
+* Change creation of synth vectors
 
 # wbpip 0.0.2
 
