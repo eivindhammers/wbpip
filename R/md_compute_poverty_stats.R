@@ -19,6 +19,7 @@
 #' @keywords internal
 md_compute_poverty_stats <- function(welfare, weight, povline_lcu) {
   print("check")
+
   pov_status <- (welfare < povline_lcu)
   relative_distance <- (1 - (welfare[pov_status] / povline_lcu))
   weight_pov <- weight[pov_status]
