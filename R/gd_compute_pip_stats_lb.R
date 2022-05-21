@@ -123,29 +123,39 @@ create_functional_form_lb <- function(welfare, population) {
 #'
 #' @return numeric
 #' @keywords internal
+# derive_lb <- function(x, A, B, C) {
+#   if (x == 0) {
+#     if (B == 1) {
+#       return(1 - A)
+#     }
+#     if (B > 1) {
+#       return(1)
+#     }
+#     return(-Inf)
+#   } else if (x == 1) {
+#     if (C == 1) {
+#       return(1 + A)
+#     }
+#     if (C > 1) {
+#       return(1)
+#     }
+#     return(Inf)
+#   }
+#
+#   # Formula for first derivative of GQ Lorenz Curve
+#   val <- 1 - ((A * x^B) * ((1 - x)^C) * ((B / x) -( C / (1 - x)) ) )
+#
+#   return(val)
+# }
+
 derive_lb <- function(x, A, B, C) {
-  if (x == 0) {
-    if (B == 1) {
-      return(1 - A)
-    }
-    if (B > 1) {
-      return(1)
-    }
-    return(-Inf)
-  } else if (x == 1) {
-    if (C == 1) {
-      return(1 + A)
-    }
-    if (C > 1) {
-      return(1)
-    }
-    return(Inf)
-  }
-
-  # Formula for first derivative of GQ Lorenz Curve
-  val <- 1 - ((A * x^B) * ((1 - x)^C) * ((B / x) -( C / (1 - x)) ) )
-
-  return(val)
+  ifelse(x == 0 & B == 1, 1 - A,
+         ifelse(x == 0 & B > 1, 1,
+                ifelse(x == 0, Inf,
+                       ifelse(x == 1 & C == 1, 1 + A,
+                                           ifelse(x == 1 & C > 1, 1,
+                                                  ifelse(x == 1, Inf,
+                            1 - ((A * x^B) * ((1 - x)^C) * ((B / x) -( C / (1 - x)) ) )))))))
 }
 
 #' Check validity of Lorenz beta fit
@@ -336,9 +346,9 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
 
   xend <- headcount - snw
   xstep_snw <- seq(0, xend, by = snw) + snw
-  print(length(xstep_snw))
-  x2 <- vapply(xstep_snw, function(x)
-    derive_lb(x, A, B, C), FUN.VALUE = numeric(1))
+  #x2 <- vapply(xstep_snw, function(x)
+  #  derive_lb(x, A, B, C), FUN.VALUE = numeric(1))
+  x2 <- derive_lb(xstep_snw, A, B, C)
   x1 <- c(derive_lb(0, A, B, C), x2[1:(length(x2) - 1)])
 
   check <- (x1 <= 0) | (x2 <= 0)
