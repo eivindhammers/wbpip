@@ -4,6 +4,9 @@
 
 ## Enhancements
 
+* Remove `purrr` dependency
+* Vectorized `derive_lb` function
+
 ## Bug fixes
 
 # wbpip 0.0.3
