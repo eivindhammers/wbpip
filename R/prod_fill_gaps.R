@@ -177,14 +177,11 @@ prod_fg_adjust_poverty_stats <- function(stats0, stats1, survey_year, request_ye
   # Calculate a weighted average for the poverty stats by taking the
   # difference between the two survey years and the request year
   out <-
-    purrr::map2(
-      stats0, stats1,
-      .f = function(measure0, measure1, survey_year, request_year) {
-        ((survey_year[2] - request_year) * measure0 +
-          (request_year - survey_year[1]) * measure1) /
-          (survey_year[2] - survey_year[1])
-      }, survey_year, request_year
-    )
+    mapply(function(measure0, measure1) {
+      ((survey_year[2] - request_year) * measure0 +
+         (request_year - survey_year[1]) * measure1) /
+        (survey_year[2] - survey_year[1])
+    }, stats0, stats1, SIMPLIFY = FALSE)
 
   out[["median"]] <- NA_real_
 

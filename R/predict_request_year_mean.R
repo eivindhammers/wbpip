@@ -113,20 +113,14 @@ compute_predicted_mean <- function(survey_mean, proxy) {
 #' @return numeric
 #' @noRd
 extrapolate_survey_mean <- function(survey_mean, proxy) {
+  #Can growth_factor be reduced to proxy$req_value/c(proxy$value0, proxy$value1) ?
+
   # Growth factor = request_value / value
-  growth_factor <-
-    purrr::map_dbl(c(proxy$value0, proxy$value1),
-      .f = function(x, y) {
-        y / x
-      },
-      y = proxy$req_value
-    )
+  growth_factor <- sapply(c(proxy$value0, proxy$value1), function(x) proxy$req_value/x)
+  #Can out be reduced to survey_mean * growth_factor ?
+
   # Extrapolated value = survey_mean * growth factor
-  out <- purrr::map2_dbl(survey_mean, growth_factor,
-    .f = function(x, y) {
-      x * y
-    }
-  )
+  out <- mapply(`*`, survey_mean, growth_factor)
   return(out)
 }
 
