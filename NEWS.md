@@ -5,7 +5,7 @@
 ## Enhancements
 
 * Remove `purrr` dependency
-* Vectorized `derive_lb` function
+* add test for `sd_create_synth_vector`. 
 
 ## Bug fixes
 
