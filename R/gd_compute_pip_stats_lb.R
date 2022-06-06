@@ -346,8 +346,8 @@ gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
 
   xend <- headcount - snw
   xstep_snw <- seq(0, xend, by = snw) + snw
-  x2 <- vapply(xstep_snw, function(x) derive_lb(x, A, B, C), FUN.VALUE = numeric(1))
-  #x2 <- derive_lb(xstep_snw, A, B, C)
+  #x2 <- vapply(xstep_snw, function(x) derive_lb(x, A, B, C), FUN.VALUE = numeric(1))
+  x2 <- derive_lb(xstep_snw, A, B, C)
   x1 <- c(derive_lb(0, A, B, C), x2[1:(length(x2) - 1)])
 
   check <- (x1 <= 0) | (x2 <= 0)
