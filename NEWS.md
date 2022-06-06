@@ -5,7 +5,7 @@
 ## Enhancements
 
 * Remove `purrr` dependency
-* add test for `sd_create_synth_vector`. 
+* add test for `sd_create_synth_vector` 
 
 ## Bug fixes
 
