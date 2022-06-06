@@ -5,7 +5,8 @@
 ## Enhancements
 
 * Remove `purrr` dependency
-* add test for `sd_create_synth_vector` 
+* add test for `sd_create_synth_vector`
+* create a separate function (`weighted_average_poverty_stats`) for repetitive calculation in adjust poverty stats and add corresponding test case for it. 
 
 ## Bug fixes
 
