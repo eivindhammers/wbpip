@@ -116,11 +116,13 @@ extrapolate_survey_mean <- function(survey_mean, proxy) {
   #Can growth_factor be reduced to proxy$req_value/c(proxy$value0, proxy$value1) ?
 
   # Growth factor = request_value / value
-  growth_factor <- sapply(c(proxy$value0, proxy$value1), function(x) proxy$req_value/x)
+  growth_factor <- vapply(c(proxy$value0, proxy$value1),
+                          function(x) proxy$req_value/x,
+                          numeric(1))
   #Can out be reduced to survey_mean * growth_factor ?
 
   # Extrapolated value = survey_mean * growth factor
-  out <- mapply(`*`, survey_mean, growth_factor)
+  out <- mapply(`*`, survey_mean, growth_factor, SIMPLIFY = TRUE)
   return(out)
 }
 
