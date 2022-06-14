@@ -250,11 +250,12 @@ fg_adjust_poverty_stats <- function(stats0, stats1, survey_year, request_year) {
 weighted_average_poverty_stats <- function(stats0, stats1, survey_year, request_year) {
   # Calculate a weighted average for the poverty stats by taking the
   # difference between the two survey years and the request year
-    mapply(function(measure0, measure1) {
-      ((survey_year[2] - request_year) * measure0 +
-         (request_year - survey_year[1]) * measure1) /
-        (survey_year[2] - survey_year[1])
-    }, stats0, stats1, SIMPLIFY = FALSE)
+  mapply(function(measure0, measure1) {
+    ((survey_year[2] - request_year) * measure0 +
+       (request_year - survey_year[1]) * measure1) /
+      (survey_year[2] - survey_year[1])
+  },
+  stats0, stats1, SIMPLIFY = FALSE)
 }
 
 #' check_inputs_fill_gaps
