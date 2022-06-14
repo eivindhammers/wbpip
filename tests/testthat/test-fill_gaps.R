@@ -537,3 +537,14 @@ test_that("check_inputs_fill_gaps() catches input errors", {
     )
   )
 })
+
+
+test_that("test weighted_average_poverty_stats", {
+  stats0 <- list(c(4, 6), c(2, 3))
+  stats1 <- list(c(5, 9), c(1, 3))
+  out <- weighted_average_poverty_stats(stats0, stats1, c(2019, 2011), 2017)
+
+  expect_length(out, 2)
+  expect_equal(out[[1]], c(4.25, 6.75))
+  expect_equal(out[[2]], c(1.75, 3))
+})

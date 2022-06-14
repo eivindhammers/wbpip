@@ -101,7 +101,7 @@ prod_gd_estimate_lq <- function(mean, povline, p0, A, B, C) {
   r <- (n^2) - (4 * m * e^2) # r is called K in paper
 
   validity <- check_curve_validity_lq(A, B, C, e, m, n, r)
-  if (validity$is_valid == FALSE & validity$is_normal == FALSE) {
+  if (!validity$is_valid & !validity$is_normal) {
     return(empty_gd_compute_pip_stats_response)
   }
 

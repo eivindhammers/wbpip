@@ -44,7 +44,6 @@ Depends:
 Imports: 
     dplyr,
     rlang,
-    purrr,
     data.table,
     assertthat,
     cli,

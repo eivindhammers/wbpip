@@ -81,10 +81,10 @@ test_that("fill_gaps() works correctly on production microdata examples", {
     poverty_line = 1.9 * 365 / 12
   )
   expect_equal(res$mean, 49.94999, tolerance = 1.5e-7)
-  expect_equal(res$median, 37.09282, tolerance = 1.5e-7)
+  expect_equal(res$median[1], 37.09282, tolerance = 1.5e-7)
   expect_equal(res$headcount, 0.754573, tolerance = 1.5e-7)
   expect_equal(res$gini, 0.3862482, tolerance = 1.5e-7)
-  expect_equal(res$mld, 0.2467371, tolerance = 1.6e-7)
+  expect_equal(res$mld[1], 0.2467371, tolerance = 1.6e-7)
   expect_equal(res$poverty_gap, 0.3385979, tolerance = 1.5e-7)
   expect_equal(res$poverty_severity, 0.18495, tolerance = 2e-7)
   expect_equal(res$watts, 0.5118873, tolerance = 1.5e-7)

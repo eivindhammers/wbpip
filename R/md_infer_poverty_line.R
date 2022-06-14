@@ -30,7 +30,7 @@ md_infer_poverty_line <- function(welfare,
   # Weighted mean with the next available value in order to
   # guarantee inclusion in poverty calculation
 
-  if (include == TRUE) {
+  if (include) {
     pctile <- stats::weighted.mean(
       c(welfare[ps], welfare[ps + 1]),
       c(weight[ps], weight[ps + 1])
