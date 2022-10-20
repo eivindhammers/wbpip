@@ -1,16 +1,16 @@
 skip_if(Sys.getenv('WBPIP_RUN_LOCAL_TESTS') != "TRUE")
 
 # Load microdatasets
-ago2008 <- readRDS("../testdata/local/ago2008.RDS")
-ago2018 <- readRDS("../testdata/local/ago2018.RDS")
-bdi2013 <- readRDS("../testdata/local/bdi2013.RDS")
-nga1996 <- readRDS("../testdata/local/nga1996.RDS")
-nga2003 <- readRDS("../testdata/local/nga2003.RDS")
-zwe2011 <- readRDS("../testdata/local/zwe2011.RDS")
-zwe2017 <- readRDS("../testdata/local/zwe2017.RDS")
-ukr1995 <- readRDS("../testdata/local/ukr1995.RDS")
+ago2008 <- readRDS(test_path("testdata", "local/ago2008.RDS"))
+ago2018 <- readRDS(test_path("testdata", "local/ago2018.RDS"))
+bdi2013 <- readRDS(test_path("testdata", "local/bdi2013.RDS"))
+nga1996 <- readRDS(test_path("testdata", "local/nga1996.RDS"))
+nga2003 <- readRDS(test_path("testdata", "local/nga2003.RDS"))
+zwe2011 <- readRDS(test_path("testdata", "local/zwe2011.RDS"))
+zwe2017 <- readRDS(test_path("testdata", "local/zwe2017.RDS"))
+ukr1995 <- readRDS(test_path("testdata", "local/ukr1995.RDS"))
 # ukr1999 <- readRDS('../testdata/local/ukr1999.RDS')
-ukr2002 <- readRDS("../testdata/local/ukr2002.RDS")
+ukr2002 <- readRDS(test_path("testdata", "local/ukr2002.RDS"))
 
 # Clean datasets
 ago2008 <- md_clean_data(

@@ -1,5 +1,5 @@
 # Load list of synthetic test datasets
-dl <- readRDS("tests/testdata/synthetic-microdata.RDS")
+dl <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
 
 for (i in seq_along(dl)) {
   m <- dl[[i]]$meta

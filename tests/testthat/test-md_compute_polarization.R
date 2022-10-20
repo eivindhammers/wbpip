@@ -1,5 +1,5 @@
 # Constants
-dl <- readRDS("../testdata/synthetic-microdata.RDS")
+dl <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
 v <- c(0.4667890, 0.2457807, 0.3102726, 0.2928000, 0.4392192)
 
 # Tests

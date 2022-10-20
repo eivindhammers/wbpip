@@ -1,4 +1,4 @@
-benchmark <- readRDS("../testdata/synthetic-microdata.RDS")
+benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
 
 benchmark <- md_clean_data(benchmark[[1]]$data,
                            welfare = 'welfare',

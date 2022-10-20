@@ -1,4 +1,4 @@
-gd_ex2 <- readRDS("../testdata/gd_ex2.RDS")
+gd_ex2 <- readRDS(test_path("testdata", "gd_ex2.RDS"))
 
 test_that("sd_create_synth_vector works as expected", {
   out <- sd_create_synth_vector(

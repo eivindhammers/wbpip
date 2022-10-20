@@ -1,6 +1,6 @@
 data("gd_GHI_2009_income")
-gd_ex1 <- readRDS("../testdata/gd_ex1.RDS")
-gd_ex3 <- readRDS("../testdata/gd_ex3.RDS")
+gd_ex1 <- readRDS(test_path("testdata", "gd_ex1.RDS"))
+gd_ex3 <- readRDS(test_path("testdata", "gd_ex3.RDS"))
 
 test_that("gd_compute_dist_stats() returns correct results", {
 
