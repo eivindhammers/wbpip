@@ -1,5 +1,5 @@
-gd_ex1 <- readRDS("../testdata/gd_ex1.RDS")
-gd_ex3 <- readRDS("../testdata/gd_ex3.RDS")
+gd_ex1 <- readRDS(test_path("testdata", "gd_ex1.RDS"))
+gd_ex3 <- readRDS(test_path("testdata", "gd_ex3.RDS"))
 lq_ex1 <- create_functional_form_lq(welfare = gd_ex1$welfare, gd_ex1$weight)
 lb_ex1 <- create_functional_form_lb(welfare = gd_ex1$welfare, gd_ex1$weight)
 lq_ex3 <- create_functional_form_lq(welfare = gd_ex3$welfare, gd_ex3$weight)

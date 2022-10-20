@@ -102,7 +102,7 @@ test_that("extrapolate_survey_mean() returns correct results", {
   proxy = list(value0 = 242.8459,
                req_value = 228.4325)
   out <- extrapolate_survey_mean(survey_mean, proxy)
-  expect_equal(res, 49.949977)
+  expect_equal(out, 50.20511)
 })
 
 # check_inputs_predict_request_year_mean

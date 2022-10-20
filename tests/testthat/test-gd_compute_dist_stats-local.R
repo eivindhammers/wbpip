@@ -1,7 +1,7 @@
 skip_if(Sys.getenv('WBPIP_RUN_LOCAL_TESTS') != "TRUE")
 
-idn1990 <- readRDS("../testdata/local/idn1990.RDS")
-zwe2011 <- readRDS("../testdata/local/zwe2011.RDS")
+idn1990 <- readRDS(test_path("testdata", "local/idn1990.RDS"))
+zwe2011 <- readRDS(test_path("testdata", "local/zwe2011.RDS"))
 
 test_that("gd_compute_dist_stats() returns correct results for production data", {
 

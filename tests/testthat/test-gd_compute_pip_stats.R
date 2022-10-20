@@ -1,4 +1,6 @@
-gd_ex2 <- readRDS("../testdata/gd_ex2.RDS")
+gd_ex2 <- readRDS(test_path("testdata", "gd_ex2.RDS"))
+
+
 
 test_that("gd_compute_pip_stats() returns correct results", {
   res <- gd_compute_pip_stats(
@@ -56,4 +58,34 @@ test_that("retrieve_distributional() returns correct results", {
     ),
     expected
   )
+})
+
+
+test_that("there is no non-monotonicity issues", {
+  welfare <- c(0.001627099, 0.005665031, 0.018053738, 0.034416427, 0.104759131, 0.217308879,
+               0.344013235, 0.445912758, 0.546653748, 0.629349157, 0.735393023, 0.802366805,
+               0.848560276, 1.000000000)
+
+  population <- c(0.005807122, 0.017521512, 0.047998763, 0.082875117, 0.205667649, 0.369685881,
+                  0.527352350, 0.636749530, 0.731944193, 0.801841067, 0.880026880, 0.921517670,
+                  0.946241705, 1.000000000)
+
+  res <- gd_compute_pip_stats(
+    welfare = welfare,
+    povline = 24.35,
+    population = population,
+    requested_mean = 3.036399
+  )
+  hc_inferior <- res$headcount
+
+  res <- gd_compute_pip_stats(
+    welfare = welfare,
+    povline = 30,
+    population = population,
+    requested_mean = 3.036399
+  )
+  hc_superior <- res$headcount
+
+  expect_true(hc_inferior < hc_superior)
+
 })

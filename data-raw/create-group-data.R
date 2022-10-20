@@ -1,7 +1,7 @@
 # Load list of synthetic test datasets
-grouped_data_ex1 <- readRDS("tests/testdata/gd_ex1.RDS")
-grouped_data_ex2 <- readRDS("tests/testdata/gd_ex2.RDS")
-grouped_data_ex3 <- readRDS("tests/testdata/gd_ex3.RDS")
+grouped_data_ex1 <- readRDS(test_path("testdata", "gd_ex1.RDS"))
+grouped_data_ex2 <- readRDS(test_path("testdata", "gd_ex2.RDS"))
+grouped_data_ex3 <- readRDS(test_path("testdata", "gd_ex3.RDS"))
 
 # National grouped data (type 5)
 gd_GHI_2009_income <- data.frame(

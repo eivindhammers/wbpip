@@ -1,4 +1,4 @@
-gd_ex2 <- readRDS('../testdata/gd_ex2.RDS')
+gd_ex2 <- readRDS(test_path("testdata", "gd_ex2.RDS"))
 
 testthat::test_that("test sd_create_synth_vector", {
   res <- wbpip:::sd_create_synth_vector(
