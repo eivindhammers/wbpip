@@ -1,18 +1,23 @@
+#' Get Lorenz Parameters
+#'
+#' Get Parameters and key values derived from the quadratic and Beta Lorenz
+#' parametrization. `welfare` and `population` must be vectors of a group data
+#' dataset
+#'
+#' @param welfare numeric: cumulative sahre of welfare (income/consumption)
+#' @param population numeric: cumulative share of the population
+#'
+#' @return list with parameters
+#' @export
+#'
+#' @examples
+#' # Get Lorenz parameters
+#' res <- get_gd_lorenz_params(
+#'   welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight)
+#' str(res)
 get_gd_lorenz_params <- function(welfare,
-                                 population,
-                                 mean,
-                                 pop            = NULL,
-                                 p0             = 0.5,
-                                 nobs           = 1e5,
-                                 selected_model = NULL,
-                                 verbose        = FALSE) {
-  # Check arguments
-  if (!is.null(selected_model) && !selected_model  %in% c("q", "b") ) {
-    cli::cli_abort(c("Incorrect selected model",
-                     "must be either {.field 'q'} or {.field 'b'},
-                       not {.val {selected_model}}"))
-  }
-
+                                 population) {
 
 #   ____________________________________________________________________________
 #   on.exit                                                                 ####
@@ -44,11 +49,12 @@ get_gd_lorenz_params <- function(welfare,
   # Apply Lorenz quadratic fit ----------------------------------------------
 
   ## STEP 1: Prep data to fit functional form-------------
-  prepped_data <- create_functional_form_lq(welfare    = welfare,
-                                            population = population)
+  functional_form_lq <-
+    create_functional_form_lq(welfare    = welfare,
+                              population = population)
 
   ## STEP 2: Estimate regression coefficients using LQ parametrization------
-  reg_results_lq <- regres(prepped_data, is_lq = TRUE)
+  reg_results_lq <- regres(functional_form_lq, is_lq = TRUE)
   names(reg_results_lq$coef) <- c("A", "B", "C")
 
   # add to results list
@@ -57,46 +63,44 @@ get_gd_lorenz_params <- function(welfare,
 
   ## STEP 3: get key values
   # Compute key numbers from Lorenz quadratic form
-  kv <- gd_lq_key_values(A, B, C)
+  kv <- gd_lq_key_values(reg_results_lq$coef[["A"]],
+                         reg_results_lq$coef[["B"]],
+                         reg_results_lq$coef[["C"]])
 
   ## STEP 4: check viability
-  validity <- check_curve_validity_lq(A,
-                                      B,
-                                      C,
-                                      kv$e,
-                                      kv$m,
-                                      kv$n,
-                                      kv$r^2)
-  reg_coef_lq    <- reg_results_lq$coef
-  results_lq     <- gd_estimate_dist_stats_lq(
-    mean = mean,
-    p0   = p0,
-    A    = reg_coef_lq[1],
-    B    = reg_coef_lq[2],
-    C    = reg_coef_lq[3]
-  )
-
-  results_lq <- append(results_lq, reg_results_lq)
+  validity_lq <- check_curve_validity_lq(reg_results_lq$coef[["A"]],
+                                         reg_results_lq$coef[["B"]],
+                                         reg_results_lq$coef[["C"]],
+                                         kv$e,
+                                         kv$m,
+                                         kv$n,
+                                         kv$r^2)
+  l_res$lq$key_values <- kv
+  l_res$lq$validity   <- validity_lq
 
   # Apply Lorenz beta fit ---------------------------------------------------
 
   ## STEP 1: Prep data to fit functional form --------------
-  prepped_data <- create_functional_form_lb(
-    welfare = welfare, population = population
-  )
+  functional_form_lb <-
+    create_functional_form_lb(welfare    = welfare,
+                              population = population)
 
   ## STEP 2: Estimate regression coefficients using LB parameterization
-  reg_results_lb <- regres(prepped_data, is_lq = FALSE)
-  reg_coef_lb <- reg_results_lb$coef
+  reg_results_lb <- regres(functional_form_lb, is_lq = FALSE)
+  names(reg_results_lb$coef) <- c("A", "B", "C")
 
-  ## STEP 3: Calculate distributional stats ---------------
-  results_lb <- gd_estimate_dist_stats_lb(
-    mean = mean, p0 = p0, A = reg_coef_lb[1],
-    B = reg_coef_lb[2], C = reg_coef_lb[3]
-  )
+  # add to results list
+  l_res$lb$reg_results <- reg_results_lb
 
-  results_lb <- append(results_lb, reg_results_lb)
+  l_res$lb$key_values <- NULL
 
+  # Check validity
+  validity_lb <- check_curve_validity_dist_lb(reg_results_lb$coef[["A"]],
+                                              reg_results_lb$coef[["B"]],
+                                              reg_results_lb$coef[["C"]])
+  l_res$lb$validity   <- validity_lb
+
+  return(l_res)
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # create template for synthetic vector   ---------
@@ -184,6 +188,9 @@ get_gd_lorenz_params <- function(welfare,
   return(TRUE)
 
 }
+
+
+
 
 
 
