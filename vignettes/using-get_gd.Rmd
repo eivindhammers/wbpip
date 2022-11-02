@@ -1,0 +1,25 @@
+---
+title: "Using `get_gd` functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using `get_gd` functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(wbpip)
+```
+
+# Introduction
+
+Working with group data might be different depending on the type of work that we are your doing. If you are working on the back end of PIP, you probably need a different set of functions as if you were working the group data directly. This vignette is about working with group data directly.
+
+To work with group data directly you need the `get_gd` set of functions. The objective of these functions is to provide the users with the information they need in a single call rather executing several other functions before getting the results the want. Thus, the `get_gd` functions talk to each in several ways. In most of the functions, the user can provide either the `welfare` and `population` vectors and get the desired output, or the can provide the results of a previous function that are the intermediate input in process of getting the desired results. Examples are provided below.
