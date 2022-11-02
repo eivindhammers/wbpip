@@ -68,7 +68,10 @@ regres <- function(data, is_lq = TRUE) {
 #'
 #' @param lp list of parameters
 #'
-#' @return invisible TRUE if all tests are passed
+#' @return
+#' @export
+#'
+#' @examples
 check_get_gd_fun_params <- function(lp) {
 
 #   ____________________________________________________________________________
@@ -76,6 +79,7 @@ check_get_gd_fun_params <- function(lp) {
   on.exit({
 
   })
+
 #   ____________________________________________________________________________
 #   Defenses                                                                ####
   stopifnot( exprs = {
@@ -91,12 +95,36 @@ check_get_gd_fun_params <- function(lp) {
 
 #   ____________________________________________________________________________
 #   Computations                                                            ####
-  il  <- as.list(environment())
 
+  nlp <- names(lp)
+
+  ## welfare -----------
+
+
+  ## welfare and params -----------
+  if ( all(c("params", "welfare") %in% nlp)) {
+    if (!is.null(lp$params) &&
+        (!is.null(lp$welfare)  || !is.null(lp$population))) {
+      cli_abort("You must specify either {.field params} or
+                {.field welfare} and {.field population}")
+    }
+  }
+
+
+
+  # "Either `params` or `welfare` and `population` should be spefied" =
+  #   (is.null(params) && !is.null(welfare) && !is.null(population)) ||
+  #   (!is.null(params) && is.null(welfare) && is.null(population))
+  #
+  # "`params` should be a list from `get_gd_lorenz_params()`" =
+  #   is.list(params) || is.null(params)
+  #
+  # "`complete` must be logical" =
+  #   is.logical(complete)
 
 #   ____________________________________________________________________________
 #   Return                                                                  ####
-  return(TRUE)
+  return(invisible(TRUE))
 
 }
 

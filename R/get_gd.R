@@ -100,7 +100,7 @@ get_gd_lorenz_params <- function(welfare,
 }
 
 
-#' Check valirity of Lorenz Curve for distriburional Stats
+#' Check validity of Lorenz Curve for distributional Stats
 #'
 #' @inheritParams get_gd_lorenz_params
 #' @param params list of parameters from `get_gd_lorenz_params()`
@@ -176,6 +176,95 @@ get_gd_lorenz_validity_dist <- function(welfare    = NULL,
   return(params)
 
 }
+
+
+#' Check validity of Lorenz Curve for poverty Stats
+#'
+#' @inheritParams get_gd_lorenz_validity_dist
+#' @param mean numeric: welfare mean of distribution.
+#' @param povline numeric: value of poverty line. Default is the `mean` value
+#'
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_gd_lorenz_validity_pov <- function(welfare    = NULL,
+                                       population = NULL,
+                                       params     = NULL,
+                                       mean       = 1,
+                                       povline    = mean,
+                                       complete   = FALSE) {
+
+#   ____________________________________________________________________________
+#   on.exit                                                                 ####
+  on.exit({
+
+  })
+
+#   ____________________________________________________________________________
+#   Defenses                                                                ####
+  stopifnot( exprs = {
+
+    }
+  )
+
+#   ____________________________________________________________________________
+#   Early returns                                                           ####
+  if (FALSE) {
+    return()
+  }
+
+#   ____________________________________________________________________________
+#   Computations                                                            ####
+  if (!is.null(welfare)) {
+    params <- get_gd_lorenz_params(welfare, population)
+  }
+
+  # Validity or LQ
+  validity_lq <- check_curve_validity_lq(params$lq$reg_results$coef[["A"]],
+                                         params$lq$reg_results$coef[["B"]],
+                                         params$lq$reg_results$coef[["C"]],
+                                         params$lq$key_values$e,
+                                         params$lq$key_values$m,
+                                         params$lq$key_values$n,
+                                         params$lq$key_values$r^2)
+
+  # Validity of LB
+  # Compute poverty stats
+  headcount <- gd_compute_headcount_lb(mean,
+                                       povline,
+                                       params$lb$reg_results$coef[["A"]],
+                                       params$lb$reg_results$coef[["B"]],
+                                       params$lb$reg_results$coef[["C"]])
+
+  # Check validity
+  validity_lb <-
+    check_curve_validity_lb(headcount = headcount,
+                            params$lb$reg_results$coef[["A"]],
+                            params$lb$reg_results$coef[["B"]],
+                            params$lb$reg_results$coef[["C"]])
+
+  #   __________________________________________________________________
+  #   Return                                                          ####
+
+  if (isFALSE(complete)) {
+    params <- vector("list")
+  }
+
+  params$lq$validity <- validity_lq
+  params$lb$validity <- validity_lb
+  return(params)
+
+
+#   ____________________________________________________________________________
+#   Return                                                                  ####
+  return(TRUE)
+
+}
+
+
+
 
 #' Get selected Lorenz curve for distributional stats
 #'
@@ -277,11 +366,9 @@ get_gd_selected_lorenz_dist <-
 
 #' Get selected Lorenz curve for distributional stats
 #'
-#' @inheritParams get_gd_selected_lorenz_dist
-#' @param mean numeric: welfare mean of distribution.
-#' @param povline numeric: value of poverty line. Default is the `mean` value
+#' @inheritParams get_gd_lorenz_validity_pov
 #'
-#' @return
+#' @return list with information of selected lorenz for poverty
 #' @export
 #'
 #' @examples
@@ -300,10 +387,8 @@ get_gd_selected_lorenz_pov <- function(welfare    = NULL,
 
 #   ____________________________________________________________________________
 #   Defenses                                                                ####
-  stopifnot( exprs = {
-
-    }
-  )
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
 
 #   ____________________________________________________________________________
 #   Early returns                                                           ####

@@ -4,10 +4,10 @@
 \alias{check_get_gd_fun_params}
 \title{Check parameters of get_gd functions}
 \usage{
-check_get_gd_fun_params(...)
+check_get_gd_fun_params(lp)
 }
 \arguments{
-\item{...}{}
+\item{lp}{list of parameters}
 }
 \description{
 Check parameters of get_gd functions
