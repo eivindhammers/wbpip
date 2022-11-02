@@ -165,14 +165,13 @@ derive_lb <- function(x, A, B, C) {
 #' @inheritParams gd_estimate_lb
 #' @inheritParams gd_compute_fit_lb
 #'
-#' @references
-#' Datt, G. 1998. "[Computational Tools For Poverty Measurement And
-#' Analysis](https://www.ifpri.org/cdmref/p15738coll2/id/125673)". FCND
-#' Discussion Paper 50. World Bank, Washington, DC.
+#' @references Datt, G. 1998. "[Computational Tools For Poverty Measurement And
+#'   Analysis](https://ageconsearch.umn.edu/record/94862/)". FCND Discussion
+#'   Paper 50. World Bank, Washington, DC.
 #'
-#' Kakwani, N. 1980. "[On a Class of Poverty
-#' Measures](https://EconPapers.repec.org/RePEc:ecm:emetrp:v:48:y:1980:i:2:p:437-46)".
-#' *Econometrica 48* (2): 437-46.
+#'   Kakwani, N. 1980. "[On a Class of Poverty
+#'   Measures](https://EconPapers.repec.org/RePEc:ecm:emetrp:v:48:y:1980:i:2:p:437-46)".
+#'    *Econometrica 48* (2): 437-46.
 #'
 #' @return list
 #' @keywords internal
