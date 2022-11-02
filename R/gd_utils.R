@@ -61,3 +61,42 @@ regres <- function(data, is_lq = TRUE) {
 }
 
 
+
+
+
+#' Check parameters of get_gd functions
+#'
+#' @param lp list of parameters
+#'
+#' @return invisible TRUE if all tests are passed
+check_get_gd_fun_params <- function(lp) {
+
+#   ____________________________________________________________________________
+#   on.exit                                                                 ####
+  on.exit({
+
+  })
+#   ____________________________________________________________________________
+#   Defenses                                                                ####
+  stopifnot( exprs = {
+
+    }
+  )
+
+#   ____________________________________________________________________________
+#   Early returns                                                           ####
+  if (FALSE) {
+    return()
+  }
+
+#   ____________________________________________________________________________
+#   Computations                                                            ####
+  il  <- as.list(environment())
+
+
+#   ____________________________________________________________________________
+#   Return                                                                  ####
+  return(TRUE)
+
+}
+

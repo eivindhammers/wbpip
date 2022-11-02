@@ -20,7 +20,7 @@ parametrization. \code{welfare} and \code{population} must be vectors of a group
 dataset
 }
 \examples{
-# Get Lorens parameters
+# Get Lorenz parameters
 res <- get_gd_lorenz_params(
   welfare = grouped_data_ex2$welfare,
   population = grouped_data_ex2$weight)

@@ -42,3 +42,5 @@ params <- get_gd_lorenz_params(
   population = dt$weight)
 str(params)
 ```
+
+The output or `get_gd_lorenz_params` return a list with two lists inside. One of the Lorenz Quadratic (lq) and one of the Lorenz Beta (lb). Each of these lists, has three lists inside.
