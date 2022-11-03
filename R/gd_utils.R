@@ -68,10 +68,7 @@ regres <- function(data, is_lq = TRUE) {
 #'
 #' @param lp list of parameters
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return invisible TRUE
 check_get_gd_fun_params <- function(lp) {
 
 #   ____________________________________________________________________________

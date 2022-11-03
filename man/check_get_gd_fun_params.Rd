@@ -9,6 +9,9 @@ check_get_gd_fun_params(lp)
 \arguments{
 \item{lp}{list of parameters}
 }
+\value{
+invisible TRUE
+}
 \description{
 Check parameters of get_gd functions
 }

@@ -508,11 +508,14 @@ gd_compute_poverty_stats_lq <- function(mean,
                                         s1,
                                         s2) {
   # Compute headcount
-  bu <- B + (2 * povline / mean)
-  u <- mean / povline
+  headcount <- gd_compute_headcount_lq(mean,
+                                       povline,
+                                       B,
+                                       m,
+                                       n,
+                                       r)
 
-  headcount <- -(n + ((r * bu) / sqrt(bu^2 - m))) / (2 * m)
-
+  u    <- mean / povline
   tmp0 <- (m * headcount^2) + (n * headcount) + (e^2)
   tmp0 <- if (tmp0 < 0) 0L else tmp0
   tmp0 <- sqrt(tmp0)
@@ -693,4 +696,33 @@ gd_compute_fit_lq <- function(welfare,
   names(out) <- list("sse", "ssez")
 
   return(out)
+}
+
+
+
+#' Compute poverty for Quadratic Lorenz
+#'
+#' @inheritParams gd_compute_poverty_stats_lq
+#'
+#' @return poverty headcount
+#' @keywords internal
+gd_compute_headcount_lq <- function(mean,
+                                    povline,
+                                    B,
+                                    m,
+                                    n,
+                                    r) {
+
+
+
+#   ____________________________________________________________________________
+#   Compute headcount                                                  ####
+  bu <- B + (2 * povline / mean)
+  headcount <- -(n + ((r * bu) / sqrt(bu^2 - m))) / (2 * m)
+
+
+#   ____________________________________________________________________________
+#   Return                                                      ####
+  return(headcount)
+
 }
