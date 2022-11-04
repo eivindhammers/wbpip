@@ -10,7 +10,8 @@ get_gd_lorenz_validity(
   params = NULL,
   mean = 1,
   times_mean = 1,
-  povline = mean * times_mean,
+  popshare = NULL,
+  povline = ifelse(is.null(popshare), mean * times_mean, NULL),
   complete = FALSE
 )
 }
@@ -22,6 +23,9 @@ get_gd_lorenz_validity(
 \item{params}{list of parameters from \code{get_gd_lorenz_params()}}
 
 \item{mean}{numeric: welfare mean of distribution.}
+
+\item{popshare}{numeric: range (0,1). Share of population. Provide share of
+population instead of poverty line}
 
 \item{povline}{numeric: value of poverty line. Default is the \code{mean} value}
 

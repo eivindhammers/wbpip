@@ -108,6 +108,14 @@ check_get_gd_fun_params <- function(lp) {
   }
 
 
+  ## povline and popshare ----------
+  if ( all(c("povline", "popshare") %in% nlp)) {
+    if (!is.na(lp$povline) && !is.null(lp$popshare)) {
+      cli_abort("You must specify either {.field povline} or
+                {.field popshare}")
+    }
+  }
+
 
   # "Either `params` or `welfare` and `population` should be spefied" =
   #   (is.null(params) && !is.null(welfare) && !is.null(population)) ||
@@ -118,6 +126,17 @@ check_get_gd_fun_params <- function(lp) {
   #
   # "`complete` must be logical" =
   #   is.logical(complete)
+
+  ## lorenz -----------
+  if ( all(c("lorenz") %in% nlp)) {
+
+    if (!is.null(lp$lorenz) && !lp$lorenz %in% c("lq", "lb")) {
+
+      cli_abort("{.field lorenz} must be either 'lq' or 'lb', or
+                {.code NULL} to let the algorithm select")
+    }
+  }
+
 
 #   ____________________________________________________________________________
 #   Return                                                                  ####

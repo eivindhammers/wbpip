@@ -10,7 +10,8 @@ get_gd_select_lorenz(
   params = NULL,
   mean = 1,
   times_mean = 1,
-  povline = mean * times_mean,
+  popshare = NULL,
+  povline = ifelse(is.null(popshare), mean * times_mean, NULL),
   complete = FALSE
 )
 }
@@ -19,9 +20,12 @@ get_gd_select_lorenz(
 
 \item{population}{numeric: cumulative share of the population}
 
-\item{params}{list of parameters from \code{get_gd_lorenz_params()}}
+\item{params}{list of parameters from \code{get_gd_lorenz_validity()}}
 
 \item{mean}{numeric: welfare mean of distribution.}
+
+\item{popshare}{numeric: range (0,1). Share of population. Provide share of
+population instead of poverty line}
 
 \item{povline}{numeric: value of poverty line. Default is the \code{mean} value}
 
@@ -43,18 +47,18 @@ params <- get_gd_lorenz_params(
 params <- get_gd_lorenz_validity(
   params = params,
   complete = TRUE)
-get_gd_select_lorenz_dist(params = params)
+get_gd_select_lorenz(params = params)
 
 # Using Lorenz parameters from get_gd_lorenz_validity
 params <- get_gd_lorenz_validity(
   welfare = grouped_data_ex2$welfare,
   population = grouped_data_ex2$weight,
   complete = TRUE)
-get_gd_select_lorenz_dist(params = params)
+get_gd_select_lorenz(params = params)
 
 # Using original vectors
 
-get_gd_select_lorenz_dist(
+get_gd_select_lorenz(
   welfare = grouped_data_ex2$welfare,
   population = grouped_data_ex2$weight)
 }

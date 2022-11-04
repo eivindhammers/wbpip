@@ -26,10 +26,8 @@ get_gd_lorenz_params <- function(welfare,
 
 #   ____________________________________________________________________________
 #   Defenses                                                                ####
-  stopifnot( exprs = {
-
-    }
-  )
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
 
 #   ____________________________________________________________________________
 #   Computations                                                            ####
@@ -96,6 +94,8 @@ get_gd_lorenz_params <- function(welfare,
 #'   previously used `get_gd` functions. Default is `FALSE`
 #' @param mean numeric: welfare mean of distribution.
 #' @param povline numeric: value of poverty line. Default is the `mean` value
+#' @param popshare numeric: range (0,1). Share of population. Provide share of
+#'   population instead of poverty line
 #'
 #'
 #' @return list of distributional validity of each Lorenz model
@@ -118,22 +118,39 @@ get_gd_lorenz_validity <- function(welfare    = NULL,
                                    params     = NULL,
                                    mean       = 1,
                                    times_mean = 1,
-                                   povline    = mean*times_mean,
+                                   popshare   = NULL,
+                                   povline    = ifelse(is.null(popshare),
+                                                   mean*times_mean,
+                                                   NA_real_),
                                    complete   = FALSE) {
 
 
 #   ____________________________________________________________________________
 #   Defenses                                                                ####
-  stopifnot( exprs = {
-
-    }
-  )
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
 
 
 #   ____________________________________________________________________________
 #   Computations                                                            ####
   if (!is.null(welfare)) {
     params <- get_gd_lorenz_params(welfare, population)
+  }
+
+  if (!is.null(popshare)) {
+    povline_lq <- mean * derive_lq(popshare,
+                                   params$lq$reg_results$coef[["A"]],
+                                   params$lq$reg_results$coef[["B"]],
+                                   params$lq$reg_results$coef[["C"]])
+
+    povline_lb <- mean * derive_lb(popshare,
+                                   params$lb$reg_results$coef[["A"]],
+                                   params$lb$reg_results$coef[["B"]],
+                                   params$lb$reg_results$coef[["C"]])
+
+  } else {
+    povline_lb <- povline_lq <- povline
+
   }
 
   # Validity or LQ
@@ -146,7 +163,7 @@ get_gd_lorenz_validity <- function(welfare    = NULL,
                                          params$lq$key_values$r^2)
 
   headcount_lq <- gd_compute_headcount_lq(mean,
-                                          povline,
+                                          povline_lq,
                                           params$lq$reg_results$coef[["B"]],
                                           params$lq$key_values$m,
                                           params$lq$key_values$n,
@@ -157,10 +174,10 @@ get_gd_lorenz_validity <- function(welfare    = NULL,
   # Validity of LB
   # Compute poverty stats
   headcount_lb <- gd_compute_headcount_lb(mean,
-                                       povline,
-                                       params$lb$reg_results$coef[["A"]],
-                                       params$lb$reg_results$coef[["B"]],
-                                       params$lb$reg_results$coef[["C"]])
+                                          povline_lb,
+                                          params$lb$reg_results$coef[["A"]],
+                                          params$lb$reg_results$coef[["B"]],
+                                          params$lb$reg_results$coef[["C"]])
 
   # Check validity
   validity_lb <-
@@ -171,12 +188,12 @@ get_gd_lorenz_validity <- function(welfare    = NULL,
 
   validity_lb$headcount <- headcount_lb
 
-  if ( povline != mean*times_mean) {
-    times_mean <- povline/mean
+  if ( povline_lb != mean*times_mean) {
+    times_mean <- povline_lb/mean
   }
 
   norm_lb_label <- paste0("Normality with a mean of ", mean,
-                          " and a poverty line of ", povline,
+                          " and a poverty line of ", povline_lb,
                           ";", times_mean, " times the mean.")
 
   attr(validity_lb$is_normal, "label") <- norm_lb_label
@@ -203,7 +220,7 @@ get_gd_lorenz_validity <- function(welfare    = NULL,
 #'
 #' @inheritParams get_gd_lorenz_params
 #' @inheritParams get_gd_lorenz_validity
-#' @param params list of parameters from `get_gd_lorenz_params()`
+#' @param params list of parameters from `get_gd_lorenz_validity()`
 #'
 #' @return list of values with best lorenz fit for distributional Stats
 #' @export
@@ -217,18 +234,18 @@ get_gd_lorenz_validity <- function(welfare    = NULL,
 #' params <- get_gd_lorenz_validity(
 #'   params = params,
 #'   complete = TRUE)
-#' get_gd_select_lorenz_dist(params = params)
+#' get_gd_select_lorenz(params = params)
 #'
 #' # Using Lorenz parameters from get_gd_lorenz_validity
 #' params <- get_gd_lorenz_validity(
 #'   welfare = grouped_data_ex2$welfare,
 #'   population = grouped_data_ex2$weight,
 #'   complete = TRUE)
-#' get_gd_select_lorenz_dist(params = params)
+#' get_gd_select_lorenz(params = params)
 #'
 #' # Using original vectors
 #'
-#' get_gd_select_lorenz_dist(
+#' get_gd_select_lorenz(
 #'   welfare = grouped_data_ex2$welfare,
 #'   population = grouped_data_ex2$weight)
 get_gd_select_lorenz <- function(welfare    = NULL,
@@ -236,11 +253,16 @@ get_gd_select_lorenz <- function(welfare    = NULL,
                                    params     = NULL,
                                    mean       = 1,
                                    times_mean = 1,
-                                   povline    = mean*times_mean,
+                                   popshare   = NULL,
+                                   povline    = ifelse(is.null(popshare),
+                                                     mean*times_mean,
+                                                     NA_real_),
                                    complete   = FALSE) {
 
 #   ____________________________________________________________________________
 #   Defenses                                                                ####
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
   stopifnot( exprs = {
     "Either `params` or `welfare` and `population` should be spefied" =
       (is.null(params) && !is.null(welfare) && !is.null(population)) ||
@@ -263,7 +285,8 @@ get_gd_select_lorenz <- function(welfare    = NULL,
                                      complete   = TRUE,
                                      mean       = mean,
                                      times_mean = times_mean,
-                                     povline    = povline)
+                                     povline    = povline,
+                                     popshare   = popshare)
   }
 
   ## Selected Lorenz for  Distribution-------
@@ -319,26 +342,35 @@ get_gd_select_lorenz <- function(welfare    = NULL,
 # Calculate Stats   ---------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#' calculate quantiles
+#' Welfare share by quantile in group data
 #'
 #' @inheritParams get_gd_select_lorenz
 #' @param lorenz character or NULL. Lorenz curve selected. It could be "lq" for
 #'   Lorenz Quadratic or "lb" for Lorenz Beta
 #' @param  n numeric: Number of quantiles
 #'
-#' @return list with vector of quantiles
+#' @return list with vector of share of welfare by quantiles
 #' @export
 #'
 #' @examples
-get_gd_quantiles <- function(welfare    = NULL,
-                             population = NULL,
-                             params     = NULL,
-                             mean       = 1,
-                             times_mean = 1,
-                             povline    = mean*times_mean,
-                             complete   = FALSE,
-                             lorenz     = NULL,
-                             n          = 10) {
+#' # Using params
+#' params <- get_gd_select_lorenz(
+#'   welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight)
+#' qt <- get_gd_wlf_sahre_by_qtl(params = params)
+#' qt$dist_stats$quantiles
+#'
+#' # Using orignal vectors
+#' qt <- get_gd_wlf_sahre_by_qtl(
+#' welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight)
+#' qt$dist_stats$quantiles
+get_gd_wlf_sahre_by_qtl <- function(welfare    = NULL,
+                                    population = NULL,
+                                    params     = NULL,
+                                    complete   = FALSE,
+                                    lorenz     = NULL,
+                                    n          = 10) {
 
   #   ________________________________________________________
   #   on.exit                                     ####
@@ -348,10 +380,8 @@ get_gd_quantiles <- function(welfare    = NULL,
 
   #   _________________________________________________________
   #   Defenses                                                ####
-  stopifnot( exprs = {
-
-  }
-  )
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
 
   #   ________________________________________________________
   #   Early returns                                ####
@@ -364,10 +394,7 @@ get_gd_quantiles <- function(welfare    = NULL,
   if (!is.null(welfare)) {
     params <- get_gd_select_lorenz(welfare,
                                    population,
-                                   complete   = TRUE,
-                                   mean       = mean,
-                                   times_mean = times_mean,
-                                   povline    = povline)
+                                   complete   = TRUE)
   }
 
   if (is.null(lorenz)) {
@@ -376,7 +403,7 @@ get_gd_quantiles <- function(welfare    = NULL,
 
   qfun <- paste0("gd_compute_quantile_", lorenz)
 
-  quantiles <-  match.fun(qfun)(params[[lorenz]]$reg_results$coef[["A"]],
+  welfare_share <-  match.fun(qfun)(params[[lorenz]]$reg_results$coef[["A"]],
                                 params[[lorenz]]$reg_results$coef[["B"]],
                                 params[[lorenz]]$reg_results$coef[["C"]],
                                 n_quantile = n)
@@ -386,13 +413,134 @@ get_gd_quantiles <- function(welfare    = NULL,
     params <- vector("list")
   }
 
-  params$dist_stats$quantiles <- quantiles
+  params$dist_stats$welfare_share <- welfare_share
   return(params)
 
 }
 
 
-get_gd_lorenz_curve <- function(welfare    = NULL,
+#' Estimate quantiles based population share or number of bins
+#'
+#' @inheritParams get_gd_wlf_sahre_by_qtl
+#' @param popshare numeric: vector of share of population. Default is `seq(from
+#'   = 1/n, to = 1, by = 1/n)`
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_gd_quantiles <- function(welfare    = NULL,
+                             population = NULL,
+                             complete   = FALSE,
+                             mean       = 1,
+                             lorenz     = NULL,
+                             n          = 10,
+                             popshare   = seq(from = 1/n, to = 1, by = 1/n)
+                             ) {
+
+#   ____________________________________________________
+#   on.exit                                         ####
+  on.exit({
+
+  })
+
+#   ____________________________________________________
+#   Defenses                                        ####
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
+
+  #   ________________________________________________________
+  #   Early returns                                ####
+  if (FALSE) {
+    return()
+  }
+
+  #   ____________________________________________________
+  #   Computations                              ####
+
+
+  # |>
+  #   sapply( \(.) {
+  #     .$selected_lorenz$for_pov
+  #   })
+
+
+
+
+  if (is.null(lorenz)) {
+
+    # Vectorize selection of lorenz for poverty
+    vc_lorenz <- Vectorize(get_gd_select_lorenz,
+                           vectorize.args = "popshare",
+                           SIMPLIFY = FALSE)
+
+    params <-
+      vc_lorenz(welfare,
+                population,
+                mean     = mean,
+                popshare = popshare,
+                complete = TRUE)
+
+  } else {
+
+    params <- get_gd_select_lorenz(welfare,
+                                   population,
+                                   complete   = TRUE)
+
+  }
+
+
+  if (!is.null(popshare)) {
+    povline_lq <- mean * derive_lq(popshare,
+                                   params$lq$reg_results$coef[["A"]],
+                                   params$lq$reg_results$coef[["B"]],
+                                   params$lq$reg_results$coef[["C"]])
+
+    povline_lb <- mean * derive_lb(popshare,
+                                   params$lb$reg_results$coef[["A"]],
+                                   params$lb$reg_results$coef[["B"]],
+                                   params$lb$reg_results$coef[["C"]])
+
+  }
+
+
+
+
+
+  qfun <- paste0("gd_compute_quantile_", lorenz)
+
+  welfare_share <-  match.fun(qfun)(params[[lorenz]]$reg_results$coef[["A"]],
+                                    params[[lorenz]]$reg_results$coef[["B"]],
+                                    params[[lorenz]]$reg_results$coef[["C"]],
+                                    n_quantile = n)
+  #   ____________________________________________________________
+  #   Return                                                ####
+  if (isFALSE(complete)) {
+    params <- vector("list")
+  }
+
+  params$dist_stats$welfare_share <- welfare_share
+  return(params)
+
+
+}
+
+
+#' Get vectors related to the Lorenz Curve
+#'
+#' @param welfare
+#' @param population
+#' @param params
+#' @param mean
+#' @param times_mean
+#' @param povline
+#' @param complete
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_gd_lorenz_stats <- function(welfare    = NULL,
                                 population = NULL,
                                 params     = NULL,
                                 mean       = 1,
