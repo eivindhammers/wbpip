@@ -11,7 +11,7 @@ get_gd_lorenz_validity(
   mean = 1,
   times_mean = 1,
   popshare = NULL,
-  povline = ifelse(is.null(popshare), mean * times_mean, NULL),
+  povline = ifelse(is.null(popshare), mean * times_mean, NA_real_),
   complete = FALSE
 )
 }

@@ -7,8 +7,8 @@
 get_gd_quantiles(
   welfare = NULL,
   population = NULL,
-  params = NULL,
   complete = FALSE,
+  mean = 1,
   lorenz = NULL,
   n = 10,
   popshare = seq(from = 1/n, to = 1, by = 1/n)
@@ -18,8 +18,6 @@ get_gd_quantiles(
 \item{welfare}{numeric: cumulative sahre of welfare (income/consumption)}
 
 \item{population}{numeric: cumulative share of the population}
-
-\item{params}{list of parameters from \code{get_gd_lorenz_validity()}}
 
 \item{complete}{logical: If TRUE, returns a list a cumulative returns from
 previously used \code{get_gd} functions. Default is \code{FALSE}}

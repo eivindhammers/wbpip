@@ -528,15 +528,9 @@ get_gd_quantiles <- function(welfare    = NULL,
 
 #' Get vectors related to the Lorenz Curve
 #'
-#' @param welfare
-#' @param population
-#' @param params
-#' @param mean
-#' @param times_mean
-#' @param povline
-#' @param complete
+#' @inheritParams get_gd_quantiles
 #'
-#' @return
+#' @return data.table or list with Lorenz stats
 #' @export
 #'
 #' @examples
