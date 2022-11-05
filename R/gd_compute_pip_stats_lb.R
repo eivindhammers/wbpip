@@ -125,41 +125,30 @@ create_functional_form_lb <- function(welfare, population) {
 #' @keywords internal
 derive_lb <- function(x, A, B, C) {
 
-  val <- x
+  # Formula for first derivative of GQ Lorenz Curve
+  val <-
+    1 - ((A * x ^ B) * ((1 - x) ^ C) * ((B / x) - (C / (1 - x))))
+
 
   if (B == 1) {
-    val[val == 0] <- 1 - A
+    val[x == 0] <- 1 - A
   } else if (B > 1) {
-    val[val == 0] <- 1
+    val[x == 0] <- 1
   } else {
-    val[val == 0] <- -Inf
+    val[x == 0] <- -Inf
   }
 
   if (C == 1) {
-    val[val == 1] <- 1 + A
+    val[x == 1] <- 1 + A
   } else if  (C > 1) {
-    val[val == 1] <- 1
+    val[x == 1] <- 1
   } else {
-    val[val == 1] <- Inf
+    val[x == 1] <- Inf
   }
-
-  # Formula for first derivative of GQ Lorenz Curve
-  y <- !is.infinite(val)
-  val[y] <-
-    1 - ((A * val[y] ^ B) * ((1 - val[y]) ^ C) * ((B / val[y]) - (C / (1 - val[y]))))
 
   return(val)
 }
 
-# derive_lb <- function(x, A, B, C) {
-#   ifelse(x == 0 & B == 1, 1 - A,
-#          ifelse(x == 0 & B > 1, 1,
-#                 ifelse(x == 0, Inf,
-#                        ifelse(x == 1 & C == 1, 1 + A,
-#                                            ifelse(x == 1 & C > 1, 1,
-#                                                   ifelse(x == 1, Inf,
-#                             1 - ((A * x^B) * ((1 - x)^C) * ((B / x) -( C / (1 - x)) ) )))))))
-# }
 
 #' Check validity of Lorenz beta fit
 #'
