@@ -465,64 +465,42 @@ get_gd_quantiles <- function(welfare    = NULL,
   #   })
 
 
-
-
-  if (is.null(lorenz)) {
-
-    # Vectorize selection of lorenz for poverty
-    vc_lorenz <- Vectorize(get_gd_select_lorenz,
-                           vectorize.args = "popshare",
-                           SIMPLIFY = FALSE)
-
-    params <-
-      vc_lorenz(welfare,
-                population,
-                mean     = mean,
-                popshare = popshare,
-                complete = TRUE)
-
-  } else {
-
+  #   Computations                              ####
+  if (!is.null(welfare)) {
     params <- get_gd_select_lorenz(welfare,
                                    population,
                                    complete   = TRUE)
-
   }
 
-
-  if (!is.null(popshare)) {
-    povline_lq <- mean * derive_lq(popshare,
-                                   params$lq$reg_results$coef[["A"]],
-                                   params$lq$reg_results$coef[["B"]],
-                                   params$lq$reg_results$coef[["C"]])
-
-    povline_lb <- mean * derive_lb(popshare,
-                                   params$lb$reg_results$coef[["A"]],
-                                   params$lb$reg_results$coef[["B"]],
-                                   params$lb$reg_results$coef[["C"]])
-
+  if (is.null(lorenz)) {
+    lorenz <- params$selected_lorenz$for_dist
   }
 
+  # Vectorize function
+  qfun <- paste0("derive_", lorenz)
+  vc_derive <- Vectorize(match.fun(qfun),
+                         vectorize.args = "x",
+                         SIMPLIFY = TRUE)
+
+  # quantiles <- mean * match.fun(qfun)(popshare,
+  #                               params[[lorenz]]$reg_results$coef[["A"]],
+  #                               params[[lorenz]]$reg_results$coef[["B"]],
+  #                               params[[lorenz]]$reg_results$coef[["C"]])
 
 
+  quantiles <- mean * vc_derive(popshare,
+                                params[[lorenz]]$reg_results$coef[["A"]],
+                                params[[lorenz]]$reg_results$coef[["B"]],
+                                params[[lorenz]]$reg_results$coef[["C"]])
 
-
-  qfun <- paste0("gd_compute_quantile_", lorenz)
-
-  welfare_share <-  match.fun(qfun)(params[[lorenz]]$reg_results$coef[["A"]],
-                                    params[[lorenz]]$reg_results$coef[["B"]],
-                                    params[[lorenz]]$reg_results$coef[["C"]],
-                                    n_quantile = n)
   #   ____________________________________________________________
   #   Return                                                ####
   if (isFALSE(complete)) {
     params <- vector("list")
   }
 
-  params$dist_stats$welfare_share <- welfare_share
+  params$dist_stats$quantiles <- quantiles
   return(params)
-
-
 }
 
 
