@@ -130,24 +130,24 @@ test_that("get_dg_quantiles works", {
     population = population,
     complete   = TRUE)
 
-  qt1 <- get_gd_wlf_sahre_by_qtl(params = params)
+  qt1 <- get_gd_wlf_share_by_qtl(params = params)
 
 
   # Using orignal vectors
-  qt2 <- get_gd_wlf_sahre_by_qtl(
+  qt2 <- get_gd_wlf_share_by_qtl(
   welfare      = welfare,
   population   = population)
 
   expect_equal(qt1, qt2)
 
   # force lorenz
-  qt3 <- get_gd_wlf_sahre_by_qtl(
+  qt3 <- get_gd_wlf_share_by_qtl(
     welfare    = welfare,
     population = population,
     lorenz     = "lb")
 
   # worng lorenz call
-  get_gd_wlf_sahre_by_qtl(
+  get_gd_wlf_share_by_qtl(
     welfare    = welfare,
     population = population,
     lorenz     = "kkb") |>

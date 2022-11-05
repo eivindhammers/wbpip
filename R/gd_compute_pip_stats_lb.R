@@ -129,19 +129,19 @@ derive_lb <- function(x, A, B, C) {
 
   if (B == 1) {
     val[val == 0] <- 1 - A
-  }
-  if (B > 1) {
+  } else if (B > 1) {
     val[val == 0] <- 1
+  } else {
+    val[val == 0] <- -Inf
   }
-  val[val == 0] <- -Inf
 
   if (C == 1) {
     val[val == 1] <- 1 + A
-  }
-  if (C > 1) {
+  } else if  (C > 1) {
     val[val == 1] <- 1
+  } else {
+    val[val == 1] <- Inf
   }
-  val[val == 1] <- Inf
 
   # Formula for first derivative of GQ Lorenz Curve
   y <- !is.infinite(val)

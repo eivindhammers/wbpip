@@ -357,15 +357,15 @@ get_gd_select_lorenz <- function(welfare    = NULL,
 #' params <- get_gd_select_lorenz(
 #'   welfare = grouped_data_ex2$welfare,
 #'   population = grouped_data_ex2$weight)
-#' qt <- get_gd_wlf_sahre_by_qtl(params = params)
+#' qt <- get_gd_wlf_share_by_qtl(params = params)
 #' qt$dist_stats$quantiles
 #'
 #' # Using orignal vectors
-#' qt <- get_gd_wlf_sahre_by_qtl(
+#' qt <- get_gd_wlf_share_by_qtl(
 #' welfare = grouped_data_ex2$welfare,
 #'   population = grouped_data_ex2$weight)
 #' qt$dist_stats$quantiles
-get_gd_wlf_sahre_by_qtl <- function(welfare    = NULL,
+get_gd_wlf_share_by_qtl <- function(welfare    = NULL,
                                     population = NULL,
                                     params     = NULL,
                                     complete   = FALSE,
@@ -421,7 +421,7 @@ get_gd_wlf_sahre_by_qtl <- function(welfare    = NULL,
 
 #' Estimate quantiles based population share or number of bins
 #'
-#' @inheritParams get_gd_wlf_sahre_by_qtl
+#' @inheritParams get_gd_wlf_share_by_qtl
 #' @param popshare numeric: vector of share of population. Default is `seq(from
 #'   = 1/n, to = 1, by = 1/n)`
 #'
