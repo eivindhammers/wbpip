@@ -478,17 +478,7 @@ get_gd_quantiles <- function(welfare    = NULL,
 
   # Vectorize function
   qfun <- paste0("derive_", lorenz)
-  vc_derive <- Vectorize(match.fun(qfun),
-                         vectorize.args = "x",
-                         SIMPLIFY = TRUE)
-
-  # quantiles <- mean * match.fun(qfun)(popshare,
-  #                               params[[lorenz]]$reg_results$coef[["A"]],
-  #                               params[[lorenz]]$reg_results$coef[["B"]],
-  #                               params[[lorenz]]$reg_results$coef[["C"]])
-
-
-  quantiles <- mean * vc_derive(popshare,
+  quantiles <- mean * match.fun(qfun)(popshare,
                                 params[[lorenz]]$reg_results$coef[["A"]],
                                 params[[lorenz]]$reg_results$coef[["B"]],
                                 params[[lorenz]]$reg_results$coef[["C"]])
