@@ -493,6 +493,79 @@ get_gd_quantiles <- function(welfare    = NULL,
   return(params)
 }
 
+#' Poverty headcount for poverty line.
+#'
+#' There are two version. `get_gd_headcount_nv` which is not vectorized, and
+#' `get_gd_headcount`, which is vectorize in the `povline` argument. There is no
+#' need to use `get_gd_headcount_nv` unless it is for debuging purposes given
+#' that it is the original function. `get_gd_headcount` is difficult to debug
+#'
+#'
+#' @inheritParams get_gd_select_lorenz
+#' @inheritParams get_gd_wlf_share_by_qtl
+#'
+#' @return list with headcount and selected Lorenz
+#' @export
+#'
+#' @examples
+get_gd_headcount_nv <- function(welfare    = NULL,
+                             population = NULL,
+                             params     = NULL,
+                             mean       = 1,
+                             times_mean = 1,
+                             povline    = mean*times_mean,
+                             complete   = FALSE,
+                             lorenz     = NULL) {
+
+#   ____________________________________________________
+#   on.exit                                         ####
+  on.exit({
+
+  })
+
+#   ____________________________________________________
+#   Defenses                                        ####
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
+
+#   ____________________________________________________
+#   Early returns                                   ####
+  if (FALSE) {
+    return()
+  }
+
+#   ____________________________________________________
+#   Computations                                     ####
+  if (!is.null(welfare)) {
+    params <- get_gd_select_lorenz(welfare,
+                                   population,
+                                   complete   = TRUE,
+                                   mean       = mean,
+                                   povline    = povline)
+  }
+
+  if (is.null(lorenz)) {
+    lorenz <- params$selected_lorenz$for_pov
+  }
+
+  headcount <- params[[lorenz]]$validity$headcount
+
+#   ____________________________________________________
+#   Return                                           ####
+  if (isFALSE(complete)) {
+    params <- vector("list")
+  }
+
+  params$pov_stats$headcount <- headcount
+  params$pov_stats$lorenz <- lorenz
+  return(params)
+
+}
+
+#' @rdname get_gd_headcount_nv
+get_gd_headcount <- Vectorize(get_gd_headcount_nv,
+                              vectorize.args = "povline",
+                              SIMPLIFY = FALSE)
 
 #' Get vectors related to the Lorenz Curve
 #'
