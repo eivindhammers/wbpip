@@ -403,7 +403,7 @@ get_gd_wlf_share_by_qtl <- function(welfare    = NULL,
 
   qfun <- paste0("gd_compute_quantile_", lorenz)
 
-  welfare_share <-  match.fun(qfun)(params[[lorenz]]$reg_results$coef[["A"]],
+  welfare_share <-  get(qfun)(params[[lorenz]]$reg_results$coef[["A"]],
                                 params[[lorenz]]$reg_results$coef[["B"]],
                                 params[[lorenz]]$reg_results$coef[["C"]],
                                 n_quantile = n)
@@ -478,7 +478,7 @@ get_gd_quantiles <- function(welfare    = NULL,
 
   # Vectorize function
   qfun <- paste0("derive_", lorenz)
-  quantiles <- mean * match.fun(qfun)(popshare,
+  quantiles <- mean * get(qfun)(popshare,
                                 params[[lorenz]]$reg_results$coef[["A"]],
                                 params[[lorenz]]$reg_results$coef[["B"]],
                                 params[[lorenz]]$reg_results$coef[["C"]])
@@ -690,7 +690,7 @@ get_gd_pov_gap_nv <- function(welfare    = NULL,
 
   fun_to_vc        <- paste0("gd_compute_pov_gap_", lorenz)
 
-  pov_gap <- match.fun(fun_to_vc)(mean      = mean,
+  pov_gap <- get(fun_to_vc)(mean      = mean,
                                   povline   = povline,
                                   headcount = params[[lorenz]]$validity$headcount,
                                   A         = params[[lorenz]]$reg_results$coef[["A"]],
