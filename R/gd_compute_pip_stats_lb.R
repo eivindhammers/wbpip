@@ -440,10 +440,10 @@ gd_compute_poverty_stats_lb <- function(mean,
 
   # Poverty gap
   u <- mean / povline
-  pov_gap <- gd_compute_pov_gap_lb(u, headcount, A, B, C)
+  pov_gap <- gd_compute_pov_gap_lb( mean,  povline, headcount, A, B, C)
 
   # Poverty severity
-  pov_gap_sq <- gd_compute_pov_severity_lb(u, headcount, pov_gap, A, B, C)
+  pov_gap_sq <- gd_compute_pov_severity_lb( mean,  povline, headcount, pov_gap, A, B, C)
 
   # First derivative of the Lorenz curve
   dl <- 1 - A * (headcount^B) * ((1 - headcount)^C) * (B / headcount - C / (1 - headcount))
@@ -765,7 +765,9 @@ BETAICF <- function(a, b, x) {
 #'
 #' @return numeric
 #' @keywords internal
-gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
+gd_compute_pov_gap_lb <- function(mean,  povline, headcount, A, B, C) {
+
+  u <-  mean/povline
   # REVIEW RATIONAL FOR THESE ADJUSTMENTS
   # Adjust Poverty gap
   if (!is.na(headcount)) {
@@ -789,7 +791,8 @@ gd_compute_pov_gap_lb <- function(u, headcount, A, B, C) {
 #'
 #' @return numeric
 #' @keywords internal
-gd_compute_pov_severity_lb <- function(u, headcount, pov_gap, A, B, C) {
+gd_compute_pov_severity_lb <- function(mean, povline, headcount, pov_gap, A, B, C) {
+  u <-  mean/povline
 
   if (!anyNA(headcount, pov_gap)) {
     u1 <- 1 - u

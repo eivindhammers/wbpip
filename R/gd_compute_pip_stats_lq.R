@@ -529,11 +529,17 @@ gd_compute_poverty_stats_lq <- function(mean,
     eh <- epg <- ep <- gh <- gpg <- gp <- 0L
   } else {
 
+
+    pov_gap <- gd_compute_pov_gap_lq(mean,
+                                     povline,
+                                     headcount,
+                                     A,
+                                     B,
+                                     C)
+
+
     # HC value at LQ
     hc_lq <- value_at_lq(headcount, A, B, C)
-
-    # Poverty gap index (P.pg)
-    pov_gap <- headcount - (u * hc_lq)
 
     # P.p2 - Distributionally sensitive FGT poverty measure
     # P.p2 <- (2*P.pg) - P.h - u^2 * (A*P.h + B*value_at_lq(P.h, A, B, C) - (r/16 *log((1 - P.h/s1))/(1 - P.h/s2)))
@@ -722,5 +728,36 @@ gd_compute_headcount_lq <- function(mean,
 #   ____________________________________________________________________________
 #   Return                                                      ####
   return(headcount)
+
+}
+
+
+gd_compute_pov_gap_lq <- function(mean,
+                                  povline,
+                                  headcount,
+                                  A,
+                                  B,
+                                  C) {
+
+#   ____________________________________________________
+#   Computations                                     ####
+
+
+  if (headcount < 0 ) {
+    pov_gap <- 0L
+  } else {
+
+    u    <- mean / povline
+
+    hc_lq <- value_at_lq(headcount, A, B, C)
+
+    # Poverty gap index (P.pg)
+    pov_gap <- headcount - (u * hc_lq)
+  }
+
+
+#   ____________________________________________________
+#   Return                                           ####
+  return(pov_gap)
 
 }

@@ -24,7 +24,8 @@ get_gd_headcount(
   times_mean = 1,
   povline = mean * times_mean,
   complete = FALSE,
-  lorenz = NULL
+  lorenz = NULL,
+  format = c("dt", "list", "atomic")
 )
 }
 \arguments{
@@ -43,13 +44,49 @@ previously used \code{get_gd} functions. Default is \code{FALSE}}
 
 \item{lorenz}{character or NULL. Lorenz curve selected. It could be "lq" for
 Lorenz Quadratic or "lb" for Lorenz Beta}
+
+\item{format}{character: either "dt" for data.table, "list" or "atomic" for a
+single numeric vector, whose names are corresponding selected Lorenz for
+each value.  Default is "dt"}
 }
 \value{
 list with headcount and selected Lorenz
+
+data.table with poverty headcounts and selected Lorenz
 }
 \description{
 There are two version. \code{get_gd_headcount_nv} which is not vectorized, and
 \code{get_gd_headcount}, which is vectorize in the \code{povline} argument. There is no
 need to use \code{get_gd_headcount_nv} unless it is for debuging purposes given
 that it is the original function. \code{get_gd_headcount} is difficult to debug
+}
+\examples{
+
+# Return data.table
+get_gd_headcount(
+welfare = grouped_data_ex2$welfare,
+population = grouped_data_ex2$weight,
+povline = c(.5, 1, 2, 3))
+
+# Return list
+get_gd_headcount(
+welfare = grouped_data_ex2$welfare,
+population = grouped_data_ex2$weight,
+povline = c(.5, 1, 2, 3),
+format = "list")
+
+# Return list complete
+get_gd_headcount(
+welfare = grouped_data_ex2$welfare,
+population = grouped_data_ex2$weight,
+povline = c(.5, 1, 2, 3),
+format = "list",
+complete = TRUE)
+
+# Return data.table
+get_gd_headcount(
+welfare = grouped_data_ex2$welfare,
+population = grouped_data_ex2$weight,
+povline = c(.5, 1, 2, 3),
+format = "atomic")
 }

@@ -563,9 +563,233 @@ get_gd_headcount_nv <- function(welfare    = NULL,
 }
 
 #' @rdname get_gd_headcount_nv
-get_gd_headcount <- Vectorize(get_gd_headcount_nv,
-                              vectorize.args = "povline",
-                              SIMPLIFY = FALSE)
+#'
+#' @inheritParams return_format
+#' @param format character: either "dt" for data.table, "list" or "atomic" for a
+#'   single numeric vector, whose names are corresponding selected Lorenz for
+#'   each value.  Default is "dt"
+#'
+#' @return data.table with poverty headcounts and selected Lorenz
+#'
+#' @export
+#'
+#' @examples
+#'
+#' # Return data.table
+#' get_gd_headcount(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3))
+#'
+#' # Return list
+#' get_gd_headcount(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3),
+#' format = "list")
+#'
+#' # Return list complete
+#' get_gd_headcount(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3),
+#' format = "list",
+#' complete = TRUE)
+#'
+#' # Return data.table
+#' get_gd_headcount(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3),
+#' format = "atomic")
+get_gd_headcount <- function(welfare    = NULL,
+                             population = NULL,
+                             params     = NULL,
+                             mean       = 1,
+                             times_mean = 1,
+                             povline    = mean*times_mean,
+                             complete   = FALSE,
+                             lorenz     = NULL,
+                             format     = c("dt", "list", "atomic")) {
+
+  format <- match.arg(format)
+
+#   ____________________________________________________
+#   Defenses                                        ####
+  stopifnot( exprs = {
+
+    }
+  )
+
+#   ____________________________________________________
+#   Early returns                                   ####
+  if (FALSE) {
+    return()
+  }
+
+  inv_reduce <- function(x,f) {
+    Reduce(f,x)
+  }
+
+#   ____________________________________________________
+#   Computations                                     ####
+  get_gd_headcount_v <- Vectorize(get_gd_headcount_nv,
+                                  vectorize.args = "povline",
+                                  SIMPLIFY = FALSE)
+
+  ld <- get_gd_headcount_v(welfare,
+                           population,
+                           params     = params,
+                           povline    = povline,
+                           complete   = complete,
+                           lorenz     = lorenz,
+                           mean       = mean,
+                           times_mean = times_mean)
+#   ____________________________________________________
+#   Return                                           ####
+
+  if (format == "list") {
+    return(ld)
+  }
+
+  if (complete == TRUE) {
+    cli_abort("{.field complete} is only available with {.field format} = 'list'")
+  }
+
+    dt <- ld |>
+    inv_reduce(c) |>
+      inv_reduce(c)
+
+    hc <- dt[names(dt) == "headcount"] |>
+      unlist()
+    sl <- dt[names(dt) == "lorenz"] |>
+      unlist()
+
+  if (format == "dt") {
+    return(data.table(povline = povline,
+                      headcount = hc,
+                      lorenz    = sl))
+  }
+
+  if (format == "atomic") {
+    names(hc) <- sl
+    return(hc)
+  }
+
+}
+
+#' Group Data Poverty Gap
+#'
+#'
+#' @inheritParams get_gd_headcount
+#'
+#' @return data.table, list or atomic vector
+#' @export
+#'
+#' @examples
+get_gd_pov_gap_nv <- function(welfare    = NULL,
+                              population = NULL,
+                              params     = NULL,
+                              mean       = 1,
+                              times_mean = 1,
+                              povline    = mean*times_mean,
+                              complete   = FALSE,
+                              lorenz     = NULL) {
+
+#   ____________________________________________________
+#   on.exit                                         ####
+  on.exit({
+
+  })
+
+
+  #   ____________________________________________________
+  #   Defenses                                        ####
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
+
+  #   ____________________________________________________
+  #   Early returns                                   ####
+  if (FALSE) {
+    return()
+  }
+
+  #   ____________________________________________________
+  #   Computations                                     ####
+  if (!is.null(welfare)) {
+    params <- get_gd_select_lorenz(welfare,
+                                   population,
+                                   povline    = povline,
+                                   complete   = TRUE,
+                                   mean       = mean,
+                                   times_mean = times_mean)
+  }
+
+  if (is.null(lorenz)) {
+    lorenz <- params$selected_lorenz$for_pov
+  }
+
+  fun_to_vc        <- paste0("gd_compute_pov_gap_", lorenz)
+
+  pov_gap <- match.fun(fun_to_vc)(mean      = mean,
+                                  povline   = povline,
+                                  headcount = params[[lorenz]]$validity$headcount,
+                                  A         = params[[lorenz]]$reg_results$coef[["A"]],
+                                  B         = params[[lorenz]]$reg_results$coef[["B"]],
+                                  C         = params[[lorenz]]$reg_results$coef[["C"]])
+
+  #   ____________________________________________________
+  #   Return                                           ####
+  if (isFALSE(complete)) {
+    params <- vector("list")
+  }
+
+  params$pov_stats$pov_gap <- pov_gap
+  params$pov_stats$lorenz <- lorenz
+  return(params)
+
+}
+
+
+get_gd_pov_gap <- function(welfare    = NULL,
+                           population = NULL,
+                           params     = NULL,
+                           mean       = 1,
+                           times_mean = 1,
+                           povline    = mean*times_mean,
+                           complete   = FALSE,
+                           lorenz     = NULL,
+                           format     = c("dt", "list", "atomic")) {
+
+  format <- match.arg(format)
+
+  #   ____________________________________________________
+  #   Computations                                     ####
+  get_gd_pov_gap_v <- Vectorize(get_gd_pov_gap_nv,
+                                vectorize.args = "povline",
+                                SIMPLIFY = FALSE)
+
+
+  ld <- get_gd_pov_gap_v(welfare    = welfare,
+                         population = population,
+                         params     = params,
+                         povline    = povline,
+                         complete   = complete,
+                         lorenz     = lorenz,
+                         mean       = mean,
+                         times_mean = times_mean)
+  #   ____________________________________________________
+  #   Return                                           ####
+
+  out <- return_format(ld,
+                      var = "pov_gap",
+                      complete = complete,
+                      format = format)
+  return(out)
+
+}
+
+
 
 #' Get vectors related to the Lorenz Curve
 #'

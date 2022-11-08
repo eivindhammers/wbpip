@@ -4,11 +4,9 @@
 \alias{gd_compute_pov_severity_lb}
 \title{Compute poverty severity for Lorenz Beta fit}
 \usage{
-gd_compute_pov_severity_lb(u, headcount, pov_gap, A, B, C)
+gd_compute_pov_severity_lb(mean, povline, headcount, pov_gap, A, B, C)
 }
 \arguments{
-\item{u}{numeric: Mean? \strong{TO BE DOCUMENTED}.}
-
 \item{headcount}{numeric: Headcount index.}
 
 \item{pov_gap}{numeric: Poverty gap.}
@@ -21,6 +19,8 @@ gd_compute_pov_severity_lb(u, headcount, pov_gap, A, B, C)
 
 \item{C}{numeric: Lorenz curve coefficient. Output of
 \code{regres()$coef[3]}.}
+
+\item{u}{numeric: Mean? \strong{TO BE DOCUMENTED}.}
 }
 \value{
 numeric
