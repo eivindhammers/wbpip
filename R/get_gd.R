@@ -565,9 +565,6 @@ get_gd_headcount_nv <- function(welfare    = NULL,
 #' @rdname get_gd_headcount_nv
 #'
 #' @inheritParams return_format
-#' @param format character: either "dt" for data.table, "list" or "atomic" for a
-#'   single numeric vector, whose names are corresponding selected Lorenz for
-#'   each value.  Default is "dt"
 #'
 #' @return data.table with poverty headcounts and selected Lorenz
 #'
@@ -615,23 +612,6 @@ get_gd_headcount <- function(welfare    = NULL,
   format <- match.arg(format)
 
 #   ____________________________________________________
-#   Defenses                                        ####
-  stopifnot( exprs = {
-
-    }
-  )
-
-#   ____________________________________________________
-#   Early returns                                   ####
-  if (FALSE) {
-    return()
-  }
-
-  inv_reduce <- function(x,f) {
-    Reduce(f,x)
-  }
-
-#   ____________________________________________________
 #   Computations                                     ####
   get_gd_headcount_v <- Vectorize(get_gd_headcount_nv,
                                   vectorize.args = "povline",
@@ -648,33 +628,12 @@ get_gd_headcount <- function(welfare    = NULL,
 #   ____________________________________________________
 #   Return                                           ####
 
-  if (format == "list") {
-    return(ld)
-  }
+  out <- return_format(ld,
+                       var = "headcount",
+                       complete = complete,
+                       format = format)
+  return(out)
 
-  if (complete == TRUE) {
-    cli_abort("{.field complete} is only available with {.field format} = 'list'")
-  }
-
-    dt <- ld |>
-    inv_reduce(c) |>
-      inv_reduce(c)
-
-    hc <- dt[names(dt) == "headcount"] |>
-      unlist()
-    sl <- dt[names(dt) == "lorenz"] |>
-      unlist()
-
-  if (format == "dt") {
-    return(data.table(povline = povline,
-                      headcount = hc,
-                      lorenz    = sl))
-  }
-
-  if (format == "atomic") {
-    names(hc) <- sl
-    return(hc)
-  }
 
 }
 
@@ -750,7 +709,43 @@ get_gd_pov_gap_nv <- function(welfare    = NULL,
 
 }
 
-
+#' @rdname get_gd_pov_gap_nv
+#'
+#' @inheritParams return_format
+#'
+#' @return data.table with poverty headcounts and selected Lorenz
+#'
+#' @export
+#'
+#' @examples
+#'
+#' # Return data.table
+#' get_gd_pov_gap(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3))
+#'
+#' # Return list
+#' get_gd_pov_gap(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3),
+#' format = "list")
+#'
+#' # Return list complete
+#' get_gd_pov_gap(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3),
+#' format = "list",
+#' complete = TRUE)
+#'
+#' # Return data.table
+#' get_gd_pov_gap(
+#' welfare = grouped_data_ex2$welfare,
+#' population = grouped_data_ex2$weight,
+#' povline = c(.5, 1, 2, 3),
+#' format = "atomic")
 get_gd_pov_gap <- function(welfare    = NULL,
                            population = NULL,
                            params     = NULL,
