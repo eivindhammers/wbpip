@@ -630,6 +630,7 @@ get_gd_headcount <- function(welfare    = NULL,
 
   out <- return_format(ld,
                        var = "headcount",
+                       povline = povline,
                        complete = complete,
                        format = format)
   return(out)
@@ -778,6 +779,7 @@ get_gd_pov_gap <- function(welfare    = NULL,
 
   out <- return_format(ld,
                       var = "pov_gap",
+                      povline = povline,
                       complete = complete,
                       format = format)
   return(out)

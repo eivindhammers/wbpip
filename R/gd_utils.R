@@ -70,7 +70,12 @@ regres <- function(data, is_lq = TRUE) {
 #'
 #' @return data.table, list, or atomic vector
 #' @keywords internal
-return_format <- function(ld, var, complete = FALSE, format = c("dt", "list", "atomic")) {
+return_format <-
+  function(ld,
+           var,
+           povline = NULL,
+           complete = FALSE,
+           format = c("dt", "list", "atomic")) {
 
   format <- match.arg(format)
 
