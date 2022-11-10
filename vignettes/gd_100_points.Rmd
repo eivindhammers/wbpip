@@ -1,0 +1,127 @@
+---
+title: "100 points distributions with Group Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{100 points distributions with Group Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(wbpip)
+```
+
+
+# intro
+
+```{r all}
+country  <- "ARE"
+year     <- 2019
+coverage <- "national"
+
+cond <- "country_code == country & 
+            survey_year  == (year-1) &
+            tolower(pop_data_level) == coverage"
+cond <- parse(text = cond)
+
+
+dt   <- pipload::pip_load_cache(country, year)
+dtm <- pipload::pip_load_aux("gdm") |> 
+  {\(.) .[eval(cond),
+          survey_mean_lcu ]}()
+
+
+cpi <- pipload::pip_load_aux("cpi") |> 
+  setnames("cpi_data_level", "pop_data_level") |> 
+  {\(.) .[eval(cond), cpi2017]}()
+
+
+
+ppp <- pipload::pip_load_aux("ppp")  |> 
+  {\(.) .[country_code == country &
+            ppp_year == 2017 &
+            ppp_default_by_year  == TRUE & 
+            ppp_data_level == coverage, 
+          ppp]}() 
+
+
+
+
+welfare    <-  dt$welfare
+population <-  dt$weight
+mean       <- 
+  wbpip::deflate_welfare_mean(welfare_mean = dtm, 
+                              ppp = ppp, 
+                              cpi = cpi) |>
+  {\(.) ./(365/12)}()
+
+
+
+# Get quantiles
+
+# lorenz <- "lq"
+nq <- 10
+lorenz <- NULL
+# lorenz <- "lb"
+popshare <- seq(from = 1/nq, to = 1, by = 1/nq)
+
+params <- get_gd_quantiles(welfare,
+                           population,
+                           complete = TRUE, 
+                           mean     = mean,
+                           popshare = popshare, 
+                           lorenz = lorenz)
+
+povlines <- params$dist_stats$quantiles
+# lorenz   <- params$selected_lorenz$for_dist
+
+pg <- get_gd_pov_gap(params  = params,
+                     mean    = mean,
+                     povline = povlines, 
+                     lorenz  = lorenz)
+pg[, .N, by = lorenz]
+
+
+
+pg[, bin := .I
+][, 
+  c("lorenz") := NULL
+  ][, headcount := popshare]
+
+df <- copy(pg)
+
+## AVerage cummulative income -------
+
+df[, avgincome_cumulative := povline  * (1 - pov_gap/headcount)]
+
+df[bin == max(bin),
+   `:=`(
+     headcount = 1,
+     avgincome_cumulative = mean
+   )]
+
+## avg income 
+df[,
+   avgincome := (
+     ((headcount*avgincome_cumulative) - 
+        shift(headcount)*shift(avgincome_cumulative)) /
+       (headcount - shift(headcount))
+   )
+][bin == 1, 
+  avgincome := avgincome_cumulative]
+
+df[]
+mean
+
+
+# ethics_helpline@worldbank.org
+# 2024730279
+```
+

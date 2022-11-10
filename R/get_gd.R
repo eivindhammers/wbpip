@@ -292,6 +292,7 @@ get_gd_select_lorenz <- function(welfare    = NULL,
   ## Selected Lorenz for  Distribution-------
   lq <- append(params$lq$validity,
                params$lq$reg_results["sse"])
+
   lb <- append(params$lb$validity,
                params$lb$reg_results["sse"])
 
@@ -300,14 +301,14 @@ get_gd_select_lorenz <- function(welfare    = NULL,
 
   ## Selected Lorenz for Poverty -----------
 
-  fit_lb <- gd_compute_fit_lb(params$data$population,
+  fit_lb <- gd_compute_fit_lb(params$data$welfare,
                               params$data$population,
                               params$lb$validity$headcount,
                               params$lb$reg_results$coef[["A"]],
                               params$lb$reg_results$coef[["B"]],
                               params$lb$reg_results$coef[["C"]])
 
-  fit_lq <- gd_compute_fit_lq(params$data$population,
+  fit_lq <- gd_compute_fit_lq(params$data$welfare,
                               params$data$population,
                               params$lq$validity$headcount,
                               params$lb$reg_results$coef[["A"]],
@@ -509,13 +510,13 @@ get_gd_quantiles <- function(welfare    = NULL,
 #'
 #' @examples
 get_gd_headcount_nv <- function(welfare    = NULL,
-                             population = NULL,
-                             params     = NULL,
-                             mean       = 1,
-                             times_mean = 1,
-                             povline    = mean*times_mean,
-                             complete   = FALSE,
-                             lorenz     = NULL) {
+                                population = NULL,
+                                params     = NULL,
+                                mean       = 1,
+                                times_mean = 1,
+                                povline    = mean*times_mean,
+                                complete   = FALSE,
+                                lorenz     = NULL) {
 
 #   ____________________________________________________
 #   on.exit                                         ####
@@ -537,16 +538,26 @@ get_gd_headcount_nv <- function(welfare    = NULL,
 #   ____________________________________________________
 #   Computations                                     ####
   if (!is.null(welfare)) {
-    params <- get_gd_select_lorenz(welfare,
-                                   population,
+  params <- get_gd_select_lorenz(welfare    = welfare,
+                                 population = population,
+                                 complete   = TRUE,
+                                 mean       = mean,
+                                 povline    = povline)
+  } else {
+    # Force validity to be re-calculated with each poverty lines
+    params <- get_gd_select_lorenz(welfare    = params$data$welfare,
+                                   population = params$data$population,
                                    complete   = TRUE,
                                    mean       = mean,
                                    povline    = povline)
+
   }
 
   if (is.null(lorenz)) {
     lorenz <- params$selected_lorenz$for_pov
   }
+
+  # estimate again poverty.
 
   headcount <- params[[lorenz]]$validity$headcount
 
@@ -617,8 +628,8 @@ get_gd_headcount <- function(welfare    = NULL,
                                   vectorize.args = "povline",
                                   SIMPLIFY = FALSE)
 
-  ld <- get_gd_headcount_v(welfare,
-                           population,
+  ld <- get_gd_headcount_v(welfare    = welfare,
+                           population = population,
                            params     = params,
                            povline    = povline,
                            complete   = complete,
@@ -677,12 +688,18 @@ get_gd_pov_gap_nv <- function(welfare    = NULL,
   #   ____________________________________________________
   #   Computations                                     ####
   if (!is.null(welfare)) {
-    params <- get_gd_select_lorenz(welfare,
-                                   population,
-                                   povline    = povline,
-                                   complete   = TRUE,
-                                   mean       = mean,
-                                   times_mean = times_mean)
+    params <- get_gd_headcount_nv(welfare    = welfare,
+                                  population = population,
+                                  complete   = TRUE,
+                                  mean       = mean,
+                                  povline    = povline)
+  } else {
+    params <- get_gd_headcount_nv(welfare    = params$data$welfare,
+                                  population = params$data$population,
+                                  complete   = TRUE,
+                                  mean       = mean,
+                                  povline    = povline)
+
   }
 
   if (is.null(lorenz)) {
@@ -692,11 +709,12 @@ get_gd_pov_gap_nv <- function(welfare    = NULL,
   fun_to_vc        <- paste0("gd_compute_pov_gap_", lorenz)
 
   pov_gap <- get(fun_to_vc)(mean      = mean,
-                                  povline   = povline,
-                                  headcount = params[[lorenz]]$validity$headcount,
-                                  A         = params[[lorenz]]$reg_results$coef[["A"]],
-                                  B         = params[[lorenz]]$reg_results$coef[["B"]],
-                                  C         = params[[lorenz]]$reg_results$coef[["C"]])
+                           povline   = povline,
+                           headcount = params$pov_stats$headcount,
+                           A         = params[[lorenz]]$reg_results$coef[["A"]],
+                           B         = params[[lorenz]]$reg_results$coef[["B"]],
+                           C         = params[[lorenz]]$reg_results$coef[["C"]])
+  attributes(pov_gap) <- NULL
 
   #   ____________________________________________________
   #   Return                                           ####
