@@ -4,7 +4,13 @@
 \alias{return_format}
 \title{Return data according to format}
 \usage{
-return_format(ld, var, complete = FALSE, format = c("dt", "list", "atomic"))
+return_format(
+  ld,
+  var,
+  povline = NULL,
+  complete = FALSE,
+  format = c("dt", "list", "atomic")
+)
 }
 \arguments{
 \item{ld}{list of data}

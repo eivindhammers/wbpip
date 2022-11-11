@@ -420,6 +420,88 @@ get_gd_wlf_share_by_qtl <- function(welfare    = NULL,
 }
 
 
+#' Welfare share by quantile in group data
+#'
+#' @inheritParams get_gd_wlf_share_by_qtl
+#'
+#' @return list with vector of share of welfare by quantiles
+#' @export
+#'
+#' @examples
+#' # Using params
+#' params <- get_gd_select_lorenz(
+#'   welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight)
+#' qt <- get_gd_wlf_share_by_qtl(params = params)
+#' qt$dist_stats$quantiles
+#'
+#' # Using orignal vectors
+#' qt <- get_gd_wlf_share_by_qtl(
+#' welfare = grouped_data_ex2$welfare,
+#'   population = grouped_data_ex2$weight)
+#' qt$dist_stats$quantiles
+get_gd_value <- function(welfare    = NULL,
+                                    population = NULL,
+                                    params     = NULL,
+                                    complete   = FALSE,
+                                    lorenz     = NULL,
+                                    n          = 10) {
+
+  #   ________________________________________________________
+  #   on.exit                                     ####
+  on.exit({
+
+  })
+
+  #   _________________________________________________________
+  #   Defenses                                                ####
+  pl <- as.list(environment())
+  check_get_gd_fun_params(pl)
+
+  #   ________________________________________________________
+  #   Early returns                                ####
+  if (FALSE) {
+    return()
+  }
+
+  #   ____________________________________________________
+  #   Computations                              ####
+  if (!is.null(welfare)) {
+    params <- get_gd_select_lorenz(welfare,
+                                   population,
+                                   complete   = TRUE)
+  }
+
+  if (is.null(lorenz)) {
+    lorenz <- params$selected_lorenz$for_dist
+  }
+
+  qfun <- paste0("value_at_", lorenz)
+  value_at_vc <- Vectorize(get(qfun),
+                           vectorize.args = "x",
+                           SIMPLIFY = TRUE)
+
+  welfare_share <-  value_at_vc(x = seq(from = 1/n,
+                                        to   = 1,
+                                        by   = 1/n),
+                                params[[lorenz]]$reg_results$coef[["A"]],
+                                params[[lorenz]]$reg_results$coef[["B"]],
+                                params[[lorenz]]$reg_results$coef[["C"]])
+
+
+  #   ____________________________________________________________
+  #   Return                                                ####
+  if (isFALSE(complete)) {
+    params <- vector("list")
+  }
+
+  params$dist_stats$value_at <- value_at
+  return(params)
+
+}
+
+
+
 #' Estimate quantiles based population share or number of bins
 #'
 #' @inheritParams get_gd_wlf_share_by_qtl

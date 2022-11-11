@@ -16,12 +16,51 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(wbpip)
+library(data.table)
 ```
 
 
-# intro
+# Aux data
 
-```{r all}
+```{r load-aux}
+
+pfw <- pipload::pip_load_aux("pfw") |> 
+  {\(.) .[use_groupdata == 1]}()
+
+gdm <- pipload::pip_load_aux("gdm") 
+
+cpi <- pipload::pip_load_aux("cpi") 
+
+ppp <- pipload::pip_load_aux("ppp") 
+
+```
+
+
+## filter data 
+
+```{r filter-data}
+
+fpf <- pfw[, .(country_code, 
+               year, 
+               surveyid_year,
+               reporting_year,
+               survey_year,
+               survey_coverage, 
+               welfare_type
+               )]
+
+```
+
+
+
+```{r function}
+
+
+
+
+
+
+
 country  <- "ARE"
 year     <- 2019
 coverage <- "national"
@@ -80,48 +119,32 @@ params <- get_gd_quantiles(welfare,
                            lorenz = lorenz)
 
 povlines <- params$dist_stats$quantiles
-# lorenz   <- params$selected_lorenz$for_dist
-
-pg <- get_gd_pov_gap(params  = params,
-                     mean    = mean,
-                     povline = povlines, 
-                     lorenz  = lorenz)
-pg[, .N, by = lorenz]
+lorenz   <- params$selected_lorenz$for_dist
 
 
+wlf_share <- 
+  get_gd_wlf_share_by_qtl(params = params, 
+                          lorenz = lorenz, 
+                          n      = nq) |> 
+  {\(.) .$dist_stats$welfare_share}()
+  
+pop_share <- c(popshare[1], diff(popshare))
 
-pg[, bin := .I
-][, 
-  c("lorenz") := NULL
-  ][, headcount := popshare]
+avg_wlf_qtl <- (wlf_share*mean)/pop_share
 
-df <- copy(pg)
+dt <- data.table(
+  country_code = country, 
+  year         = year, 
+  coverage     = coverage, 
+  quantile    = povlines, 
+  welfare_share = wlf_share, 
+  pop_share     = pop_share,
+  avg_welfare   = avg_wlf_qtl
+)
 
-## AVerage cummulative income -------
+dt[, bin := .I
+   ][bin == max(bin), 
+     quantile := NA_real_]
 
-df[, avgincome_cumulative := povline  * (1 - pov_gap/headcount)]
-
-df[bin == max(bin),
-   `:=`(
-     headcount = 1,
-     avgincome_cumulative = mean
-   )]
-
-## avg income 
-df[,
-   avgincome := (
-     ((headcount*avgincome_cumulative) - 
-        shift(headcount)*shift(avgincome_cumulative)) /
-       (headcount - shift(headcount))
-   )
-][bin == 1, 
-  avgincome := avgincome_cumulative]
-
-df[]
-mean
-
-
-# ethics_helpline@worldbank.org
-# 2024730279
 ```
 
