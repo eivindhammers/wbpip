@@ -51,9 +51,28 @@ fpf <- pfw[, .(country_code,
 
 ```
 
+```{r test-fun}
+
+foo <- function(...) {
+   # pl <- as.list(environment())
+   pl <- list(...)
+   print(pl$country_code)
+   print(pl$surveyid_year )
+   print(pl$survey_coverage)
+   return(invisible(TRUE))
+}
+
+lf <- as.list(fpf[1:2])
+purrr::pmap(lf, foo)
+
+
+```
+
+
 
 
 ```{r function}
+
 
 
 
