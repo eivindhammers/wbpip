@@ -31,7 +31,9 @@ gdm <- pipload::pip_load_aux("gdm")
 
 cpi <- pipload::pip_load_aux("cpi") 
 
-ppp <- pipload::pip_load_aux("ppp") 
+ppp <- pipload::pip_load_aux("ppp")
+
+ppp_year <- 2017
 
 ```
 
@@ -45,7 +47,7 @@ fpf <- pfw[, .(country_code,
                surveyid_year,
                reporting_year,
                survey_year,
-               survey_coverage, 
+               pop_domain, 
                welfare_type
                )]
 
@@ -74,44 +76,49 @@ purrr::pmap(lf, foo)
 ```{r function}
 
 
-
-
-
-
-
-
-country  <- "ARE"
-year     <- 2019
-coverage <- "national"
-
-cond <- "country_code == country & 
-            survey_year  == (year-1) &
-            tolower(pop_data_level) == coverage"
-cond <- parse(text = cond)
-
-
-dt   <- pipload::pip_load_cache(country, year)
-dtm <- pipload::pip_load_aux("gdm") |> 
-  {\(.) .[eval(cond),
-          survey_mean_lcu ]}()
-
-
-cpi <- pipload::pip_load_aux("cpi") |> 
-  setnames("cpi_data_level", "pop_data_level") |> 
-  {\(.) .[eval(cond), cpi2017]}()
-
-
-
-ppp <- pipload::pip_load_aux("ppp")  |> 
-  {\(.) .[country_code == country &
-            ppp_year == 2017 &
-            ppp_default_by_year  == TRUE & 
-            ppp_data_level == coverage, 
-          ppp]}() 
-
-
-
-
+foo <- function(...) {
+   # pl <- as.list(environment())
+   pl <- list(...)
+   
+  cond <- "country_code == pl$country_code & 
+              survey_year  == pl$reporting_year"
+  cond <- parse(text = cond)
+  
+  
+  dt   <- pipload::pip_load_cache(pl$country_code, 
+                                  pl$surveyid_year, 
+                                  verbose = FALSE)
+  
+  gdm <- pipload::pip_load_aux("gdm") |> 
+    {\(.) .[eval(cond)]}()
+  
+  dtm <- gdm[,survey_mean_lcu]
+  names(dtm) <- gdm[,pop_data_level]
+  
+  
+  cpi_var <- paste0("cpi", ppp_year)  
+  cpid <- pipload::pip_load_aux("cpi")  |> 
+    {\(.) .[eval(cond)]}()
+  
+  
+  cpi <- cpid[, get(cpi_var)]
+  names(cpi) <- cpid[, cpi_data_level]
+  
+  
+  py <- ppp_year # to avoid issues with var name in pppd
+  pppd <- pipload::pip_load_aux("ppp")  |> 
+    {\(.) .[country_code == pl$country_code &
+              ppp_year == py &
+              ppp_default_by_year  == TRUE]}() 
+  
+  ppp <- pppd[, ppp]
+  names(ppp) <- pppd[, ppp_data_level]
+  
+  ppp <- ppp[!is.na(ppp)]
+  
+  
+  ## delfate mean by coverage
+  
 welfare    <-  dt$welfare
 population <-  dt$weight
 mean       <- 
@@ -120,6 +127,68 @@ mean       <-
                               cpi = cpi) |>
   {\(.) ./(365/12)}()
 
+
+  
+  
+  
+  
+  return(dtm)
+
+                      
+}
+
+lf <- as.list(fpf[1:2])
+purrr::pmap(lf, foo)
+
+```
+
+```{r rest}
+
+
+
+
+
+# 
+# country  <- "ARE"
+# year     <- 2019
+# coverage <- "national"
+# 
+# cond <- "country_code == country & 
+#             survey_year  == (year-1) &
+#             tolower(pop_data_level) == coverage"
+# cond <- parse(text = cond)
+# 
+# 
+# dt   <- pipload::pip_load_cache(country, year)
+# dtm <- pipload::pip_load_aux("gdm") |> 
+#   {\(.) .[eval(cond),
+#           survey_mean_lcu ]}()
+
+# 
+# cpi <- pipload::pip_load_aux("cpi") |> 
+#   setnames("cpi_data_level", "pop_data_level") |> 
+#   {\(.) .[eval(cond), cpi2017]}()
+# 
+# 
+# 
+# ppp <- pipload::pip_load_aux("ppp")  |> 
+#   {\(.) .[country_code == country &
+#             ppp_year == 2017 &
+#             ppp_default_by_year  == TRUE & 
+#             ppp_data_level == coverage, 
+#           ppp]}() 
+# 
+
+
+# 
+# welfare    <-  dt$welfare
+# population <-  dt$weight
+# mean       <- 
+#   wbpip::deflate_welfare_mean(welfare_mean = dtm, 
+#                               ppp = ppp, 
+#                               cpi = cpi) |>
+#   {\(.) ./(365/12)}()
+# 
 
 
 # Get quantiles
