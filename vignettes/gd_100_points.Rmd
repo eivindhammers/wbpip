@@ -33,12 +33,76 @@ cpi <- pipload::pip_load_aux("cpi")
 
 ppp <- pipload::pip_load_aux("ppp")
 
+# INit parameters
 ppp_year <- 2017
+nq       <- 10
+lorenz   <- NULL
+popshare <- seq(from = 1/nq, to = 1, by = 1/nq)
 
 ```
 
 
 ## filter data 
+
+```{r mean-ppp}
+
+get_mean_ppp <- function(ppp_year) {
+     gdm <- pipload::pip_load_aux("gdm") 
+  cpid <- pipload::pip_load_aux("cpi")  
+  
+  
+  py <- ppp_year # to avoid issues with var name in pppd
+  pppd <- pipload::pip_load_aux("ppp")  |> 
+    {\(.) .[ppp_year == py &
+              ppp_default_by_year  == TRUE]}() 
+  
+  
+  dt <- 
+    merge(gdm, cpid, 
+          by.x =  c("country_code", "survey_year", "pop_data_level"), 
+          by.y =  c("country_code", "survey_year", "cpi_data_level")
+          ) |> 
+    merge(pppd, 
+          by.x = c("country_code", "pop_data_level"), 
+          by.y = c("country_code", "ppp_data_level"))
+  
+  cpi_var <- paste0("cpi", ppp_year)
+  
+  dt[, cpi := get(cpi_var)
+      ][, mean_ppp :=  {
+        x <- deflate_welfare_mean(survey_mean_lcu, 
+                                  ppp, 
+                                  cpi)
+        x <- x/(365/12)
+      }
+      ][, 
+        id := paste(country_code, surveyid_year, welfare_type, sep = "_")
+        ]
+  
+  ft <- dt[!is.na(mean_ppp) # keep no na data
+           ][, # keep important variables 
+             c("id", "mean_ppp", "pop_data_level")
+             ] |>
+    # create list of means and reporting level by id
+    split(by = "id", 
+        keep.by = FALSE) |> 
+    # convert data.table into vectors of means with reporting levels as names
+    purrr::map(~{
+                   y        <- .x[, mean_ppp]
+                   names(y) <- .x[, pop_data_level]
+                   attr(y,"label") <- NULL
+                   y
+                 })
+  
+  return(ft)
+}
+
+
+mean_ppp <- get_mean_ppp(ppp_year)
+# mean_ppp <- purrr::pmap(lf, get_mean_ppp)
+# mean_ppp <- mean_ppp[[1]]
+```
+
 
 ```{r filter-data}
 
@@ -51,188 +115,113 @@ fpf <- pfw[, .(country_code,
                welfare_type
                )]
 
-```
+fpf[,
+    id := paste(country_code, surveyid_year, welfare_type, sep = "_")
+    ]
 
-```{r test-fun}
+fpf <- fpf[1:5]
 
-foo <- function(...) {
-   # pl <- as.list(environment())
-   pl <- list(...)
-   print(pl$country_code)
-   print(pl$surveyid_year )
-   print(pl$survey_coverage)
-   return(invisible(TRUE))
-}
-
-lf <- as.list(fpf[1:2])
-purrr::pmap(lf, foo)
-
+lf <- as.list(fpf)
 
 ```
 
+```{r}
 
-
-
-```{r function}
-
-
-foo <- function(...) {
+get_vctrs <- function(...) {
    # pl <- as.list(environment())
    pl <- list(...)
-   
-  cond <- "country_code == pl$country_code & 
-              survey_year  == pl$reporting_year"
-  cond <- parse(text = cond)
-  
-  
   dt   <- pipload::pip_load_cache(pl$country_code, 
                                   pl$surveyid_year, 
                                   verbose = FALSE)
   
-  gdm <- pipload::pip_load_aux("gdm") |> 
-    {\(.) .[eval(cond)]}()
+  levels     <- dt[, unique(reporting_level)] 
+  welfare    <- vector("list", length(levels))
+  population <- vector("list", length(levels))
+  for (i in seq_along(levels)) {
+    nn <- levels[[i]]
+    welfare[[i]] <- dt[reporting_level == nn, 
+                       welfare]
+    population[[i]] <- dt[reporting_level == nn, 
+                       weight]
+  }
   
-  dtm <- gdm[,survey_mean_lcu]
-  names(dtm) <- gdm[,pop_data_level]
+  names(welfare) <- names(population) <- levels
   
+   id <- paste(pl$country_code, 
+         pl$surveyid_year, 
+         pl$welfare_type, 
+         sep = "_")
   
-  cpi_var <- paste0("cpi", ppp_year)  
-  cpid <- pipload::pip_load_aux("cpi")  |> 
-    {\(.) .[eval(cond)]}()
-  
-  
-  cpi <- cpid[, get(cpi_var)]
-  names(cpi) <- cpid[, cpi_data_level]
-  
-  
-  py <- ppp_year # to avoid issues with var name in pppd
-  pppd <- pipload::pip_load_aux("ppp")  |> 
-    {\(.) .[country_code == pl$country_code &
-              ppp_year == py &
-              ppp_default_by_year  == TRUE]}() 
-  
-  ppp <- pppd[, ppp]
-  names(ppp) <- pppd[, ppp_data_level]
-  
-  ppp <- ppp[!is.na(ppp)]
+  # attr(welfare, "id") <- attr(population, "id") <- id
   
   
-  ## delfate mean by coverage
-  
-welfare    <-  dt$welfare
-population <-  dt$weight
-mean       <- 
-  wbpip::deflate_welfare_mean(welfare_mean = dtm, 
-                              ppp = ppp, 
-                              cpi = cpi) |>
-  {\(.) ./(365/12)}()
-
-
-  
-  
-  
-  
-  return(dtm)
-
-                      
+  return(list(welfare    = welfare, 
+              population = population))
 }
 
-lf <- as.list(fpf[1:2])
-purrr::pmap(lf, foo)
+vctrs <- purrr::pmap(lf, get_vctrs)
 
+names(vctrs) <- fpf[, id]
+# ww <- ww[[1]]
 ```
 
-```{r rest}
+```{r get-calcs}
 
-
-
-
-
-# 
-# country  <- "ARE"
-# year     <- 2019
-# coverage <- "national"
-# 
-# cond <- "country_code == country & 
-#             survey_year  == (year-1) &
-#             tolower(pop_data_level) == coverage"
-# cond <- parse(text = cond)
-# 
-# 
-# dt   <- pipload::pip_load_cache(country, year)
-# dtm <- pipload::pip_load_aux("gdm") |> 
-#   {\(.) .[eval(cond),
-#           survey_mean_lcu ]}()
-
-# 
-# cpi <- pipload::pip_load_aux("cpi") |> 
-#   setnames("cpi_data_level", "pop_data_level") |> 
-#   {\(.) .[eval(cond), cpi2017]}()
-# 
-# 
-# 
-# ppp <- pipload::pip_load_aux("ppp")  |> 
-#   {\(.) .[country_code == country &
-#             ppp_year == 2017 &
-#             ppp_default_by_year  == TRUE & 
-#             ppp_data_level == coverage, 
-#           ppp]}() 
-# 
-
-
-# 
-# welfare    <-  dt$welfare
-# population <-  dt$weight
-# mean       <- 
-#   wbpip::deflate_welfare_mean(welfare_mean = dtm, 
-#                               ppp = ppp, 
-#                               cpi = cpi) |>
-#   {\(.) ./(365/12)}()
-# 
-
-
-# Get quantiles
-
-# lorenz <- "lq"
-nq <- 10
-lorenz <- NULL
-# lorenz <- "lb"
-popshare <- seq(from = 1/nq, to = 1, by = 1/nq)
-
-params <- get_gd_quantiles(welfare,
-                           population,
-                           complete = TRUE, 
-                           mean     = mean,
-                           popshare = popshare, 
-                           lorenz = lorenz)
-
-povlines <- params$dist_stats$quantiles
-lorenz   <- params$selected_lorenz$for_dist
-
-
-wlf_share <- 
-  get_gd_wlf_share_by_qtl(params = params, 
-                          lorenz = lorenz, 
-                          n      = nq) |> 
-  {\(.) .$dist_stats$welfare_share}()
+get_calcs <- function(level, vctr, mean, id) {
   
-pop_share <- c(popshare[1], diff(popshare))
+  welfare    <- vctr$welfare[[level]]
+  population <- vctr$population[[level]]
+  mean       <- mean[[level]]
+    
+  params <- get_gd_quantiles(welfare,
+                              population,
+                             complete = TRUE, 
+                             mean     = mean,
+                             popshare = popshare, 
+                             lorenz = lorenz)
+  
+  povlines <- params$dist_stats$quantiles
+  lorenz   <- params$selected_lorenz$for_dist
+  
+  
+  wlf_share <- 
+    get_gd_wlf_share_by_qtl(params = params, 
+                            lorenz = lorenz, 
+                            n      = nq) |> 
+    {\(.) .$dist_stats$welfare_share}()
+    
+  pop_share <- c(popshare[1], diff(popshare))
+  
+  avg_wlf_qtl <- (wlf_share*mean)/pop_share
+  
+  dt <- data.table(
+    quantile        = povlines, 
+    welfare_share   = wlf_share, 
+    pop_share       = pop_share,
+    avg_welfare     = avg_wlf_qtl, 
+    reporting_level = level, 
+    id              = id
+  )
+  
+  dt[, bin := .I
+     ][bin == max(bin), 
+       quantile := NA_real_]
+  return(dt)
+}
 
-avg_wlf_qtl <- (wlf_share*mean)/pop_share
-
-dt <- data.table(
-  country_code = country, 
-  year         = year, 
-  coverage     = coverage, 
-  quantile    = povlines, 
-  welfare_share = wlf_share, 
-  pop_share     = pop_share,
-  avg_welfare   = avg_wlf_qtl
-)
-
-dt[, bin := .I
-   ][bin == max(bin), 
-     quantile := NA_real_]
+rd <- 
+  purrr::map_df(.x = names(vctrs), 
+                .f = ~{
+                  id <- .x
+                  y <- mean_ppp[[id]]
+                  v <- vctrs[[id]]
+                                    
+                   levels <- names(y)
+                   purrr::map_df(.x = levels,
+                                 .f = get_calcs, 
+                                 vctr = v, 
+                                 mean = y, 
+                                 id   = id)
+                })
 
 ```
-

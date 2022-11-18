@@ -35,8 +35,9 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    markdown, 
-    readr
+    markdown,
+    readr,
+    purrr
 URL: https://pip-technical-team.github.io/wbpip, https://github.com/PIP-Technical-Team/wbpip
 BugReports: https://github.com/PIP-Technical-Team/wbpip/issues
 Depends: 
