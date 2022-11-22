@@ -37,7 +37,8 @@ Suggests:
     rmarkdown,
     markdown,
     readr,
-    purrr
+    purrr,
+    pipload (>= 0.2.0.9004)
 URL: https://pip-technical-team.github.io/wbpip, https://github.com/PIP-Technical-Team/wbpip
 BugReports: https://github.com/PIP-Technical-Team/wbpip/issues
 Depends: 
@@ -54,3 +55,5 @@ Imports:
 VignetteBuilder: knitr
 ByteCompile: true
 Config/testthat/edition: 3
+Remotes:  
+    PIP-technical-team/pipload@new_pipeline
