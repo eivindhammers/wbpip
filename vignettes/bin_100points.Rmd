@@ -1,0 +1,72 @@
+---
+title: "100 points distributions for bin data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{100 points distributions for bin data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(wbpip)
+library(data.table)
+```
+
+
+
+
+```{r init-calculations}
+ppp_year <- 2017
+nq       <- 10
+
+pfw <- pipload::pip_load_aux("pfw") |> 
+  {\(.) .[use_bin == 1]}() 
+
+n <- 1
+ct <- pfw[n, country_code]
+yr <- pfw[n, surveyid_year]
+
+dt   <- pipload::pip_load_cache(ct, 
+                                yr, 
+                                verbose = FALSE)
+ 
+setorder(dt, welfare_ppp, weight)
+dt[,
+   # get bins and total pop and welfare
+   `:=`(
+     bin = md_compute_bins(welfare_ppp, 
+                            weight, 
+                            nbins = nq, 
+                            output = "simple"),
+     tot_pop = sum(weight),
+     tot_wlf = sum(welfare_ppp)
+     )
+   ]
+
+dt[,
+     # get avg wlf, pop and wlf shared
+     c("avg_welfare", "pop_share", "welfare_share", "quantile") := {
+       avg_welfare   <-  weighted.mean(welfare_ppp, weight)
+       pop_share     <- sum(weight)/tot_pop
+       welfare_share <- sum(welfare_ppp)/tot_wlf
+       quantile      <- max(welfare_ppp)
+       list(avg_welfare, pop_share, welfare_share, quantile)
+     },
+   by = bin]
+
+
+dt[, 
+   lapply(.SD, mean), 
+   by = bin, 
+   .SDcols =  c("avg_welfare", "pop_share", "welfare_share", "quantile")
+   ]
+
+```
+

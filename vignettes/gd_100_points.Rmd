@@ -47,7 +47,7 @@ popshare <- seq(from = 1/nq, to = 1, by = 1/nq)
 ```{r mean-ppp}
 
 get_mean_ppp <- function(ppp_year) {
-     gdm <- pipload::pip_load_aux("gdm") 
+  gdm <- pipload::pip_load_aux("gdm") 
   cpid <- pipload::pip_load_aux("cpi")  
   
   
@@ -119,13 +119,13 @@ fpf[,
     id := paste(country_code, surveyid_year, welfare_type, sep = "_")
     ]
 
-fpf <- fpf[1:5]
+# fpf <- fpf[1:5]
 
 lf <- as.list(fpf)
 
 ```
 
-```{r}
+```{r vctrs}
 
 get_vctrs <- function(...) {
    # pl <- as.list(environment())
@@ -209,8 +209,11 @@ get_calcs <- function(level, vctr, mean, id) {
   return(dt)
 }
 
+poss_get_calcs <- purrr::possibly(.f = get_calcs, 
+                                  otherwise = NULL)
+
 rd <- 
-  purrr::map_df(.x = names(vctrs), 
+  purrr::map(.x = names(vctrs), 
                 .f = ~{
                   id <- .x
                   y <- mean_ppp[[id]]
@@ -218,10 +221,39 @@ rd <-
                                     
                    levels <- names(y)
                    purrr::map_df(.x = levels,
-                                 .f = get_calcs, 
+                                 .f = poss_get_calcs, 
                                  vctr = v, 
                                  mean = y, 
                                  id   = id)
                 })
 
+# Problematic databases
+rd_err <- 
+  rd |> 
+     purrr::keep(is.null) |> 
+     names()
+rd_err
+
+# Get rid of problematic data
+rd <- purrr::compact(rd)
+rd <- rbindlist(rd, use.names = TRUE)
+
+nvars <- c("country_code", "year", "welfare_type")
+
+rd[, (nvars) := tstrsplit(id, split = "_")
+   ][, id := NULL]
+
 ```
+
+```{r saving}
+  if (fs::dir_exists(tdirp)) {
+    dir <- 
+    fs::path_dir(tdirp) |> 
+      fs::path("stata")
+    
+    haven::write_dta(rd, fs::path(dir, "gd_10points.dta"))
+    
+  }
+
+```
+
