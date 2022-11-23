@@ -19,7 +19,6 @@ library(wbpip)
 library(data.table)
 ```
 
-
 # Aux data
 
 ```{r load-aux}
@@ -41,8 +40,7 @@ popshare <- seq(from = 1/nq, to = 1, by = 1/nq)
 
 ```
 
-
-## filter data 
+## filter data
 
 ```{r mean-ppp}
 
@@ -102,7 +100,6 @@ mean_ppp <- get_mean_ppp(ppp_year)
 # mean_ppp <- purrr::pmap(lf, get_mean_ppp)
 # mean_ppp <- mean_ppp[[1]]
 ```
-
 
 ```{r filter-data}
 
@@ -246,7 +243,7 @@ rd[, (nvars) := tstrsplit(id, split = "_")
 ```
 
 ```{r saving}
-  if (fs::dir_exists(tdirp)) {
+  if ("tdirp" %in% ls()) {
     dir <- 
     fs::path_dir(tdirp) |> 
       fs::path("stata")
@@ -256,4 +253,3 @@ rd[, (nvars) := tstrsplit(id, split = "_")
   }
 
 ```
-

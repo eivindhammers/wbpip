@@ -30,7 +30,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Suggests: 
     testthat,
     knitr,
@@ -55,5 +55,5 @@ Imports:
 VignetteBuilder: knitr
 ByteCompile: true
 Config/testthat/edition: 3
-Remotes:  
+Remotes: 
     PIP-technical-team/pipload@new_pipeline

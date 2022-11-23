@@ -119,7 +119,8 @@ dr <- purrr::compact(dr) |>
 ```
 
 ```{r saving}
-  if (fs::dir_exists(tdirp)) {
+
+  if ("tdirp" %in% ls()) {
     dir <- 
     fs::path_dir(tdirp) |> 
       fs::path("stata")
@@ -128,5 +129,122 @@ dr <- purrr::compact(dr) |>
     
   }
 
+```
+
+```{r alt-method}
+ppp_year <- 2017
+nq       <- 10
+popshare <- seq(from = 1/nq, to = 1, by = 1/nq)
+
+
+pfw <- pipload::pip_load_aux("pfw") |> 
+  {\(.) .[use_bin == 1]}() 
+
+
+fpf <- pfw[, .(country_code, 
+               surveyid_year,
+               reporting_year,
+               welfare_type
+)]
+
+
+fpf[,
+    id := paste(country_code, reporting_year, welfare_type, sep = "_")
+] 
+ 
+fpf <- fpf[1:2] |>
+# fpf <- fpf |>
+  split(by = "id")
+
+pl <- fpf[[1]]
+
+dt   <- pipload::pip_load_cache(pl$country_code, 
+                                pl$surveyid_year, 
+                                verbose = FALSE)
+
+
+welfare <- dt$welfare_ppp
+weight  <- dt$weight
+
+pov_lines <- md_infer_poverty_line(welfare = welfare, 
+                                   weight  = weight, 
+                                   popshare = popshare)
+
+dt_mean <- dt[, weighted.mean(welfare_ppp, weight)]
+dt[, bin := cut(welfare_ppp, 
+                breaks         = c(0, pov_lines),
+                include.lowest = TRUE, 
+                labels         = FALSE)]
+
+dt[,
+   # get avg wlf, pop and wlf shared
+   c("avg_welfare", "pop_share", "welfare_share", "quantile") := {
+     avg_welfare   <-  weighted.mean(welfare_ppp, weight)
+     pop_share     <- sum(weight)/tot_pop
+     welfare_share <- sum(welfare_ppp)/tot_wlf
+     quantile      <- max(welfare_ppp)
+     list(avg_welfare, pop_share, welfare_share, quantile)
+   },
+   by = bin]
+
+pov_stats <- 
+  lapply(pov_lines, \(.) {
+    # Compute poverty stats
+    md_compute_poverty_stats(welfare, 
+                             weight, 
+                             .) |> 
+      #convert list to data.table
+      as.data.table()
+  }) |> 
+  # bind all dt into one
+  rbindlist()
+
+
+pov_stats[, `:=`(
+  poverty_line  = pov_lines,
+  headcount     = popshare
+  )
+]
+
+setcolorder(pov_stats, 
+            c("poverty_line", "headcount", "poverty_gap", "poverty_severity", "watts"))
+
+
+
+
+setkey(pov_stats, country_code, year)
+
+pov_stats[, n := seq_len(.N), 
+           keyby = .(country_code, year)
+          ][, 
+            avgincome_cumulative := poverty_line * (1 - poverty_gap/headcount)
+          ][,
+            avgincome_cumulative := 1]
+
+
+
+
+
+
+
+
+pov_stats <- 
+  list(
+    pov_stats,
+    pov_stats
+  ) |> 
+  rbindlist()
+
+pov_stats[1:10, 
+          `:=`(
+            country_code = "COL",
+            year = 2010
+          )]
+
+pov_stats[11:20, 
+          `:=`(
+            country_code = "BRA",
+            year = 2015
+          )]
 ```
 
