@@ -68,7 +68,7 @@ get_bin_dist <- function(pl) {
                                      nbins = nq, 
                                      output = "simple"),
        tot_pop = sum(weight),
-       tot_wlf = sum(welfare_ppp)
+       tot_wlf = sum(welfare_ppp*weight)
        )
      ]
   
@@ -77,7 +77,7 @@ get_bin_dist <- function(pl) {
        c("avg_welfare", "pop_share", "welfare_share", "quantile") := {
          avg_welfare   <-  weighted.mean(welfare_ppp, weight)
          pop_share     <- sum(weight)/tot_pop
-         welfare_share <- sum(welfare_ppp)/tot_wlf
+         welfare_share <- sum(welfare_ppp*weight)/tot_wlf
          quantile      <- max(welfare_ppp)
          list(avg_welfare, pop_share, welfare_share, quantile)
        },
@@ -171,21 +171,26 @@ pov_lines <- md_infer_poverty_line(welfare = welfare,
                                    popshare = popshare)
 
 dt_mean <- dt[, weighted.mean(welfare_ppp, weight)]
-dt[, bin := cut(welfare_ppp, 
-                breaks         = c(0, pov_lines),
-                include.lowest = TRUE, 
-                labels         = FALSE)]
 
-dt[,
-   # get avg wlf, pop and wlf shared
-   c("avg_welfare", "pop_share", "welfare_share", "quantile") := {
-     avg_welfare   <-  weighted.mean(welfare_ppp, weight)
-     pop_share     <- sum(weight)/tot_pop
-     welfare_share <- sum(welfare_ppp)/tot_wlf
-     quantile      <- max(welfare_ppp)
-     list(avg_welfare, pop_share, welfare_share, quantile)
-   },
-   by = bin]
+dt[, `:=`(
+       bin = cut(welfare_ppp, 
+                    breaks         = c(0, pov_lines),
+                    include.lowest = TRUE, 
+                    labels         = FALSE), 
+       tot_pop = sum(weight),
+       tot_wlf = sum(welfare_ppp*weight)
+       ) 
+  ]
+
+df <- dt[,
+         # get avg wlf, pop and wlf shared
+         .(
+           avg_welfare   = weighted.mean(welfare_ppp, weight),
+           popshare      = sum(weight)/max(tot_pop),
+           welfare_share = sum(welfare_ppp*weight)/max(tot_wlf),
+           poverty_line  = max(welfare_ppp)
+         ),
+         by = bin]
 
 pov_stats <- 
   lapply(pov_lines, \(.) {
@@ -197,54 +202,15 @@ pov_stats <-
       as.data.table()
   }) |> 
   # bind all dt into one
-  rbindlist()
+  rbindlist() |> 
+  {\(.) cbind(df, .)}()
 
 
-pov_stats[, `:=`(
-  poverty_line  = pov_lines,
-  headcount     = popshare
-  )
-]
-
-setcolorder(pov_stats, 
-            c("poverty_line", "headcount", "poverty_gap", "poverty_severity", "watts"))
-
-
-
-
-setkey(pov_stats, country_code, year)
-
-pov_stats[, n := seq_len(.N), 
-           keyby = .(country_code, year)
-          ][, 
+pov_stats[, 
             avgincome_cumulative := poverty_line * (1 - poverty_gap/headcount)
-          ][,
-            avgincome_cumulative := 1]
+          ][bin == max(bin),
+            by = .(country_code, year),
+            avgincome_cumulative := dt_mean]
 
-
-
-
-
-
-
-
-pov_stats <- 
-  list(
-    pov_stats,
-    pov_stats
-  ) |> 
-  rbindlist()
-
-pov_stats[1:10, 
-          `:=`(
-            country_code = "COL",
-            year = 2010
-          )]
-
-pov_stats[11:20, 
-          `:=`(
-            country_code = "BRA",
-            year = 2015
-          )]
 ```
 
