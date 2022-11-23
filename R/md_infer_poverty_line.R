@@ -24,20 +24,35 @@ md_infer_poverty_line <- function(welfare,
                                   weight,
                                   popshare = .5,
                                   include = FALSE) {
+
+
   prob <- cumsum(weight) / sum(weight)
-  ps <- which.min(abs(prob - popshare))
+  ps <- lapply(popshare, \(.) {
+    abs(prob - .) |>
+      which.min()
+  })
 
   # Weighted mean with the next available value in order to
   # guarantee inclusion in poverty calculation
 
   if (include) {
-    pctile <- stats::weighted.mean(
-      c(welfare[ps], welfare[ps + 1]),
-      c(weight[ps], weight[ps + 1])
-    )
+
+    pctile <-
+      sapply(ps, \(.) {
+        stats::weighted.mean(
+          x = c(welfare[.], welfare[. + 1]),
+          w = c(weight[.], weight[. + 1])
+        )
+      })
+
+
   } else {
-    pctile <- mean(welfare[ps])
+    pctile <-
+      sapply(ps, \(.) {
+        mean(welfare[.])
+      })
   }
+
 
   return(pctile)
 }
