@@ -4,19 +4,15 @@
 \alias{compute_spl}
 \title{Compute SPL}
 \usage{
-compute_spl(weighted_median_ppp, threshold_rate = 0.5, min_level = 1.9)
+compute_spl(weighted_median_ppp, ppp_year)
 }
 \arguments{
 \item{weighted_median_ppp}{numeric: Median. Weighted median in PPP terms.}
 
-\item{threshold_rate}{numeric: A value between 0 and 1 for the proportion of
-the median welfare for SPL calculation.}
-
-\item{min_level}{numeric: Minimum level of the SPL. Defaults to the current
-IPL ($1.90).}
+\item{ppp_year}{numeric: PPP year.}
 }
 \value{
-numeric
+numeric vector with spl values
 }
 \description{
 Compute the societal poverty line based on the median welfare in PPP-adjusted
