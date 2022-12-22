@@ -1,4 +1,4 @@
-# wbpip 0.0.3.9000
+# wbpip 0.0.4
 
 ## New features
 
