@@ -11,6 +11,8 @@
 * create a separate function (`weighted_average_poverty_stats`) for repetitive calculation in adjust poverty stats and add corresponding test case for it. 
 
 ## Bug fixes
+* Fix duplicated values being returned for group data when poverty line when no
+Lorenz fit was successful
 
 # wbpip 0.0.3
 
