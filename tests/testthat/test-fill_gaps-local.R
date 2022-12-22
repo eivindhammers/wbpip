@@ -1,16 +1,16 @@
 skip_if(Sys.getenv('WBPIP_RUN_LOCAL_TESTS') != "TRUE")
 
 # Load microdatasets
-ago2008 <- readRDS("../testdata/local/ago2008.RDS")
-ago2018 <- readRDS("../testdata/local/ago2018.RDS")
-bdi2013 <- readRDS("../testdata/local/bdi2013.RDS")
-nga1996 <- readRDS("../testdata/local/nga1996.RDS")
-nga2003 <- readRDS("../testdata/local/nga2003.RDS")
-zwe2011 <- readRDS("../testdata/local/zwe2011.RDS")
-zwe2017 <- readRDS("../testdata/local/zwe2017.RDS")
-ukr1995 <- readRDS("../testdata/local/ukr1995.RDS")
+ago2008 <- readRDS(test_path("testdata", "local/ago2008.RDS"))
+ago2018 <- readRDS(test_path("testdata", "local/ago2018.RDS"))
+bdi2013 <- readRDS(test_path("testdata", "local/bdi2013.RDS"))
+nga1996 <- readRDS(test_path("testdata", "local/nga1996.RDS"))
+nga2003 <- readRDS(test_path("testdata", "local/nga2003.RDS"))
+zwe2011 <- readRDS(test_path("testdata", "local/zwe2011.RDS"))
+zwe2017 <- readRDS(test_path("testdata", "local/zwe2017.RDS"))
+ukr1995 <- readRDS(test_path("testdata", "local/ukr1995.RDS"))
 # ukr1999 <- readRDS('../testdata/local/ukr1999.RDS')
-ukr2002 <- readRDS("../testdata/local/ukr2002.RDS")
+ukr2002 <- readRDS(test_path("testdata", "local/ukr2002.RDS"))
 
 # Clean datasets
 ago2008 <- md_clean_data(
@@ -81,10 +81,10 @@ test_that("fill_gaps() works correctly on production microdata examples", {
     poverty_line = 1.9 * 365 / 12
   )
   expect_equal(res$mean, 49.94999, tolerance = 1.5e-7)
-  expect_equal(res$median, 37.09282, tolerance = 1.5e-7)
+  expect_equal(res$median[1], 37.09282, tolerance = 1.5e-7)
   expect_equal(res$headcount, 0.754573, tolerance = 1.5e-7)
   expect_equal(res$gini, 0.3862482, tolerance = 1.5e-7)
-  expect_equal(res$mld, 0.2467371, tolerance = 1.6e-7)
+  expect_equal(res$mld[1], 0.2467371, tolerance = 1.6e-7)
   expect_equal(res$poverty_gap, 0.3385979, tolerance = 1.5e-7)
   expect_equal(res$poverty_severity, 0.18495, tolerance = 2e-7)
   expect_equal(res$watts, 0.5118873, tolerance = 1.5e-7)

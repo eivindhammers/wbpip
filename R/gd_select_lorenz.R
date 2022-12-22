@@ -310,10 +310,18 @@ retrieve_distributional <- function(lq,
 retrieve_poverty <- function(lq,
                              lb,
                              is_normal,
-                             use_lq_for_pov) {
+                             use_lq_for_pov,
+                             max_headcount = 0.9999999,
+                             max_poverty_gap = 0.9999998,
+                             max_poverty_severity = 0.9999997) {
   if (!is_normal) {
+    if (lq$poverty_line == lb$poverty_line) {
+      pl <- lq$poverty_line
+    } else {
+      pl <- NA_real_
+    }
     return(list(
-      poverty_line     = NA_real_,
+      poverty_line     = pl,
       headcount        = NA_real_,
       poverty_gap      = NA_real_,
       poverty_severity = NA_real_,
@@ -370,11 +378,13 @@ retrieve_poverty <- function(lq,
     poverty_gap <- NA_real_
     poverty_severity <- NA_real_
   }
-
+  # headcount is inferred from the fitted lorenz curve. At high value of the poverty
+  # line, the returned headcount can be superior to 1, which does not make sense.
+  # Hence the ad-hoc correction below
   if (headcount > 1) {
-    headcount <- 0.99999
-    poverty_gap <- 0.99998
-    poverty_severity <- 0.99997
+    headcount <- max_headcount
+    poverty_gap <- max_poverty_gap
+    poverty_severity <- max_poverty_severity
   }
 
   return(

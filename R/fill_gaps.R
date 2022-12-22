@@ -236,23 +236,26 @@ fg_select_compute_pip_stats <- list(
 #' @noRd
 fg_adjust_poverty_stats <- function(stats0, stats1, survey_year, request_year) {
 
-  # Calculate a weighted average for the poverty stats by taking the
-  # difference between the two survey years and the request year
-  out <-
-    purrr::map2(
-      stats0, stats1,
-      .f = function(measure0, measure1, survey_year, request_year) {
-        ((survey_year[2] - request_year) * measure0 +
-          (request_year - survey_year[1]) * measure1) /
-          (survey_year[2] - survey_year[1])
-      }, survey_year, request_year
-    )
-
+  out <- weighted_average_poverty_stats(stats0, stats1, survey_year, request_year)
   # Set distributional statistics to missing
   # It does not make sense to interpolate these values
   out[c("polarization", "gini", "mld", "median", "deciles")] <- NA_real_
 
   return(out)
+}
+
+#' weighted_average_poverty_stats
+#' @return numeric
+#' @noRd
+weighted_average_poverty_stats <- function(stats0, stats1, survey_year, request_year) {
+  # Calculate a weighted average for the poverty stats by taking the
+  # difference between the two survey years and the request year
+  mapply(function(measure0, measure1) {
+    ((survey_year[2] - request_year) * measure0 +
+       (request_year - survey_year[1]) * measure1) /
+      (survey_year[2] - survey_year[1])
+  },
+  stats0, stats1, SIMPLIFY = FALSE)
 }
 
 #' check_inputs_fill_gaps

@@ -81,6 +81,30 @@ test_that("predict_request_year_mean() returns correct results", {
   expect_equal(res, c(181.3862034, 151.9215873))
 })
 
+test_that("extrapolate_survey_mean() returns correct results", {
+  # Check 1
+  survey_mean     <- 180.2398
+  proxy           <-  list(value0 = 1121.88,
+                           req_value = 1121.88)
+  out <- extrapolate_survey_mean(survey_mean, proxy)
+  expect_equal(class(out), "numeric")
+  expect_equal(length(out), 1)
+  expect_equal(out, 180.2398)
+
+  # Check 2
+  survey_mean     <- 31.95283
+  proxy           <-  list(value0 = 11933.7557,
+                           req_value = 13203.1141)
+  out <- extrapolate_survey_mean(survey_mean, proxy)
+  expect_equal(out, 35.351558)
+  # Check 3
+  survey_mean <- 53.3729
+  proxy = list(value0 = 242.8459,
+               req_value = 228.4325)
+  out <- extrapolate_survey_mean(survey_mean, proxy)
+  expect_equal(out, 50.20511)
+})
+
 # check_inputs_predict_request_year_mean
 test_that("check_inputs_predict_request_year_mean() catches input errors correctly", {
 

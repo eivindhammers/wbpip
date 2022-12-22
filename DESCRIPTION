@@ -1,6 +1,6 @@
 Package: wbpip
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     c(person(given = "Tony",
             family = "Fujs",
@@ -44,7 +44,6 @@ Depends:
 Imports: 
     dplyr,
     rlang,
-    purrr,
     data.table,
     assertthat,
     cli,

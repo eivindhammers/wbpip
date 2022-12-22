@@ -1,5 +1,5 @@
 # Read in synthetic microdata
-dl <- readRDS("../testdata/synthetic-microdata.RDS")
+dl <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
 
 test_that("md_compute_gini() computations are correct", {
 

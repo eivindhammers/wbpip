@@ -1,3 +1,19 @@
+# wbpip 0.0.4
+
+## New features
+
+## Enhancements
+
+* Make local file path more robust in test-suite
+* Fix non-monotonicity bugs for grouped distributions
+* Remove `purrr` dependency
+* add test for `sd_create_synth_vector`
+* create a separate function (`weighted_average_poverty_stats`) for repetitive calculation in adjust poverty stats and add corresponding test case for it. 
+
+## Bug fixes
+* Fix duplicated values being returned for group data when poverty line when no
+Lorenz fit was successful
+
 # wbpip 0.0.3
 
 Initial release used in the PIP soft-launch on February 9, 2022

@@ -1,5 +1,5 @@
-md_lorenz1 <- readRDS("../testdata/md_lorenz1.RDS")
-md_lorenz2 <- readRDS("../testdata/md_lorenz2.RDS")
+md_lorenz1 <- readRDS(test_path("testdata", "md_lorenz1.RDS"))
+md_lorenz2 <- readRDS(test_path("testdata", "md_lorenz2.RDS"))
 
 test_that("md_compute_quantiles() output is formatted as expected", {
   out <- md_compute_quantiles(
