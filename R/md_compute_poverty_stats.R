@@ -29,15 +29,15 @@ md_compute_poverty_stats <- function(welfare, weight, povline_lcu) {
   fgt2 <- sum(relative_distance^2 * weight_pov) / weight_total
 
   #--------- Watts index ---------
-
-  w_gt_zero <- welfare[welfare > 0 & pov_status]
+  keep <- welfare > 0 & pov_status
+  w_gt_zero <- welfare[keep]
   sensitive_distance <- log(povline_lcu / w_gt_zero)
 
   # watts              <- collapse::fmean(x = c(sensitive_distance, non_pov),
   #                                       w = weight[welfare > 0])
   #--------- Old Watts ---------
 
-  watts <- sum(sensitive_distance * weight[welfare > 0 & pov_status]) /
+  watts <- sum(sensitive_distance * weight[keep]) /
     weight_total
 
   # Handle cases where Watts is numeric(0)
