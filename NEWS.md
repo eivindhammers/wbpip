@@ -1,3 +1,9 @@
+# wbpip 0.1.0
+
+## New features
+* Updated SPL function
+* Small optimization
+
 # wbpip 0.0.4
 
 ## New features
