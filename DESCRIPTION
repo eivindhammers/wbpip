@@ -1,6 +1,6 @@
 Package: wbpip
 Title: What the Package Does (One Line, Title Case)
-Version: 0.1.0.9000
+Version: 0.0.4.9000
 Authors@R: 
     c(person(given = "Tony",
             family = "Fujs",
@@ -30,7 +30,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Suggests: 
     testthat,
     knitr,
