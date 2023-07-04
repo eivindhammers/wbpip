@@ -20,6 +20,7 @@ get_lh_number_poor <- function(headcount, pop){
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
   stopifnot(is.numeric(pop) & is.vector(pop)) # numeric vector
   stopifnot(length(headcount) == length(pop)) # vectors of same length
+  if(headcount<0 | pop<0) warning("both headcount and pop should be positive")
 
   # Number of poor
   np <- headcount*pop
@@ -71,6 +72,7 @@ get_lh_average_shortfall <- function(headcount, povgap, povline){
 #' Calculate total shortfall from headcount, poverty gap, and poverty line
 #'
 #' @param headcount Numeric vector giving headcount ratio, i.e. P0 FGT measure
+#' @param pop Numeric vector giving population size
 #' @param povgap Numeric vector giving poverty gap ratio, i.e. P1 FGT measure
 #' @param povline Numeric vector giving the poverty line
 #'
@@ -82,24 +84,31 @@ get_lh_average_shortfall <- function(headcount, povgap, povline){
 #'   pip <- get_stats()
 #'   get_lh_total_shortfall(
 #'     pip$headcount,
+#'     pip$pop,
 #'     pip$poverty_gap,
 #'     pip$poverty_line) |>
 #'     head()
 #' }
-get_lh_total_shortfall <- function(headcount, povgap, povline){
+get_lh_total_shortfall <- function(headcount, pop, povgap, povline){
 
   # Input checks
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
+  stopifnot(is.numeric(pop) & is.vector(pop)) # numeric vector
   stopifnot(is.numeric(povgap) & is.vector(povgap)) # numeric vector
   stopifnot(is.numeric(povline) & is.vector(povline)) # numeric vector
   stopifnot(length(headcount) == length(povline)) # vectors of same length
+  stopifnot(length(headcount) == length(pop)) # vectors of same length
   stopifnot(length(headcount) == length(povgap)) # vectors of same length
 
-  # Average Shortfall
-  av_sf <- povline*povgap/headcount # z times P1/P0
+  # Total Shortfall
+  tot_sf <- get_lh_number_poor(
+    headcount = headcount, pop = pop
+  )*get_lh_average_shortfall(
+    headcount, povgap, povline
+  )
 
   # Return
-  return(av_sf)
+  return(tot_sf)
 }
 
 
