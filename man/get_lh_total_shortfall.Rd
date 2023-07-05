@@ -4,10 +4,12 @@
 \alias{get_lh_total_shortfall}
 \title{Calculate total shortfall from headcount, poverty gap, and poverty line}
 \usage{
-get_lh_total_shortfall(headcount, povgap, povline)
+get_lh_total_shortfall(headcount, pop, povgap, povline)
 }
 \arguments{
 \item{headcount}{Numeric vector giving headcount ratio, i.e. P0 FGT measure}
+
+\item{pop}{Numeric vector giving population size}
 
 \item{povgap}{Numeric vector giving poverty gap ratio, i.e. P1 FGT measure}
 
@@ -24,6 +26,7 @@ if (suppressWarnings(require(pipr))) {
   pip <- get_stats()
   get_lh_total_shortfall(
     pip$headcount,
+    pip$pop,
     pip$poverty_gap,
     pip$poverty_line) |>
     head()
