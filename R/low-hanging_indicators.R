@@ -20,7 +20,7 @@ get_lh_number_poor <- function(headcount, pop){
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
   stopifnot(is.numeric(pop) & is.vector(pop)) # numeric vector
   stopifnot(length(headcount) == length(pop)) # vectors of same length
-  if (headcount < 0 | pop < 0)
+  if (any(headcount < 0) | any(pop < 0))
     warning("both headcount and pop should be positive")
 
   # Number of poor
