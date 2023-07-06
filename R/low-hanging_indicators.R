@@ -16,12 +16,21 @@
 #' }
 get_number_poor <- function(headcount, pop){
 
-  # Input checks
-  if (any(headcount < 0) | any(pop < 0))
-    warning("both headcount and pop should be positive")
+  l <- as.list(environment())
 
   # Number of poor
   np <- headcount*pop
+
+  # Find NA values
+  obs_na       <- which_na(l)
+
+  # Find negatives
+  obs_negative <- which_negative(l)
+
+  to_nas <- unique(c(obs_na, obs_negative))
+
+  np[to_nas] <- NA
+
 
   # Return
   return(np)
@@ -226,6 +235,31 @@ get_9010_ratio <- function(
   return(ratio)
 
 
+}
+
+
+
+#' find unique obs with specific characteristics
+#'
+#' `which_na` finds out which observations are NA in a list of vectors
+#' `which_negative` finds out which observations are negative in a list of vectors
+#'
+#' @param l list of vectors
+#'
+#' @return numeric vector with index
+#' @keywords internal
+which_na <- function(l) {
+  sapply(l, \(x) which(is.na(x))) |>
+    unlist() |>
+    unique()
+}
+
+
+#' @describeIn which_na finds out which observations are negative in a list of vectors
+which_negative <- function(l) {
+  sapply(l, \(x) which(x < 0)) |>
+    unlist() |>
+    unique()
 }
 
 
