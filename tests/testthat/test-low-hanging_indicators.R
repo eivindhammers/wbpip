@@ -3,80 +3,95 @@
 ## Test 1
 test_that("get_number_poor() returns expected results", {
 
-  # expectation 1
-  hc <- 0.2
-  pop <- 100
-  output <- get_number_poor(headcount = hc, pop = pop)
-  expect_equal(output, hc*pop)
 
-  # expectation 2
+  # check NA ------
   hc <- rep(c(0.1, 0.2), 5)
   pop <- sample(c(1:100), size = 10, replace = T)
+
+  hc_na  <- sample(length(pop), 2)
+  pop_na <- sample(length(pop), 2)
+
+  hc[hc_na]   <- NA
+  pop[pop_na] <- NA
+
   output <- get_number_poor(headcount = hc, pop = pop)
-  expect_equal(output, hc*pop)
 
+  expect_equal(is.na(output) |>
+                 which() |>
+                 sort(),
+               c(hc_na, pop_na) |>
+                 unique() |>
+                 sort()
+               )
 
-})
+  expect_equal(output,hc*pop)
 
-## Test 2
-test_that("get_number_poor() gives correct errors", {
+  # Check negative ----
+  hc <- rep(c(0.1, 0.2), 5)
+  pop <- sample(c(1:100), size = 10, replace = T)
 
-  # expectation 1
+  hc_na  <- sample(length(pop), 2)
+  pop_na <- sample(length(pop), 2)
+
+  hc[hc_na]   <- -.5
+  pop[pop_na] <- -2
+
+  output <- get_number_poor(headcount = hc, pop = pop)
+
+  expect_equal(is.na(output) |>
+                 which() |>
+                 sort(),
+               c(hc_na, pop_na) |>
+                 unique() |>
+                 sort()
+               )
+
+  # errors ------
+
   hc <- "character"
   pop <- 100
   expect_error(get_number_poor(headcount = hc, pop = pop))
 
-  # expectation 2
-  hc <- rep(c(0.1, 0.2), 5)
-  pop <- c(10)
-  expect_error(get_number_poor(headcount = hc, pop = pop))
-
 })
 
-# get_average_shortfall()
 
 ## Test 1
 test_that("get_average_shortfall() returns expected results", {
 
-  # expectation 1
-  hc <- 0.2
-  pl <- 100
-  pg <- 0.3
-  output <- get_average_shortfall(headcount = hc, povgap = pg, povline = pl)
-  expect_equal(output, pl*pg/hc)
 
-  # expectation 2
-  hc <- rep(c(0.1, 0.2), 5)
-  pl <- sample(c(1:100), size = 10, replace = T)
-  pg <- rep(c(0.2), 10)
+  # right values -----
+  hc <- sample(c(1:100)/100, 20)
+  pl <- sample(c(1:100), size = 20, replace = T)
+  pg <- sample(c(1:100)/100, 20)
   output <- get_average_shortfall(headcount = hc, povgap = pg, povline = pl)
   expect_equal(output, pl*pg/hc)
 
 
+  # negative values -----
+  hc_na  <- sample(length(hc), 2)
+  pl_na  <- sample(length(hc), 2)
+  pg_na  <- sample(length(hc), 2)
+
+
+  hc[hc_na]   <- -.5
+  pl[pl_na]   <- -2
+  pg[pg_na]   <- -8
+
+  output <- get_average_shortfall(headcount = hc, povgap = pg, povline = pl)
+  expect_equal(is.na(output) |>
+                 which() |>
+                 sort(),
+               c(hc_na, pl_na, pg_na) |>
+                 unique() |>
+                 sort())
+
+
 })
-
-## Test 2
-test_that("get_average_shortfall() gives correct errors", {
-
-  # expectation 1
-  hc <- "0.2"
-  pl <- 100
-  pg <- 0.3
-
-  expect_error(get_average_shortfall(headcount = hc, povgap = pg, povline = pl))
-
-  # expectation 2
-  hc <- rep(c(0.1, 0.2), 5)
-  expect_error(get_average_shortfall(headcount = hc, povgap = pg, povline = pl))
-
-})
-
-# get_total_shortfall()
 
 ## Test 1
 test_that("get_total_shortfall() returns expected results", {
 
-  # expectation 1
+  # right value -----
   hc <- 0.2
   pl <- 100
   pg <- 0.3
@@ -84,38 +99,43 @@ test_that("get_total_shortfall() returns expected results", {
   output <- get_total_shortfall(headcount = hc, pop = pop, povgap = pg, povline = pl)
   expect_equal(output, (hc*pop)*pl*pg/hc)
 
-  # expectation 2
-  hc <- rep(c(0.1, 0.2), 5)
-  pl <- sample(c(1:100), size = 10, replace = T)
-  pg <- rep(c(0.2), 10)
-  pop <- c(10:19)
+  # negative values ----------
+  hc  <- sample(c(1:100)/100, 20)
+  pl  <- sample(c(1:100), size = 20, replace = T)
+  pg  <- sample(c(1:100)/100, 20)
+  pop <- sample(c(1:100), 20)
+
+
+
+  hc_na  <- sample(length(hc), 2)
+  pl_na  <- sample(length(hc), 2)
+  pg_na  <- sample(length(hc), 2)
+  pop_na <- sample(length(pop), 2)
+
+
+  hc[hc_na]   <- -.5
+  pl[pl_na]   <- -2
+  pg[pg_na]   <- -8
+  pop[pop_na] <- -2
+
   output <- get_total_shortfall(headcount = hc, pop = pop, povgap = pg, povline = pl)
-  expect_equal(output, (hc*pop)*pl*pg/hc)
+  expect_equal(is.na(output) |>
+                 which() |>
+                 sort(),
+               c(hc_na, pl_na, pg_na, pop_na) |>
+                 unique() |>
+                 sort())
 
-
-})
-
-## Test 2
-test_that("get_total_shortfall() gives correct errors", {
-
-  # expectation 1
+  # errors ---------
   hc <- "0.2"
   pl <- 100
   pg <- 0.3
   pop <- 10
   expect_error(get_total_shortfall(headcount = hc, pop = pop, povgap = pg, povline = pl))
 
-  # expectation 2
-  hc <- c(0.1, 0.2)
-  expect_error(get_total_shortfall(headcount = hc, pop = pop, povgap = pg, povline = pl))
-
 
 })
 
-
-
-
-# get_income_gap_ratio()
 
 ## Test 1
 test_that("get_income_gap_ratio() returns expected results", {

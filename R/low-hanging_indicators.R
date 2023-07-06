@@ -21,16 +21,11 @@ get_number_poor <- function(headcount, pop){
   # Number of poor
   np <- headcount*pop
 
-  # Find NA values
-  obs_na       <- which_na(l)
+  # treat special values
+  # obs_na       <- which_na(l) # Find NA values
+  obs_negative <- which_negative(l) # Find negatives
 
-  # Find negatives
-  obs_negative <- which_negative(l)
-
-  to_nas <- unique(c(obs_na, obs_negative))
-
-  np[to_nas] <- NA
-
+  np[obs_negative] <- NA
 
   # Return
   return(np)
@@ -59,10 +54,15 @@ get_number_poor <- function(headcount, pop){
 get_average_shortfall <- function(headcount, povgap, povline){
 
   # Input checks
-
+  l <- as.list(environment())
 
   # Average Shortfall
   av_sf <- povline*povgap/headcount # z times P1/P0
+
+
+  # treat special values
+  obs_negative        <- which_negative(l) # Find negatives
+  av_sf[obs_negative] <- NA
 
   # Return
   return(av_sf)
