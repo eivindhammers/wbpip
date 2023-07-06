@@ -9,12 +9,12 @@
 #' @examples
 #' if (suppressWarnings(require(pipr))) {
 #'   pip <- get_stats()
-#'   get_lh_number_poor(
+#'   get_number_poor(
 #'     pip$headcount,
 #'     pip$pop) |>
 #'     head()
 #' }
-get_lh_number_poor <- function(headcount, pop){
+get_number_poor <- function(headcount, pop){
 
   # Input checks
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
@@ -44,13 +44,13 @@ get_lh_number_poor <- function(headcount, pop){
 #' @examples
 #' if (suppressWarnings(require(pipr))) {
 #'   pip <- get_stats()
-#'   get_lh_average_shortfall(
+#'   get_average_shortfall(
 #'     pip$headcount,
 #'     pip$poverty_gap,
 #'     pip$poverty_line) |>
 #'     head()
 #' }
-get_lh_average_shortfall <- function(headcount, povgap, povline){
+get_average_shortfall <- function(headcount, povgap, povline){
 
   # Input checks
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
@@ -83,14 +83,14 @@ get_lh_average_shortfall <- function(headcount, povgap, povline){
 #' @examples
 #' if (suppressWarnings(require(pipr))) {
 #'   pip <- get_stats()
-#'   get_lh_total_shortfall(
+#'   get_total_shortfall(
 #'     pip$headcount,
 #'     pip$pop,
 #'     pip$poverty_gap,
 #'     pip$poverty_line) |>
 #'     head()
 #' }
-get_lh_total_shortfall <- function(headcount, pop, povgap, povline){
+get_total_shortfall <- function(headcount, pop, povgap, povline){
 
   # Input checks
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
@@ -102,9 +102,9 @@ get_lh_total_shortfall <- function(headcount, pop, povgap, povline){
   stopifnot(length(headcount) == length(povgap)) # vectors of same length
 
   # Total Shortfall
-  tot_sf <- get_lh_number_poor(
+  tot_sf <- get_number_poor(
     headcount = headcount, pop = pop
-  )*get_lh_average_shortfall(
+  )*get_average_shortfall(
     headcount, povgap, povline
   )
 
@@ -125,12 +125,12 @@ get_lh_total_shortfall <- function(headcount, pop, povgap, povline){
 #' @examples
 #' if (suppressWarnings(require(pipr))) {
 #'   pip <- get_stats()
-#'   get_lh_income_gap_ratio(
+#'   get_income_gap_ratio(
 #'     pip$headcount,
 #'     pip$poverty_gap) |>
 #'     head()
 #' }
-get_lh_income_gap_ratio <- function(headcount, povgap){
+get_income_gap_ratio <- function(headcount, povgap){
 
   # Input checks
   stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
@@ -163,7 +163,7 @@ get_lh_income_gap_ratio <- function(headcount, povgap){
 #' if (suppressWarnings(require(pipr))) {
 #'   pip <- get_stats()
 #'
-#'   get_lh_palma_ratio(
+#'   get_palma_ratio(
 #'     top10   = pip$decile10,
 #'     decile1 = pip$decile1,
 #'     decile2 = pip$decile2,
@@ -177,13 +177,13 @@ get_lh_income_gap_ratio <- function(headcount, povgap){
 #' pip <- pip |>
 #' transform(bottom40 = decile1 + decile2 + decile3 + decile4)
 #'
-#'   get_lh_palma_ratio(
+#'   get_palma_ratio(
 #'     top10    = pip$decile10,
 #'     bottom40 = pip$bottom40
 #'     ) |>
 #'     head()
 #' }
-get_lh_palma_ratio <- function(top10,
+get_palma_ratio <- function(top10,
                                bottom40 = NULL,
                                decile1  = NULL,
                                decile2  = NULL,
@@ -239,13 +239,13 @@ get_lh_palma_ratio <- function(top10,
 #' if (suppressWarnings(require(pipr))) {
 #'   pip <- get_stats()
 #'
-#'   get_lh_9010_ratio(
+#'   get_9010_ratio(
 #'     top10    = pip$decile10,
 #'     bottom10 = pip$decile1
 #'     ) |>
 #'     head()
 #' }
-get_lh_9010_ratio <- function(
+get_9010_ratio <- function(
     top10,
     bottom10){
 
