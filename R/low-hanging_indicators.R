@@ -17,9 +17,6 @@
 get_number_poor <- function(headcount, pop){
 
   # Input checks
-  stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
-  stopifnot(is.numeric(pop) & is.vector(pop)) # numeric vector
-  stopifnot(length(headcount) == length(pop)) # vectors of same length
   if (any(headcount < 0) | any(pop < 0))
     warning("both headcount and pop should be positive")
 
@@ -53,11 +50,7 @@ get_number_poor <- function(headcount, pop){
 get_average_shortfall <- function(headcount, povgap, povline){
 
   # Input checks
-  stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
-  stopifnot(is.numeric(povgap) & is.vector(povgap)) # numeric vector
-  stopifnot(is.numeric(povline) & is.vector(povline)) # numeric vector
-  stopifnot(length(headcount) == length(povline)) # vectors of same length
-  stopifnot(length(headcount) == length(povgap)) # vectors of same length
+
 
   # Average Shortfall
   av_sf <- povline*povgap/headcount # z times P1/P0
@@ -93,13 +86,6 @@ get_average_shortfall <- function(headcount, povgap, povline){
 get_total_shortfall <- function(headcount, pop, povgap, povline){
 
   # Input checks
-  stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
-  stopifnot(is.numeric(pop) & is.vector(pop)) # numeric vector
-  stopifnot(is.numeric(povgap) & is.vector(povgap)) # numeric vector
-  stopifnot(is.numeric(povline) & is.vector(povline)) # numeric vector
-  stopifnot(length(headcount) == length(povline)) # vectors of same length
-  stopifnot(length(headcount) == length(pop)) # vectors of same length
-  stopifnot(length(headcount) == length(povgap)) # vectors of same length
 
   # Total Shortfall
   tot_sf <- get_number_poor(
@@ -133,9 +119,7 @@ get_total_shortfall <- function(headcount, pop, povgap, povline){
 get_income_gap_ratio <- function(headcount, povgap){
 
   # Input checks
-  stopifnot(is.numeric(headcount) & is.vector(headcount)) # numeric vector
-  stopifnot(is.numeric(povgap) & is.vector(povgap)) # numeric vector
-  stopifnot(length(headcount) == length(povgap)) # vectors of same length
+
 
   # income gap
   income_gap <- povgap/headcount
@@ -191,30 +175,13 @@ get_palma_ratio <- function(top10,
                                decile4  = NULL){
 
   # Input checks
-  stopifnot( is.numeric(top10) & is.vector(top10)) # numeric vector)
+
   if (is.null(bottom40)) {
-    stopifnot(
-      exprs = {
-        is.numeric(decile1) & is.vector(decile1) # numeric vecto
-        is.numeric(decile2) & is.vector(decile2) # numeric vector
-        is.numeric(decile3) & is.vector(decile3) # numeric vector
-        is.numeric(decile4) & is.vector(decile4) # numeric vector
-        length(decile1) == length(decile2) # vectors of same length
-        length(decile1) == length(decile3) # vectors of same length
-        length(decile1) == length(decile4) # vectors of same length
-        length(decile1) == length(top10)
-      }
-    )
 
     # create bottom 40
     bottom40 <- decile1 + decile2 + decile3 + decile4
   } else {
-    stopifnot(
-      exprs = {
-        is.numeric(bottom40) & is.vector(bottom40) # numeric vecto
-        length(bottom40) == length(top10)
-      }
-    )
+
   }
 
   # Palma ratio
@@ -250,15 +217,7 @@ get_9010_ratio <- function(
     bottom10){
 
   # Input Checks
-  stopifnot(
-    exprs = {
-      is.numeric(top10) # numeric
-      is.numeric(bottom10) # numeric
-      is.vector(top10) # vector
-      is.vector(bottom10) # vector
-      length(top10) == length(bottom10) # two inputs are vectors of same length
-    }
-  )
+
 
   # Decile ratio
   ratio <- top10/bottom10
