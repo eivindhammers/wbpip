@@ -16,6 +16,10 @@
 #' }
 get_number_poor <- function(headcount, pop){
 
+  # headcount must be a ratio
+  hc_not_ratio <- which_not_ratio(list(headcount)) # headcounts not between 0 and 1
+  headcount[hc_not_ratio] <- NA
+
   l <- as.list(environment())
 
   # Number of poor
@@ -25,12 +29,14 @@ get_number_poor <- function(headcount, pop){
   # obs_na       <- which_na(l) # Find NA values
   obs_negative <- which_negative(l) # Find negatives
 
+
   np[obs_negative] <- NA
 
   # Return
   return(np)
 
 }
+
 
 
 #' Calculate average shortfall for the poor using headcount, poverty gap ratio, and poverty line
@@ -59,10 +65,11 @@ get_average_shortfall <- function(headcount, povgap, povline){
   # Average Shortfall
   av_sf <- povline*povgap/headcount # z times P1/P0
 
-
   # treat special values
-  obs_negative        <- which_negative(l) # Find negatives
-  av_sf[obs_negative] <- NA
+  obs_negative         <- which_negative(l) # Find negatives
+  obs_not_ratio        <- which_not_ratio(list(headcount, povgap))
+  av_sf[obs_negative]  <- NA
+  av_sf[obs_not_ratio] <- NA
 
   # Return
   return(av_sf)
@@ -94,7 +101,7 @@ get_average_shortfall <- function(headcount, povgap, povline){
 #' }
 get_total_shortfall <- function(headcount, pop, povgap, povline){
 
-  # Input checks
+  # Input checks not necessary: all checked in function dependencies
 
   # Total Shortfall
   tot_sf <- get_number_poor(
@@ -128,10 +135,16 @@ get_total_shortfall <- function(headcount, pop, povgap, povline){
 get_income_gap_ratio <- function(headcount, povgap){
 
   # Input checks
-
+  l <- as.list(environment())
 
   # income gap
   income_gap <- povgap/headcount
+
+  # Find negatives and non-ratios to make NAs
+  obs_negative               <- which_negative(list(headcount, povgap)) # Find negatives
+  obs_not_ratio              <- which_not_ratio(list(headcount, povgap))
+  income_gap[obs_not_ratio]  <- NA
+  income_gap[obs_negative]   <- NA
 
   # return
   return(income_gap)
@@ -184,7 +197,7 @@ get_palma_ratio <- function(top10,
                                decile4  = NULL){
 
   # Input checks
-
+  l <- as.list(environment())
   if (is.null(bottom40)) {
 
     # create bottom 40
@@ -196,9 +209,13 @@ get_palma_ratio <- function(top10,
   # Palma ratio
   palma <- top10/bottom40
 
+  # treat special values
+  obs_negative <- which_negative(l) # Find negatives
+
+  palma[obs_negative] <- NA
+
   # return
   return(palma)
-
 
 }
 
@@ -226,10 +243,15 @@ get_9010_ratio <- function(
     bottom10){
 
   # Input Checks
-
+  l <- as.list(environment())
 
   # Decile ratio
   ratio <- top10/bottom10
+
+  # treat special values
+  obs_negative <- which_negative(l) # Find negatives
+
+  ratio[obs_negative] <- NA
 
   # return
   return(ratio)
@@ -243,21 +265,29 @@ get_9010_ratio <- function(
 #'
 #' `which_na` finds out which observations are NA in a list of vectors
 #' `which_negative` finds out which observations are negative in a list of vectors
+#' `which_not_ratio` finds out which observations are not between 0 and 1 in a list of vectors
 #'
 #' @param l list of vectors
 #'
 #' @return numeric vector with index
 #' @keywords internal
 which_na <- function(l) {
-  sapply(l, \(x) which(is.na(x))) |>
+  lapply(l, \(x) which(is.na(x))) |>
     unlist() |>
     unique()
 }
 
 
-#' @describeIn which_na finds out which observations are negative in a list of vectors
+#' @describeIn which_negative finds out which observations are negative in a list of vectors
 which_negative <- function(l) {
-  sapply(l, \(x) which(x < 0)) |>
+  lapply(l, \(x) which(x < 0)) |>
+    unlist() |>
+    unique()
+}
+
+#' @describeIn which_na finds out which observations are negative in a list of vectors
+which_not_ratio <- function(l) {
+  lapply(l, \(x) which(x < 0 | x > 1)) |>
     unlist() |>
     unique()
 }
