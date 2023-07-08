@@ -201,16 +201,19 @@ get_palma_ratio <- function(top10,
   if (is.null(bottom40)) {
 
     # create bottom 40
+    obs_negative <-
+      list(top10, decile1, decile2, decile3, decile4) |>
+      which_negative() # Find negatives
+
     bottom40 <- decile1 + decile2 + decile3 + decile4
   } else {
-
+    obs_negative <- which_negative(list(top10, bottom40)) # Find negatives
   }
 
   # Palma ratio
   palma <- top10/bottom40
 
   # treat special values
-  obs_negative <- which_negative(l) # Find negatives
 
   palma[obs_negative] <- NA
 
@@ -249,7 +252,7 @@ get_9010_ratio <- function(
   ratio <- top10/bottom10
 
   # treat special values
-  obs_negative <- which_negative(l) # Find negatives
+  obs_negative  <- which_negative(l) # Find negatives
 
   ratio[obs_negative] <- NA
 
@@ -263,9 +266,13 @@ get_9010_ratio <- function(
 
 #' find unique obs with specific characteristics
 #'
-#' `which_na` finds out which observations are NA in a list of vectors
-#' `which_negative` finds out which observations are negative in a list of vectors
-#' `which_not_ratio` finds out which observations are not between 0 and 1 in a list of vectors
+#' `which_na` finds out which observations are NA in a list of vectors.
+#'
+#' `which_negative` finds out which observations are negative in a list of
+#' vectors.
+#'
+#' `which_not_ratio` finds out which observations are not between 0 and 1 in a
+#' list of vectors
 #'
 #' @param l list of vectors
 #'
@@ -278,14 +285,15 @@ which_na <- function(l) {
 }
 
 
-#' @describeIn which_negative finds out which observations are negative in a list of vectors
+#' @describeIn which_na finds out which observations are negative in a list of vectors
 which_negative <- function(l) {
   lapply(l, \(x) which(x < 0)) |>
     unlist() |>
     unique()
 }
 
-#' @describeIn which_na finds out which observations are negative in a list of vectors
+#' @describeIn which_na finds out which observations are outside the the [0,1]
+#'   range
 which_not_ratio <- function(l) {
   lapply(l, \(x) which(x < 0 | x > 1)) |>
     unlist() |>
