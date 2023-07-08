@@ -3,11 +3,14 @@
 \name{which_na}
 \alias{which_na}
 \alias{which_negative}
+\alias{which_not_ratio}
 \title{find unique obs with specific characteristics}
 \usage{
 which_na(l)
 
 which_negative(l)
+
+which_not_ratio(l)
 }
 \arguments{
 \item{l}{list of vectors}
@@ -16,12 +19,21 @@ which_negative(l)
 numeric vector with index
 }
 \description{
-\code{which_na} finds out which observations are NA in a list of vectors
-\code{which_negative} finds out which observations are negative in a list of vectors
+\code{which_na} finds out which observations are NA in a list of vectors.
+}
+\details{
+\code{which_negative} finds out which observations are negative in a list of
+vectors.
+
+\code{which_not_ratio} finds out which observations are not between 0 and 1 in a
+list of vectors
 }
 \section{Functions}{
 \itemize{
 \item \code{which_negative()}: finds out which observations are negative in a list of vectors
+
+\item \code{which_not_ratio()}: finds out which observations are not between 0 and 1 in a
+list of vectors
 
 }}
 \keyword{internal}
