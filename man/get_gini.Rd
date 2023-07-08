@@ -16,6 +16,8 @@ get_gini(
 
 \item{welfare}{numeric: A vector of income or consumption values}
 
+\item{weight}{numeric: expansion population factor.}
+
 \item{distribution_type}{character: Type of distribution, either micro,
 group, aggregate or imputed.}
 }

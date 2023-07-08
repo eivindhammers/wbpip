@@ -2,10 +2,13 @@
 % Please edit documentation in R/low-hanging_indicators.R
 \name{which_na}
 \alias{which_na}
+\alias{which_negative}
 \alias{which_not_ratio}
 \title{find unique obs with specific characteristics}
 \usage{
 which_na(l)
+
+which_negative(l)
 
 which_not_ratio(l)
 }
@@ -27,8 +30,10 @@ list of vectors
 }
 \section{Functions}{
 \itemize{
-\item \code{which_not_ratio()}: finds out which observations are outside the the \link{0,1}
-range
+\item \code{which_negative()}: finds out which observations are negative in a list of vectors
+
+\item \code{which_not_ratio()}: finds out which observations are not between 0 and 1 in a
+list of vectors
 
 }}
 \keyword{internal}

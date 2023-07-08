@@ -292,8 +292,8 @@ which_negative <- function(l) {
     unique()
 }
 
-#' @describeIn which_na finds out which observations are outside the the [0,1]
-#'   range
+#' @describeIn which_na finds out which observations are not between 0 and 1 in a
+#' list of vectors
 which_not_ratio <- function(l) {
   lapply(l, \(x) which(x < 0 | x > 1)) |>
     unlist() |>

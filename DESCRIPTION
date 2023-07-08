@@ -35,8 +35,9 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    markdown, 
-    readr
+    markdown,
+    readr,
+    pipr
 URL: https://pip-technical-team.github.io/wbpip, https://github.com/PIP-Technical-Team/wbpip
 BugReports: https://github.com/PIP-Technical-Team/wbpip/issues
 Depends: 
@@ -48,7 +49,6 @@ Imports:
     assertthat,
     cli,
     collapse,
-    compiler,
     MASS
 VignetteBuilder: knitr
 ByteCompile: true
