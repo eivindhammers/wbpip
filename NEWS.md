@@ -1,6 +1,12 @@
 # wbpip (development version)
 
-# wbpip 0.1.0
+* Add new functions to compute the following indicators:  
+  - Number of poor
+  - Average shortfall
+  - Total shortfall
+  - Income gap ratio
+  - Palma ratio
+  - Top 10 / Bottom 10 ratio
 
 # wbpip 0.1.0
 
