@@ -1,6 +1,6 @@
 Package: wbpip
 Title: What the Package Does (One Line, Title Case)
-Version: 0.1.0
+Version: 0.1.0.9001
 Authors@R: 
     c(person(given = "Tony",
             family = "Fujs",
@@ -30,13 +30,14 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Suggests: 
     testthat,
     knitr,
     rmarkdown,
-    markdown, 
-    readr
+    markdown,
+    readr,
+    pipr
 URL: https://pip-technical-team.github.io/wbpip, https://github.com/PIP-Technical-Team/wbpip
 BugReports: https://github.com/PIP-Technical-Team/wbpip/issues
 Depends: 
@@ -48,7 +49,6 @@ Imports:
     assertthat,
     cli,
     collapse,
-    compiler,
     MASS
 VignetteBuilder: knitr
 ByteCompile: true

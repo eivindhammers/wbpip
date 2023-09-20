@@ -16,6 +16,7 @@ if (getRversion() >= "2.15.1") {
 #' @inheritParams compute_pip_stats
 #' @param distribution_type character: Type of distribution, either micro,
 #'   group, aggregate or imputed.
+#' @param weight numeric: expansion population factor.
 #'
 #' @return data.table
 #' @export
