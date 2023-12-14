@@ -315,8 +315,13 @@ retrieve_poverty <- function(lq,
                              max_poverty_gap = 0.9999998,
                              max_poverty_severity = 0.9999997) {
   if (!is_normal) {
+    if (lq$poverty_line == lb$poverty_line) {
+      pl <- lq$poverty_line
+    } else {
+      pl <- NA_real_
+    }
     return(list(
-      poverty_line     = NA_real_,
+      poverty_line     = pl,
       headcount        = NA_real_,
       poverty_gap      = NA_real_,
       poverty_severity = NA_real_,
