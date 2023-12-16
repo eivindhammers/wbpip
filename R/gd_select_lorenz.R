@@ -153,9 +153,7 @@ use_lq_for_poverty <- function(lq,
     use_lq_for_pov <- lq[["ssez"]] <= lb[["ssez"]]
   }
 
-  return(
-    use_lq_for_pov
-  )
+  use_lq_for_pov
 }
 
 #' Algorithm to decide which Lorenz fit to use for distributional statistics
