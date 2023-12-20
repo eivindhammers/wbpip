@@ -4,7 +4,7 @@
 \alias{gd_compute_pov_gap_lb}
 \title{Compute poverty gap for Lorenz Beta fit}
 \usage{
-gd_compute_pov_gap_lb(mean, povline, headcount, A, B, C)
+gd_compute_pov_gap_lb(mean, povline, headcount, A, B, C, u = NULL)
 }
 \arguments{
 \item{headcount}{numeric: Headcount index.}

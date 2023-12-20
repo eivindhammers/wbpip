@@ -4,7 +4,16 @@
 \alias{gd_compute_pov_severity_lb}
 \title{Compute poverty severity for Lorenz Beta fit}
 \usage{
-gd_compute_pov_severity_lb(mean, povline, headcount, pov_gap, A, B, C)
+gd_compute_pov_severity_lb(
+  mean,
+  povline,
+  headcount,
+  pov_gap,
+  A,
+  B,
+  C,
+  u = NULL
+)
 }
 \arguments{
 \item{headcount}{numeric: Headcount index.}
