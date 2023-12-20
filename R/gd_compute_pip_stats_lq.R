@@ -543,10 +543,27 @@ gd_compute_poverty_stats_lq <- function(mean,
 
     # P.p2 - Distributionally sensitive FGT poverty measure
     # P.p2 <- (2*P.pg) - P.h - u^2 * (A*P.h + B*value_at_lq(P.h, A, B, C) - (r/16 *log((1 - P.h/s1))/(1 - P.h/s2)))
+
+    pov_gap_sq <- gd_compute_pov_severity_lq(
+      mean      = mean,
+      povline   = povline,
+      headcount = headcount,
+      pov_gap   = pov_gap,
+      A         = A,
+      B         = B,
+      C         = C,
+      e         = e,
+      m         = m,
+      n         = n,
+      r         = r,
+      s1        = s1,
+      s2        = s2
+    )
+
     # Poverty severity
-    pov_gap_sq <- (2 * pov_gap) - headcount -
-      (u^2 * (A * headcount + B * hc_lq -
-        ((r / 16) * log((1 - headcount / s1) / (1 - headcount / s2)))))
+    # pov_gap_sq <- (2 * pov_gap) - headcount -
+    #   (u^2 * (A * headcount + B * hc_lq -
+    #     ((r / 16) * log((1 - headcount / s1) / (1 - headcount / s2)))))
 
     # Elasticity of headcount index w.r.t mean (P.eh)
     eh <- -povline / (mean * headcount * ddl)
@@ -586,6 +603,63 @@ gd_compute_poverty_stats_lq <- function(mean,
     )
   )
 }
+
+#
+# (2 * pov_gap) - headcount -
+#   (u^2 * (A * headcount + B * hc_lq -
+#             ((r / 16) * log((1 - headcount / s1) / (1 - headcount / s2)))))
+
+#' Compute poverty severity for Lorenz Quadratic fit
+#'
+#' @param u numeric: Mean? **TO BE DOCUMENTED**.
+#' @param pov_gap numeric: Poverty gap.
+#' @inheritParams gd_compute_fit_lq
+#' @inheritParams gd_compute_poverty_stats_lq
+#'
+#' @return numeric
+#' @keywords internal
+gd_compute_pov_severity_lq <- function(
+    mean,
+    povline,
+    headcount,
+    pov_gap,
+    A,
+    B,
+    C,
+    e,
+    m,
+    n,
+    r,
+    s1,
+    s2
+  ) {
+
+  # Define objects ----------------------------
+  u <-  mean/povline
+  hc_lq <- value_at_lq(headcount, A, B, C)
+
+  # Calculations ------------------------------
+  pov_gap_sq <-
+    (2 * pov_gap) -
+    headcount -
+    (
+      u^2 * (
+        A * headcount +
+          B * hc_lq -
+          (
+            (r / 16) * log(
+              (1 - headcount / s1) / (1 - headcount / s2)
+            )
+          )
+      )
+    )
+
+  return(pov_gap_sq)
+}
+
+
+
+
 
 #' Estimates poverty and inequality stats from Quadratic Lorenz fit
 #'
