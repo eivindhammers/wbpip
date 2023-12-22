@@ -51,8 +51,6 @@ an ellipse (m is called alpha in paper).}
 \item{s1}{numeric: \strong{TO BE DOCUMENTED}.}
 
 \item{s2}{numeric: \strong{TO BE DOCUMENTED}.}
-
-\item{u}{numeric: Mean? \strong{TO BE DOCUMENTED}.}
 }
 \value{
 numeric
@@ -60,4 +58,3 @@ numeric
 \description{
 Compute poverty severity for Lorenz Quadratic fit
 }
-\keyword{internal}

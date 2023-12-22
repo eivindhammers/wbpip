@@ -37,4 +37,3 @@ numeric
 \description{
 Compute poverty severity for Lorenz Beta fit
 }
-\keyword{internal}

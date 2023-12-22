@@ -26,4 +26,3 @@ numeric
 \description{
 Compute poverty gap for Lorenz Beta fit
 }
-\keyword{internal}

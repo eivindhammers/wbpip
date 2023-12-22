@@ -390,7 +390,7 @@ gd_compute_quantile_lq <- function(A, B, C, n_quantile = 10) {
 #' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
   if (headcount <= 0 | is.na(headcount)) {
     return(0)
@@ -806,10 +806,8 @@ gd_compute_headcount_lq <- function(mean,
 #' @inheritParams gd_compute_poverty_stats_lq
 #' @inheritParams value_at_lq
 #'
-#' @return
+#' @return numeric
 #' @export
-#'
-#' @examples
 gd_compute_pov_gap_lq <- function(mean,
                                   povline,
                                   headcount,

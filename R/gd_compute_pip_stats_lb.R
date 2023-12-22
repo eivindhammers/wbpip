@@ -317,7 +317,7 @@ gd_compute_quantile_lb <- function(A, B, C, n_quantile = 10) {
 #' @param dd numeric: **TO BE DOCUMENTED**.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 #'
 gd_compute_watts_lb <- function(headcount, mean, povline, dd, A, B, C) {
 
@@ -772,7 +772,7 @@ BETAICF <- function(a, b, x) {
 #' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
-#' @external
+#' @export
 gd_compute_pov_gap_lb <- function(mean,  povline, headcount, A, B, C, u = NULL) {
 
   if (is.null(u)) {
@@ -800,7 +800,7 @@ gd_compute_pov_gap_lb <- function(mean,  povline, headcount, A, B, C, u = NULL) 
 #' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
-#' @external
+#' @export
 gd_compute_pov_severity_lb <- function(mean, povline, headcount, pov_gap, A, B, C, u = NULL) {
 
   if (is.null(u)) {
