@@ -122,7 +122,7 @@ create_functional_form_lb <- function(welfare, population) {
 #' @inheritParams gd_compute_fit_lb
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 derive_lb <- function(x, A, B, C) {
 
   # Formula for first derivative of GQ Lorenz Curve

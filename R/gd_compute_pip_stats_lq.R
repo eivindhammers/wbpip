@@ -158,7 +158,7 @@ create_functional_form_lq <- function(welfare,
 #' *Journal of Econometrics 40* (2): 327-338.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 derive_lq <- function(x, A, B, C) {
   e <- -(A + B + C + 1)
   alpha <- (B^2) - (4 * A)
