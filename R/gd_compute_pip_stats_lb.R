@@ -211,7 +211,7 @@ check_curve_validity_lb <- function(headcount, A, B, C) {
 #' Discussion Paper 50. World Bank, Washington, DC.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_gini_lb <- function(A, B, C, nbins = 499) {
   out <- vector(mode = "numeric", length = nbins)
 

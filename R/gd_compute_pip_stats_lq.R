@@ -254,7 +254,7 @@ check_curve_validity_lq <- function(A, B, C, e, m, n, r) {
 #' Discussion Paper 50. World Bank, Washington, DC.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 
   # For the GQ Lorenz curve, the Gini formula are valid under the condition A+C>=1
