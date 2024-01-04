@@ -232,7 +232,7 @@ gd_compute_gini_lb <- function(A, B, C, nbins = 499) {
 #' @param x numeric: Point on curve.
 #' @inheritParams gd_compute_fit_lb
 #' @return numeric
-#' @keywords internal
+#' @export
 value_at_lb <- function(x, A, B, C) {
   out <- x - (A * (x^B) * ((1 - x)^C))
 

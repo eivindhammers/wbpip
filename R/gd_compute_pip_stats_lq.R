@@ -299,7 +299,7 @@ gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 #' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 value_at_lq <- function(x, A, B, C) {
   e <- -(A + B + C + 1)
   m <- (B^2) - (4 * A)
