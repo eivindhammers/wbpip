@@ -322,7 +322,7 @@ value_at_lq <- function(x, A, B, C) {
 #' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_mld_lq <- function(dd, A, B, C) {
   x1 <- derive_lq(0.0005, A, B, C)
   gap <- 0L

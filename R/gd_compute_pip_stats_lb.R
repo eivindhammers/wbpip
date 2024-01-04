@@ -250,7 +250,7 @@ value_at_lb <- function(x, A, B, C) {
 #' @param C numeric: Lorenz curve coefficient.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_mld_lb <- function(dd, A, B, C) {
   x1 <- derive_lb(0.0005, A, B, C)
   gap <- 0
