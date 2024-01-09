@@ -9,7 +9,7 @@
 #' @examples
 #' wbpip:::md_compute_gini(welfare = 1:2000, weight = rep(1, 2000))
 #' @return numeric
-#' @keywords internal
+#' @export
 md_compute_gini <- function(welfare, weight) {
 
   # Compute weighted welfare

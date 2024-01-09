@@ -22,4 +22,3 @@ Given a vector of income or consumption values and their respective weights
 \examples{
 wbpip:::md_compute_gini(welfare = 1:2000, weight = rep(1, 2000))
 }
-\keyword{internal}
