@@ -16,7 +16,7 @@
 #'   povline_lcu = 10
 #' )
 #' @return list
-#' @keywords internal
+#' @export
 md_compute_poverty_stats <- function(welfare, weight, povline_lcu) {
 
   pov_status <- (welfare < povline_lcu)
