@@ -36,4 +36,3 @@ Ravallion, M., S. Chen. 1996.
 Policy Research Working Paper 1694.
 World Bank, Washington, DC.
 }
-\keyword{internal}

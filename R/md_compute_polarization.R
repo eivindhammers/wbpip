@@ -21,7 +21,7 @@
 #'   median = 1000
 #' )
 #' @return numeric
-#' @keywords internal
+#' @export
 md_compute_polarization <- function(welfare, weight, gini,
                                     mean, median) {
 
