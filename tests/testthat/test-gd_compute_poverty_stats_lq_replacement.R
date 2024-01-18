@@ -218,8 +218,10 @@ test_that("gd_compute_poverty_stats_lq_replacement works with negative headcount
   s1 <- -0.22612667749534146
   s2 <- 1.002393060455814
 
-  # Test values above make headcount negative
-  # gd_compute_headcount_lq(
+  # # ______________________________________________________
+  # # Test to make sure values above make headcount negative
+  # # ______________________________________________________
+  # headcount <- gd_compute_headcount_lq(
   #   mean    = mean,
   #   povline = povline,
   #   B       = B,
@@ -227,19 +229,42 @@ test_that("gd_compute_poverty_stats_lq_replacement works with negative headcount
   #   n       = n,
   #   r       = r
   # )
+  # # headcount is -0.202735
+  #
+  # #_________________________________________
+  # # Find dl and ddl for negative headcount
+  # #_________________________________________
+  #
+  # tmp0 <- (m * headcount^2) + (n * headcount) + (e^2)
+  # tmp0 <- if (tmp0 < 0) 0L else tmp0
+  # tmp0 <- sqrt(tmp0)
+  #
+  # # ____________________________________________________________________________
+  # # Compute dl - first derivative of Lorenz curve
+  # # ____________________________________________________________________________
+  # dl <- -(0.5 * B) - (0.25 * ((2 * m * headcount) + n) / tmp0)
+  # # dl is -1.120731
+  #
+  # # ____________________________________________________________________________
+  # # Compute ddl - second derivative of Lorenz curve
+  # # ____________________________________________________________________________
+  # ddl <- r^2 / (tmp0^3 * 8)
+  # # ddl is 41.74948
 
-  benchmark <- gd_compute_poverty_stats_lq(
-    mean = mean,
-    povline = povline,
-    A = A,
-    B = B,
-    C = C,
-    e = e,
-    m = m,
-    n = n,
-    r = r,
-    s1 = s1,
-    s2 = s2)
+  benchmark <- list(
+    headcount = 0,
+    pg = 0,
+    p2 = 0,
+    eh = 0,
+    epg = 0,
+    ep = 0,
+    gh = 0,
+    gpg = 0,
+    gp = 0,
+    watts = 0,
+    dl = -1.120731,
+    ddl = 41.74948
+  )
 
   out <- gd_compute_poverty_stats_lq_replacement(
     mean = mean,
@@ -270,6 +295,6 @@ test_that("gd_compute_poverty_stats_lq_replacement works with negative headcount
   expect_equal(out$gpg, benchmark$gpg)
   expect_equal(out$gp, benchmark$gp)
   expect_equal(out$watts, benchmark$watts)
-  expect_equal(round(out$dl, 7), round(benchmark$dl, 7))
-  expect_equal(round(out$ddl, 6), round(benchmark$ddl, 6))
+  expect_equal(round(out$dl, 5), round(benchmark$dl, 5))
+  expect_equal(round(out$ddl, 5), round(benchmark$ddl, 5))
 })
