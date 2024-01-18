@@ -46,6 +46,30 @@ test_that("gd_compute_pov_gap_lq works as expected", {
 
 })
 
+test_that("gd_compute_pov_gap_lq works as expected when headcount negative", {
+  mean <- 51.5660557757944
+  povline <- 57.791666666666664
+  A <- 0.795981535745657
+  B <- -1.4445933880119242
+  C <- 0.14728191995919815
+
+  headcount <- -0.76005810499191284
+
+  benchmark <- 0
+
+  out <- gd_compute_pov_gap_lq(
+    mean      = mean,
+    povline   = povline,
+    headcount = headcount,
+    A         = A,
+    B         = B,
+    C         = C
+  )
+
+  expect_equal(out, benchmark)
+
+})
+
 test_that("gd_compute_pov_severity_lq works as expected", {
   mean <- 51.5660557757944
   povline <- 57.791666666666664
