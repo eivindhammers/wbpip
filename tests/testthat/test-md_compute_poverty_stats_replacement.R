@@ -216,3 +216,65 @@ test_that("md_compute_watss works", {
   expect_equal(out, 0.6899868, tolerance = 1e-4) #match compute_poverty_stats in povcalnet
 
 })
+
+test_that("md_compute_poverty_stats_replacement works", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+  # ______________________________________________________________________
+  # Get intermediate for benchmark
+  # ______________________________________________________________________
+  povline_lcu       <- mean(benchmark$welfare)
+  # pov_status        <- (benchmark$welfare < povline_lcu)
+  # relative_distance <- (1 - (benchmark$welfare[pov_status] / povline_lcu))
+  # weight_pov        <- benchmark$weight[pov_status]
+  # weight_total      <- sum(benchmark$weight)
+
+  out <- md_compute_poverty_stats_replacement(
+    welfare     = benchmark$welfare,
+    weight      = benchmark$weight,
+    povline_lcu = povline_lcu
+  )
+
+  expect_equal(out[["headcount"]], 0.7333513, tolerance = 1e-6)
+  expect_equal(out[["poverty_gap"]], 0.3957584, tolerance = 1e-6)
+  expect_equal(out[["poverty_severity"]], 0.2534849, tolerance = 1e-6)
+  expect_equal(out[["watts"]], 0.6899868, tolerance = 1e-4)
+})
+
+test_that("md_compute_poverty_stats_replacement matches previous function", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  out_old <- md_compute_poverty_stats(
+    welfare     = benchmark$welfare,
+    weight      = benchmark$weight,
+    povline_lcu = mean(benchmark$welfare)
+  )
+
+  out <- md_compute_poverty_stats_replacement(
+    welfare     = benchmark$welfare,
+    weight      = benchmark$weight,
+    povline_lcu = mean(benchmark$welfare)
+  )
+
+  expect_equal(out[["headcount"]], out_old[["headcount"]], tolerance = 1e-6)
+  expect_equal(out[["poverty_gap"]], out_old[["poverty_gap"]], tolerance = 1e-6)
+  expect_equal(out[["poverty_severity"]], out_old[["poverty_severity"]], tolerance = 1e-6)
+  expect_equal(out[["watts"]], out_old[["watts"]], tolerance = 1e-4)
+})
