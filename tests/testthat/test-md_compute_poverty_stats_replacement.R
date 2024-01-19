@@ -278,3 +278,91 @@ test_that("md_compute_poverty_stats_replacement matches previous function", {
   expect_equal(out[["poverty_severity"]], out_old[["poverty_severity"]], tolerance = 1e-6)
   expect_equal(out[["watts"]], out_old[["watts"]], tolerance = 1e-4)
 })
+
+test_that("md_compute_poverty_stats_replacement prints error when welfare is null", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  expect_error(md_compute_poverty_stats_replacement(
+    welfare     = NULL,
+    weight      = benchmark$weight,
+    povline_lcu = mean(benchmark$welfare)
+  ),"`welfare` and `povline` arguments must be non-NULL")
+})
+
+test_that("md_compute_poverty_stats_replacement prints error when povline is null", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  expect_error(md_compute_poverty_stats_replacement(
+    welfare     = benchmark$welfare,
+    weight      = benchmark$weight,
+    povline_lcu = NULL
+  ),"`welfare` and `povline` arguments must be non-NULL")
+})
+
+test_that("md_compute_poverty_stats_replacement prints error when welfare and povline is null", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  expect_error(md_compute_poverty_stats_replacement(
+    welfare     = NULL,
+    weight      = benchmark$weight,
+    povline_lcu = NULL
+  ),"`welfare` and `povline` arguments must be non-NULL")
+})
+
+test_that("md_compute_poverty_stats_replacement prints error when welfare and/or povline is null", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  expect_error(md_compute_poverty_stats_replacement(
+    welfare     = benchmark$welfare,
+    weight      = benchmark$weight,
+    povline_lcu = NULL
+  ),"`welfare` and `povline` arguments must be non-NULL")
+
+  expect_error(md_compute_poverty_stats_replacement(
+    welfare     = NULL,
+    weight      = benchmark$weight,
+    povline_lcu = NULL
+  ),"`welfare` and `povline` arguments must be non-NULL")
+
+  expect_error(md_compute_poverty_stats_replacement(
+    welfare     = NULL,
+    weight      = benchmark$weight,
+    povline_lcu = NULL
+  ),"`welfare` and `povline` arguments must be non-NULL")
+})
