@@ -574,6 +574,43 @@ test_that("md_compute_watts creates warning when weight is null", {
   ),"The `weight` argument is NULL, thus each observation is given equal weight by default. ")
 })
 
+test_that("When watts is numeric(0) then watts equals 0" , {
+
+  # # ______________________________________________________________________
+  # # Example of when watts can be numeric(0)
+  # # ______________________________________________________________________
+  # welfare <- benchmark$welfare
+  # weight <- benchmark$weight
+  # povline_lcu       <- min(welfare)-1
+  # pov_status        <- (welfare < povline_lcu)
+  # weight_total      <- sum(weight)
+  # keep               <- welfare > 0 & pov_status
+  # w_gt_zero          <- welfare[keep] # Makes it numeric(0)
+  # sensitive_distance <- log(povline_lcu / w_gt_zero) # Makes it numeric(0)
+  # watts              <- sum(sensitive_distance * weight[keep])/weight_total #The sum makes it just 0
+  #
+  #
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  out <- md_compute_watts(
+    welfare = benchmark$welfare,
+    povline = min(welfare)-1,
+    weight = benchmark$weight)
+
+  expect_equal(
+    out,
+    0
+  )
+})
+
 test_that("Does headcount function return 0 headcount when all welfare is above poverty line?", {
 
   out <- md_compute_headcount(
