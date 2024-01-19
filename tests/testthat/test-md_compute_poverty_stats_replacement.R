@@ -366,3 +366,82 @@ test_that("md_compute_poverty_stats_replacement prints error when welfare and/or
     povline_lcu = NULL
   ),"`welfare` and `povline` arguments must be non-NULL")
 })
+
+test_that("Does headcount function return 0 headcount when all welfare is above poverty line?", {
+
+  out <- md_compute_headcount(
+    welfare = 10:100,
+    povline = 9,
+    weight = 10:100)
+
+  expect_equal(
+    out,
+    0
+  )
+})
+
+test_that("Does headcount function return all as poor when all welfare values are below poverty line?", {
+
+  pop <- 1:100
+  out <- md_compute_headcount(
+    welfare = pop,
+    povline = 101,
+    weight = rep(1, 100))
+
+  expect_equal(
+    out,
+    1
+  )
+})
+
+test_that("Does poverty gap = 1 in when welfare values are 0?", {
+
+  out <- md_compute_pov_gap(
+    welfare = rep(0, 10),
+    povline = 12,
+    weight = rep(1, 10)
+  )
+
+  expect_equal(
+    out,
+    1
+  )
+})
+
+test_that("Does poverty gap = 0 when welfare values are at least the povline?", {
+
+  out <- md_compute_pov_gap(
+    welfare = 21:30,
+    povline = 15,
+    weight = rep(1, 10)
+  )
+
+  expect_equal(
+    out,
+    0
+  )
+})
+
+test_that("md_compute_poverty_stats_replacement does not fail when poverty == 0", {
+
+  #_______________________________________________________________________
+  # Download test data
+  #________________________________________________________________________
+  benchmark <- readRDS(test_path("testdata", "synthetic-microdata.RDS"))
+
+  benchmark <- md_clean_data(benchmark[[1]]$data,
+                             welfare = 'welfare',
+                             weight = 'weight',
+                             quiet = TRUE)$data
+
+  out <- md_compute_poverty_stats_replacement(
+    welfare = benchmark$welfare,
+    povline_lcu = min(benchmark$welfare) - 1,
+    weight = benchmark$weight
+  )
+
+  expect_equal(out[["headcount"]], 0)
+  expect_equal(out[["poverty_gap"]], 0)
+  expect_equal(out[["poverty_severity"]], 0)
+  expect_equal(out[["watts"]], 0)
+})
