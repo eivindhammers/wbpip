@@ -129,17 +129,17 @@ gd_compute_poverty_stats_lq_replacement <- function(
   return(
     list(
       headcount = headcount,
-      pg = pov_gap,
-      p2 = pov_gap_sq,
-      eh = eh,
-      epg = epg,
-      ep = ep,
-      gh = gh,
-      gpg = gpg,
-      gp = gp,
-      watts = watts,
-      dl = dl,
-      ddl = ddl
+      pg        = pov_gap,
+      p2        = pov_gap_sq,
+      eh        = eh,
+      epg       = epg,
+      ep        = ep,
+      gh        = gh,
+      gpg       = gpg,
+      gp        = gp,
+      watts     = watts,
+      dl        = dl,
+      ddl       = ddl
     )
   )
 }
