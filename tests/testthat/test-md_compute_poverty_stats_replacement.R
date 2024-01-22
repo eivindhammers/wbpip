@@ -37,7 +37,7 @@ test_that("md_compute_headcount works", {
     povline      = povline_lcu
   )
 
-  expect_equal(out,
+  expect_equal(out1,
                0.7333513,
                tolerance = 1e-6) #match compute_poverty_stats in povcalnet
 
