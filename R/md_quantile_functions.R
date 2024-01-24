@@ -73,7 +73,7 @@ md_quantile_values <- function(
 
   # ____________________________________________________________________________
   # Calculations ---------------------------------------------------------------
-  q <- collapse::fquantile(
+  q <- fquantile(
     x     = welfare,
     w     = weight,
     probs = popshare
@@ -156,7 +156,7 @@ md_welfare_share_at <- function(
     popshare = popshare,
     format   = "list"
   )
-  total_weight <- sum(weight)
+  total_weight <- fsum(weight)
   output <- lapply(
     q,
     function(x){
@@ -175,7 +175,7 @@ md_welfare_share_at <- function(
       output |> unlist()
     )
   } else if (format == "dt") {
-    output <- data.table::data.table(
+    output <- data.table(
       quantile   = paste0("q_", names(output)),
       share_at   = output |> as.numeric()
     )
@@ -256,7 +256,7 @@ md_quantile_welfare_share <- function(
 
   # ____________________________________________________________________________
   # Get welfare shares ---------------------------------------------------------
-  total_sum <- sum(welfare)
+  total_sum <- fsum(welfare)
 
   # Create a factor indicating the range of each element
   # Add a small epsilon to the max value
