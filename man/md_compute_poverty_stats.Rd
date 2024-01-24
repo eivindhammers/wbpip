@@ -4,26 +4,35 @@
 \alias{md_compute_poverty_stats}
 \title{Compute Poverty Statistics}
 \usage{
-md_compute_poverty_stats(welfare, weight, povline_lcu)
+md_compute_poverty_stats(
+  welfare = NULL,
+  weight = NULL,
+  povline_lcu = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{welfare}{numeric: A vector of income or consumption values}
 
+\item{weight}{numeric: A vector of population weights, optional, a vector of 1s if not specified.}
+
 \item{povline_lcu}{numeric: Poverty line in Local Currency Unit (LCU).}
+
+\item{verbose}{logical: display messages. Default is FALSE}
 }
 \value{
 list
 }
 \description{
-Compute poverty statictics for microdata.
+Compute poverty statictics for microdata - replace old \link{md_compute_poverty_stats}
 }
 \details{
 Given a vector of consumption or income values and their respective weights
-\code{md_compute_poverty_stats()} computes poverty headcount, poverty gap,
+\code{md_compute_poverty_stats_replacement()} computes poverty headcount, poverty gap,
 poverty severity and the watts index.
 }
 \examples{
-wbpip:::md_compute_poverty_stats(
+wbpip:::md_compute_poverty_stats_replacement(
   welfare = 1:2000,
   weight = rep(1, 2000),
   povline_lcu = 10

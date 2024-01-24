@@ -493,10 +493,10 @@ test_that("When watts is numeric(0) then watts equals 0" , {
 
 
 #_______________________________________________________________________
-# Test - md_compute_poverty_stats_replacement
-test_that("md_compute_poverty_stats_replacement works", {
+# Test - md_compute_poverty_stats
+test_that("md_compute_poverty_stats works", {
 
-  out <- md_compute_poverty_stats_replacement(
+  out <- md_compute_poverty_stats(
     welfare     = benchmark$welfare,
     weight      = benchmark$weight,
     povline_lcu = povline_lcu
@@ -515,7 +515,7 @@ test_that("md_compute_poverty_stats_replacement works", {
                tolerance = 1e-4)
 })
 
-test_that("md_compute_poverty_stats_replacement matches previous function", {
+test_that("md_compute_poverty_stats matches previous function", {
 
   out_old <- md_compute_poverty_stats(
     welfare     = benchmark$welfare,
@@ -523,7 +523,7 @@ test_that("md_compute_poverty_stats_replacement matches previous function", {
     povline_lcu = mean(benchmark$welfare)
   )
 
-  out <- md_compute_poverty_stats_replacement(
+  out <- md_compute_poverty_stats(
     welfare     = benchmark$welfare,
     weight      = benchmark$weight,
     povline_lcu = mean(benchmark$welfare)
@@ -543,7 +543,7 @@ test_that("md_compute_poverty_stats_replacement matches previous function", {
                tolerance = 1e-4)
 })
 
-test_that("md_compute_poverty_stats_replacement calculates with weight = 1 when is NULL", {
+test_that("md_compute_poverty_stats calculates with weight = 1 when is NULL", {
 
   #____________________________________________________________________
   # Run old function with weight one to find  true values
@@ -558,7 +558,7 @@ test_that("md_compute_poverty_stats_replacement calculates with weight = 1 when 
   # out_old # $headcount = 0.705 $poverty_gap = 0.3557192
   #         # $poverty_severity = 0.2193438 $watts = 0.598579
 
-  out <- md_compute_poverty_stats_replacement(
+  out <- md_compute_poverty_stats(
       welfare     = benchmark$welfare,
       weight      = NULL,
       povline_lcu = povline_lcu
@@ -578,23 +578,23 @@ test_that("md_compute_poverty_stats_replacement calculates with weight = 1 when 
                tolerance = 1e-4)
 })
 
-test_that("md_compute_poverty_stats_replacement prints error when welfare and/or povline is NULL", {
+test_that("md_compute_poverty_stats prints error when welfare and/or povline is NULL", {
 
-  expect_error(md_compute_poverty_stats_replacement(
+  expect_error(md_compute_poverty_stats(
     welfare     = benchmark$welfare,
     weight      = benchmark$weight,
     povline_lcu = NULL
   ),
   "`welfare` and `povline` arguments must be non-NULL")
 
-  expect_error(md_compute_poverty_stats_replacement(
+  expect_error(md_compute_poverty_stats(
     welfare     = NULL,
     weight      = benchmark$weight,
     povline_lcu = mean(benchmark$welfare)
   ),
   "`welfare` and `povline` arguments must be non-NULL")
 
-  expect_error(md_compute_poverty_stats_replacement(
+  expect_error(md_compute_poverty_stats(
     welfare     = NULL,
     weight      = benchmark$weight,
     povline_lcu = NULL
@@ -602,9 +602,9 @@ test_that("md_compute_poverty_stats_replacement prints error when welfare and/or
   "`welfare` and `povline` arguments must be non-NULL")
 })
 
-test_that("md_compute_poverty_stats_replacement creates warning when weight is NULL", {
+test_that("md_compute_poverty_stats creates warning when weight is NULL", {
 
-  expect_message(md_compute_poverty_stats_replacement(
+  expect_message(md_compute_poverty_stats(
     welfare     = benchmark$welfare,
     weight      = NULL,
     povline_lcu = mean(benchmark$welfare),
@@ -613,9 +613,9 @@ test_that("md_compute_poverty_stats_replacement creates warning when weight is N
   "The `weight` argument is NULL, thus each observation is given equal weight by default. ")
 })
 
-test_that("md_compute_poverty_stats_replacement does not fail when poverty == 0", {
+test_that("md_compute_poverty_stats does not fail when poverty == 0", {
 
-  out <- md_compute_poverty_stats_replacement(
+  out <- md_compute_poverty_stats(
     welfare = benchmark$welfare,
     povline_lcu = min(benchmark$welfare) - 1,
     weight = benchmark$weight

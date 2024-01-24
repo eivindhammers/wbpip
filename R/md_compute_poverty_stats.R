@@ -18,7 +18,7 @@
 #' )
 #' @return list
 #' @export
-md_compute_poverty_stats_replacement <- function(
+md_compute_poverty_stats <- function(
     welfare     = NULL,
     weight      = NULL,
     povline_lcu = NULL,
