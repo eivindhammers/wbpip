@@ -8,23 +8,33 @@
 
 test_that("md_quantile_values", {
 
+  output_check <-
+    c(
+      "10%" = 3032.35026692369,
+      "20%" = 3877.66291497121,
+      "30%" = 4654.7337064404,
+      "40%" = 5451.87437787381,
+      "50%" = 6291.8766358101,
+      "60%" = 7325.87435276559,
+      "70%" = 8654.29982700615,
+      "80%" = 10448.7385566442,
+      "90%" = 13620.9052916984,
+      "100%" = 97747.2265625
+    )
+
+
   output <- md_quantile_values(
     welfare    = md_GHI_2000_consumption$welfare,
     weight     = md_GHI_2000_consumption$weight,
     n          = 10,
     format     = "atomic"
   )
-  output_check <- Hmisc::wtd.quantile(
-    x = md_GHI_2000_consumption$welfare,
-    w = md_GHI_2000_consumption$weight,
-    probs = seq(from = 0.1, to = 1, by = 0.1)
-  )
+
   expect_length(
     output,10
   )
-  expect_true( # different quantile algorithms, so not precise
-    ((output - output_check)/output < 0.001) |> all()
-  )
+  expect_equal(output, output_check, tolerance = 1e-10)
+
   expect_message(
     output <- md_quantile_values(
       welfare    = c(0:100),
