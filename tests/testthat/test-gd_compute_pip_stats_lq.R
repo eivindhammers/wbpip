@@ -275,6 +275,92 @@ test_that("gd_compute_pov_severity_lq() works as before the function update", {
 
 })
 
+test_that("gd_compute_poverty_stats_lq works with negative headcount", {
+
+  povline_neg <- -57.791666666666664 # Negative to test negative headcount
+
+  benchmark <- list(
+    headcount = 0,
+    pg        = 0,
+    p2        = 0,
+    eh        = 0,
+    epg       = 0,
+    ep        = 0,
+    gh        = 0,
+    gpg       = 0,
+    gp        = 0,
+    watts     = 0,
+    dl        = -1.120731,
+    ddl       = 41.74948
+  )
+
+  out <- gd_compute_poverty_stats_lq(
+    mean    = mean,
+    povline = povline_neg,
+    A       = A,
+    B       = B,
+    C       = C,
+    e       = e,
+    m       = m,
+    n       = n,
+    r       = r,
+    s1      = s1,
+    s2      = s2
+  )
+
+  out_original <- old_gd_compute_poverty_stats_lq(
+    mean    = mean,
+    povline = povline_neg,
+    A       = A,
+    B       = B,
+    C       = C,
+    e       = e,
+    m       = m,
+    n       = n,
+    r       = r,
+    s1      = s1,
+    s2      = s2
+  )
+
+
+  expect_equal(length(out), length(benchmark))
+  expect_equal(names(out),
+               c("headcount", "pg", "p2", "eh", "epg",
+                 "ep", "gh", "gpg", "gp", "watts", "dl", "ddl"))
+  expect_equal(round(out$headcount, 7),
+               round(benchmark$headcount, 7))
+  expect_equal(out$pg,
+               benchmark$pg)
+  expect_equal(out$p2,
+               benchmark$p2)
+  expect_equal(round(out$eh, 6),
+               round(benchmark$eh, 6)) # Due to headcount difference
+  expect_equal(round(out$epg, 7),
+               round(benchmark$epg, 7)) # Due to headcount difference
+  expect_equal(out$ep,
+               benchmark$ep)
+  expect_equal(out$gh,
+               benchmark$gh, tolerance = 1.1e-07)
+  expect_equal(out$gpg,
+               benchmark$gpg)
+  expect_equal(out$gp,
+               benchmark$gp)
+  expect_equal(out$watts,
+               benchmark$watts)
+  expect_equal(round(out$dl, 5),
+               round(benchmark$dl, 5))
+  expect_equal(round(out$ddl, 5),
+               round(benchmark$ddl, 5))
+  expect_equal(out,
+               benchmark,
+               tolerance = 0.000001)
+  expect_equal(out,
+               out_original)
+})
+
+
+
+
 test_that("gd_compute_fit_lq works as expected", {
   p <- c(
     0.00050000000000000001,
@@ -366,5 +452,92 @@ test_that("gd_compute_watts_lq() gives correct results", {
     C = 0.4720329161
   )
   expect_equal(res, 0.4366290738)
+
+})
+
+
+
+test_that("gd_compute_headcount works as expected", {
+
+  # expected headcount ----
+  benchmark <- 0.76005810499191284
+
+  # headcount function ----
+  out <- gd_compute_headcount_lq(
+    mean    = mean,
+    povline = povline,
+    B       = B,
+    m       = m,
+    n       = n,
+    r       = r
+  )
+
+  expect_equal(round(out, 7),
+               round(benchmark, 7))
+
+})
+
+
+test_that("gd_compute_pov_gap_lq works as expected", {
+
+  # expected pov gap
+  benchmark <- 0.27617606019159308
+
+  # output
+  out <- gd_compute_pov_gap_lq(
+    mean      = mean,
+    povline   = povline,
+    headcount = headcount,
+    A         = A,
+    B         = B,
+    C         = C
+  )
+
+  expect_equal(out,
+               benchmark)
+
+})
+
+test_that("gd_compute_pov_gap_lq works as expected when headcount negative", {
+
+  headcount_neg <- -0.76005810499191284
+  benchmark     <- 0
+
+  out <- gd_compute_pov_gap_lq(
+    mean      = mean,
+    povline   = povline,
+    headcount = headcount_neg,
+    A         = A,
+    B         = B,
+    C         = C
+  )
+
+  expect_equal(out,
+               benchmark)
+
+})
+
+test_that("gd_compute_pov_severity_lq works as expected", {
+
+  benchmark <- 0.12832887439632906
+
+  out <- gd_compute_pov_severity_lq(
+    mean      = mean,
+    povline   = povline,
+    headcount = headcount,
+    pov_gap   = pov_gap,
+    A         = A,
+    B         = B,
+    C         = C,
+    e         = e,
+    m         = m,
+    n         = n,
+    r         = r,
+    s1        = s1,
+    s2        = s2
+  )
+
+  expect_equal(out,
+               benchmark)
 
 })
