@@ -48,7 +48,7 @@ md_compute_poverty_stats <- function(
   pov_status        <- (welfare < povline_lcu)
   relative_distance <- (1 - (welfare[pov_status] / povline_lcu))
   weight_pov        <- weight[pov_status]
-  weight_total      <- sum(weight)
+  weight_total      <- fsum(weight)
 
   # ______________________________________________________________________
   # Computations
@@ -155,7 +155,7 @@ md_compute_headcount <- function(
   # ______________________________________________________________________
   # Computations
   # ______________________________________________________________________
-  hc <- sum(weight_pov) / weight_total
+  hc <- fsum(weight_pov) / weight_total
 
   # ______________________________________________________________________
   # Return
@@ -191,18 +191,21 @@ md_compute_pov_gap <- function(
       "`povline` argument must be non-NULL"
     )
   }
-  if (is.null(weight) & (is.null(weight_pov) | is.null(weight_total) | is.null(relative_distance))) {
+  if (is.null(weight) & (is.null(weight_pov) |
+                         is.null(weight_total) |
+                         is.null(relative_distance))) {
     weight <- rep(1, length(welfare))
     if (verbose) {
       cli::cli_alert_info(
-        "The `weight` argument is NULL, thus each observation is given equal weight by default."
+        "The `weight` argument is NULL, thus each observation is
+        given equal weight by default."
       )
     }
   }
   if (is.null(weight_pov) | is.null(weight_total) | is.null(relative_distance)) {
     pov_status        <- (welfare < povline)
     weight_pov        <- weight[pov_status]
-    weight_total      <- sum(weight)
+    weight_total      <- fsum(weight)
     relative_distance <- (1 - (welfare[pov_status] / povline))
 
     if (verbose) {
@@ -219,7 +222,7 @@ md_compute_pov_gap <- function(
   # ______________________________________________________________________
   # Computations
   # ______________________________________________________________________
-  povgap <- sum(relative_distance * weight_pov) / weight_total
+  povgap <- fsum(relative_distance * weight_pov) / weight_total
 
   # ______________________________________________________________________
   # Return
@@ -261,7 +264,7 @@ md_compute_pov_severity <- function(
   if (is.null(weight_pov) | is.null(weight_total) | is.null(relative_distance)) {
     pov_status        <- (welfare < povline)
     weight_pov        <- weight[pov_status]
-    weight_total      <- sum(weight)
+    weight_total      <- fsum(weight)
     relative_distance <- (1 - (welfare[pov_status] / povline))
     if (verbose) {
       cli::cli_alert_info(
@@ -276,7 +279,7 @@ md_compute_pov_severity <- function(
   # ______________________________________________________________________
   # Computations
   # ______________________________________________________________________
-  povsev <- sum(relative_distance^2 * weight_pov) / weight_total
+  povsev <- fsum(relative_distance^2 * weight_pov) / weight_total
 
   # ______________________________________________________________________
   # Return
@@ -318,11 +321,11 @@ md_compute_watts <- function(
   # Computations
   # ______________________________________________________________________
   pov_status         <- (welfare < povline)
-  weight_total       <- sum(weight)
+  weight_total       <- fsum(weight)
   keep               <- welfare > 0 & pov_status
   w_gt_zero          <- welfare[keep]
   sensitive_distance <- log(povline / w_gt_zero)
-  watts              <- sum(sensitive_distance * weight[keep])/weight_total
+  watts              <- fsum(sensitive_distance * weight[keep])/weight_total
 
   # # Handle cases where Watts is numeric(0)
   # if (identical(watts, numeric(0))) {
