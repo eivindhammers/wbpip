@@ -159,10 +159,8 @@ md_welfare_share_at <- function(
   total_weight <- fsum(weight)
   output <- lapply(
     q,
-    function(x){
-      share <- weight[welfare <= x]
-      share <- sum(share)/total_weight
-      return(share)
+    \(x){
+      fsum(weight[welfare <= x])/total_weight
     }
   )
 
@@ -261,8 +259,8 @@ md_quantile_welfare_share <- function(
   # Create a factor indicating the range of each element
   # Add a small epsilon to the max value
   quantiles <- c(-Inf, quantiles)
-  if (!max(quantiles) == max(welfare)) {
-    quantiles <- c(quantiles, max(welfare) + .Machine$double.eps)
+  if (!fmax(quantiles) == fmax(welfare)) {
+    quantiles <- c(quantiles, fmax(welfare) + .Machine$double.eps)
   }
 
   shares <- tapply(welfare, cut(welfare, breaks = quantiles), sum)
