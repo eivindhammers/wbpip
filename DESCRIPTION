@@ -52,7 +52,7 @@ Imports:
     data.table,
     assertthat,
     cli,
-    collapse,
+    collapse (>= 2.0.9),
     MASS
 VignetteBuilder: knitr
 ByteCompile: true
