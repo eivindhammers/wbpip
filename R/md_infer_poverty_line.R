@@ -25,8 +25,11 @@ md_infer_poverty_line <- function(welfare,
                                   popshare = .5,
                                   include = FALSE) {
 
+  if (anyNA(c(welfare, weight))) {
+    cli::cli_abort("neither {.arg welfare} nor {.arg weight} can have {.var NAs}")
+  }
 
-  prob <- cumsum(weight) / sum(weight)
+  prob <- fcumsum(weight) / fsum(weight)
   ps <- lapply(popshare, \(.) {
     abs(prob - .) |>
       which.min()
@@ -39,7 +42,7 @@ md_infer_poverty_line <- function(welfare,
 
     pctile <-
       sapply(ps, \(.) {
-        stats::weighted.mean(
+        fmean(
           x = c(welfare[.], welfare[. + 1]),
           w = c(weight[.], weight[. + 1])
         )
@@ -49,7 +52,7 @@ md_infer_poverty_line <- function(welfare,
   } else {
     pctile <-
       sapply(ps, \(.) {
-        mean(welfare[.])
+        fmean(welfare[.])
       })
   }
 
