@@ -8,7 +8,7 @@
 #'
 #' @return list
 #' @keywords internal
-gd_compute_poverty_stats_lq_replacement <- function(
+gd_compute_poverty_stats_lq <- function(
     mean,
     povline,
     A,
@@ -143,9 +143,6 @@ gd_compute_poverty_stats_lq_replacement <- function(
     )
   )
 }
-
-
-
 
 
 
