@@ -57,5 +57,3 @@ Imports:
 VignetteBuilder: knitr
 ByteCompile: true
 Config/testthat/edition: 3
-Remotes: 
-    PIP-technical-team/pipload@new_pipeline
