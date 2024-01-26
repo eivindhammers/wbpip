@@ -440,17 +440,20 @@ gd_compute_poverty_stats_lb <- function(mean,
 
   # Poverty gap
   u <- mean / povline
-  pov_gap <- gd_compute_pov_gap_lb( mean,  povline, headcount, A, B, C)
+  pov_gap <- gd_compute_pov_gap_lb(headcount = headcount,
+                                   A         = A,
+                                   B         = B,
+                                   C         = C,
+                                   u         = u)
 
   # Poverty severity
   pov_gap_sq <- gd_compute_pov_severity_lb(
-    mean      = mean,
-    povline   = povline,
     headcount = headcount,
     pov_gap   = pov_gap,
     A         = A,
     B         = B,
-    C         = C
+    C         = C,
+    u         = u
   )
 
   # First derivative of the Lorenz curve
