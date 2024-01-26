@@ -3,7 +3,7 @@
 #' Compute poverty statictics for microdata - replace old [md_compute_poverty_stats]
 #'
 #' Given a vector of consumption or income values and their respective weights
-#' `md_compute_poverty_stats_replacement()` computes poverty headcount, poverty gap,
+#' `md_compute_poverty_stats()` computes poverty headcount, poverty gap,
 #' poverty severity and the watts index.
 #'
 #' @inheritParams compute_pip_stats
@@ -11,7 +11,7 @@
 #' @param povline_lcu numeric: Poverty line in Local Currency Unit (LCU).
 #'
 #' @examples
-#' wbpip:::md_compute_poverty_stats_replacement(
+#' wbpip:::md_compute_poverty_stats(
 #'   welfare = 1:2000,
 #'   weight = rep(1, 2000),
 #'   povline_lcu = 10
