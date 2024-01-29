@@ -252,6 +252,16 @@ md_compute_watts <- function(
     povline
 ) {
 
+  ss_args <- environment() |>
+    as.list()
+
+  null_args <- sapply(ss_args, is.null)
+
+  if (any(null_args)) {
+    cli::cli_abort("{.or {.arg  {names(ss_args)}}} can't be NULL")
+  }
+
+
   # ______________________________________________________________________
   # Computations
   # ______________________________________________________________________

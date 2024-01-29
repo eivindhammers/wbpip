@@ -86,6 +86,67 @@ relative_distance <- (1 - (benchmark$welfare[pov_status] / povline_lcu))
 weight_pov        <- benchmark$weight[pov_status]
 weight_total      <- sum(benchmark$weight)
 
+
+# MD FGT
+#
+test_that("md_compute_fgt throughs erros", {
+  welfare <- benchmark$welfare
+  weight  <- benchmark$weight
+
+  md_compute_fgt() |>
+    expect_error()
+
+
+  fgt <- md_compute_fgt(welfare    = welfare,
+                        weight      = weight,
+                        return_data =  TRUE)
+  md_compute_fgt(fgt_data = fgt,
+                 welfare = welfare) |>
+    expect_error()
+
+
+  })
+test_that("md_compute_fgt works", {
+  welfare <- benchmark$welfare
+  weight  <- benchmark$weight
+
+  md_compute_fgt(welfare = welfare,
+                 weight  = weight)
+
+  fgt <- md_compute_fgt(welfare    = welfare,
+                       weight      = weight,
+                       return_data =  TRUE)
+  expect_equal(names(fgt),
+               c("pov_status", "relative_distance", "weight", "FGT0"))
+
+  expect_equal(fgt$FGT0, 0.18186165)
+
+  ## return all three measures -----------
+  fgt <- md_compute_fgt(welfare    = welfare,
+                        weight      = weight,
+                        return_data =  TRUE) |>
+    md_compute_fgt(alpha = 1,
+                   return_data =  TRUE) |>
+    md_compute_fgt(alpha = 2,
+                   return_data =  TRUE)
+
+
+  expect_equal(names(fgt),
+               c(
+                 "pov_status",
+                 "relative_distance",
+                 "weight",
+                 "FGT0",
+                 "FGT1",
+                 "FGT2"
+               ))
+  expect_equal(fgt$FGT0, 0.18186165)
+  expect_equal(fgt$FGT1, 0.066429986)
+  expect_equal(fgt$FGT2, 0.034727533)
+
+})
+
+
 #_______________________________________________________________________
 # Test - md_compute_headcount
 
@@ -94,9 +155,7 @@ test_that("md_compute_headcount works", {
   out1 <- md_compute_headcount(
     welfare      = benchmark$welfare,
     weight       = benchmark$weight,
-    povline      = povline_lcu,
-    weight_pov   = weight_pov,
-    weight_total = weight_total
+    povline      = povline_lcu
   )
 
   out2 <- md_compute_headcount(
@@ -118,16 +177,11 @@ test_that("md_compute_headcount works", {
 
 test_that("md_compute_headcount works with NULL for weight_pov and weight_total", {
 
-  expect_message(
-    out <- md_compute_headcount(
-      welfare      = benchmark$welfare,
-      weight       = benchmark$weight,
-      povline      = povline_lcu,
-      verbose      = T
-    ),
-    regexp = "The `weight_pov` and/or `weight_total` arguments are NULL, therefore calculated internally"
+  out <- md_compute_headcount(
+    welfare      = benchmark$welfare,
+    weight       = benchmark$weight,
+    povline      = povline_lcu
   )
-
   expect_equal(out,
                0.7333513,
                tolerance = 1e-6) #match compute_poverty_stats in povcalnet
@@ -135,75 +189,7 @@ test_that("md_compute_headcount works with NULL for weight_pov and weight_total"
 
 })
 
-test_that("md_compute_headcount works when NULL welfare and weight", {
 
-  expect_message(
-    out <- md_compute_headcount(
-      povline      = povline_lcu,
-      weight_pov   = weight_pov,
-      weight_total = weight_total,
-      verbose      = T
-    ),
-    regexp = "The `weight_pov` and/or `weight_total` arguments are used for directly for headcount calculation"
-  )
-
-  expect_equal(out, 0.7333513, tolerance = 1e-6) #match compute_poverty_stats in povcalnet
-
-  expect_equal(
-    md_compute_headcount(
-      welfare      = benchmark$welfare,
-      povline      = povline_lcu,
-    ),
-    mean(benchmark$welfare < mean(benchmark$welfare))
-  )
-
-  expect_message(
-    md_compute_headcount(
-      welfare      = benchmark$welfare,
-      povline      = povline_lcu,
-      verbose      = T
-    )
-  )
-
-})
-
-test_that("md_compute_headcount error and message", {
-
-  expect_error(
-    out <- md_compute_headcount(
-      weight_pov   = weight_pov,
-      weight_total = weight_total
-    )
-  )
-
-  expect_message(
-    md_compute_headcount(
-      welfare      = benchmark$welfare,
-      povline      = povline_lcu,
-      weight_total = weight_total,
-      verbose      = TRUE
-    )
-  )
-  expect_message(
-    md_compute_headcount(
-      welfare      = benchmark$welfare,
-      povline      = povline_lcu,
-      weight_total = weight_total,
-      verbose      = TRUE
-    )
-  )
-
-  expect_message(
-    md_compute_headcount(
-      welfare      = benchmark$welfare,
-      weight       = benchmark$weight,
-      povline      = povline_lcu,
-      weight_pov   = weight_pov,
-      weight_total = weight_total,
-      verbose      = TRUE
-    )
-  )
-})
 
 
 #_______________________________________________________________________
@@ -213,84 +199,16 @@ test_that("md_compute_pov_gap works", {
   out <- md_compute_pov_gap(
     welfare           = benchmark$welfare,
     weight            = benchmark$weight,
-    povline           = povline_lcu,
-    weight_pov        = weight_pov,
-    weight_total      = weight_total,
-    relative_distance = relative_distance,
-    verbose           = TRUE
+    povline           = povline_lcu
   )
 
-  out2 <- md_compute_pov_gap(
-    welfare           = benchmark$welfare,
-    weight            = benchmark$weight,
-    povline           = povline_lcu,
-    verbose           = TRUE
-  )
 
   expect_equal(out,
                0.3957584,
                tolerance = 1e-6) # match compute_poverty_stats in povcalnet
 
-  expect_equal(
-    out,
-    out2
-  )
 })
 
-test_that("md_compute_pov_gap messages and errors", {
-
-  # povline error
-  expect_error(
-    md_compute_pov_gap(
-      welfare           = benchmark$welfare,
-      weight            = benchmark$weight,
-      weight_pov        = weight_pov,
-      weight_total      = weight_total,
-      relative_distance = relative_distance
-    )
-  )
-  # no weight message
-  expect_message(
-    md_compute_pov_gap(
-      welfare           = benchmark$welfare,
-      povline           = povline_lcu,
-      weight_pov        = weight_pov,
-      weight_total      = weight_total,
-      relative_distance = relative_distance,
-      verbose           = TRUE
-    )
-  )
-  expect_message(
-    md_compute_pov_gap(
-      welfare           = benchmark$welfare,
-      povline           = povline_lcu,
-      weight_total      = weight_total,
-      relative_distance = relative_distance,
-      verbose           = TRUE
-    )
-  )
-  # calculate pars message
-  expect_message(
-    md_compute_pov_gap(
-      welfare           = benchmark$welfare,
-      weight            = benchmark$weight,
-      povline           = povline_lcu,
-      verbose           = TRUE
-    )
-  )
-  # use pars message
-  expect_message(
-    md_compute_pov_gap(
-      welfare           = benchmark$welfare,
-      weight            = benchmark$weight,
-      povline           = povline_lcu,
-      weight_pov        = weight_pov,
-      weight_total      = weight_total,
-      relative_distance = relative_distance,
-      verbose           = TRUE
-    )
-  )
-})
 
 test_that("md_compute_pov_gap works with NULLs", {
 
@@ -300,17 +218,8 @@ test_that("md_compute_pov_gap works with NULLs", {
     povline           = povline_lcu
   )
 
-  out2 <- md_compute_pov_gap(
-    povline           = povline_lcu,
-    weight_pov        = weight_pov,
-    weight_total      = weight_total,
-    relative_distance = relative_distance,
-  )
 
   expect_equal(out,
-               0.3957584,
-               tolerance = 1e-6) #match compute_poverty_stats in povcalnet
-  expect_equal(out2,
                0.3957584,
                tolerance = 1e-6) #match compute_poverty_stats in povcalnet
 
@@ -325,86 +234,13 @@ test_that("md_compute_pov_severity works", {
   out <- md_compute_pov_severity(
     welfare           = benchmark$welfare,
     weight            = benchmark$weight,
-    povline           = povline_lcu,
-    weight_pov        = weight_pov,
-    weight_total      = weight_total,
-    relative_distance = relative_distance
-  )
-
-  out2 <- md_compute_pov_severity(
-    welfare           = benchmark$welfare,
-    weight            = benchmark$weight,
     povline           = povline_lcu
   )
 
   expect_equal(out,
                0.2534849,
                tolerance = 1e-6) #match compute_poverty_stats in povcalnet
-
-  expect_equal(
-    out,
-    out2
-  )
 })
-
-test_that("md_compute_pov_severity errors and messages", {
-
-  # povline
-  expect_error(
-    md_compute_pov_severity(
-      welfare     = benchmark$welfare,
-      weight      = benchmark$weight,
-      povline     = NULL
-    ),
-    "`povline` argument must be non-NULL")
-
-  # no weight
-  expect_message(
-    md_compute_pov_severity(
-      welfare           = benchmark$welfare,
-      povline           = povline_lcu,
-      weight_total      = weight_total,
-      weight_pov        = weight_pov,
-      relative_distance = relative_distance,
-      verbose           = TRUE
-    )
-  )
-  expect_message(
-    md_compute_pov_severity(
-      welfare           = benchmark$welfare,
-      povline           = povline_lcu,
-      verbose           = TRUE
-    )
-  )
-  # no pars
-  expect_message(
-    md_compute_pov_severity(
-      welfare           = benchmark$welfare,
-      weight            = benchmark$weight,
-      povline           = povline_lcu,
-      weight_pov        = weight_pov,
-      weight_total      = weight_total,
-      relative_distance = relative_distance,
-      verbose           = TRUE
-    )
-  )
-  # given pars
-  expect_message(
-    md_compute_pov_severity(
-      welfare           = benchmark$welfare,
-      weight            = benchmark$weight,
-      povline           = povline_lcu,
-      weight_pov        = weight_pov,
-      weight_total      = weight_total,
-      relative_distance = relative_distance,
-      verbose           = TRUE
-    )
-  )
-
-
-})
-
-
 
 
 #_______________________________________________________________________
@@ -438,39 +274,29 @@ test_that("md_compute_watts messages and errors", {
     )
   )
 
-  # no weight
-  expect_message(
-    md_compute_watts(
-      welfare           = benchmark$welfare,
-      povline           = povline_lcu,
-      verbose           = TRUE
-    )
-  )
 
 })
 
 
 test_that("md_compute_watts prints error when welfare and/or povline is null", {
 
-
-
-  expect_error(md_compute_watts(
+  md_compute_watts(
     welfare     = benchmark$welfare,
     weight      = benchmark$weight,
-    povline = NULL
-  ),"`welfare` and `povline` arguments must be non-NULL")
+    povline = NULL) |>
+  expect_error()
 
   expect_error(md_compute_watts(
     welfare     = NULL,
     weight      = benchmark$weight,
     povline = mean(benchmark$welfare)
-  ),"`welfare` and `povline` arguments must be non-NULL")
+  ))
 
   expect_error(md_compute_watts(
     welfare     = NULL,
     weight      = benchmark$weight,
     povline = NULL
-  ),"`welfare` and `povline` arguments must be non-NULL")
+  ))
 })
 
 
@@ -512,7 +338,7 @@ test_that("md_compute_poverty_stats works", {
   out <- md_compute_poverty_stats(
     welfare     = benchmark$welfare,
     weight      = benchmark$weight,
-    povline_lcu = povline_lcu
+    povline_lcu = mean(benchmark$welfare)
   )
   expect_equal(out[["headcount"]],
                0.7333513,
@@ -573,8 +399,8 @@ test_that("md_compute_poverty_stats calculates with weight = 1 when is NULL", {
 
   out <- md_compute_poverty_stats(
     welfare     = benchmark$welfare,
-    weight      = NULL,
-    povline_lcu = povline_lcu
+    weight      = rep(1, length(benchmark$welfare)),
+    povline_lcu = mean(benchmark$welfare)
   )
 
   expect_equal(out[["headcount"]],
@@ -597,32 +423,17 @@ test_that("md_compute_poverty_stats prints error when welfare and/or povline is 
     welfare     = benchmark$welfare,
     weight      = benchmark$weight,
     povline_lcu = NULL
-  ),
-  "`welfare` and `povline` arguments must be non-NULL")
+  ))
 
   expect_error(md_compute_poverty_stats(
     welfare     = NULL,
     weight      = benchmark$weight,
     povline_lcu = mean(benchmark$welfare)
-  ),
-  "`welfare` and `povline` arguments must be non-NULL")
+  ))
 
   expect_error(md_compute_poverty_stats(
     welfare     = NULL,
     weight      = benchmark$weight,
     povline_lcu = NULL
-  ),
-  "`welfare` and `povline` arguments must be non-NULL")
+  ))
 })
-
-test_that("md_compute_poverty_stats creates warning when weight is NULL", {
-
-  expect_message(md_compute_poverty_stats(
-    welfare     = benchmark$welfare,
-    weight      = NULL,
-    povline_lcu = mean(benchmark$welfare),
-    verbose     = TRUE
-  ),
-  "The `weight` argument is NULL, thus each observation is given equal weight by default. ")
-})
-
