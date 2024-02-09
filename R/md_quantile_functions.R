@@ -172,6 +172,15 @@ md_welfare_share_at <- function(
   # ____________________________________________________________________________
   # Calculations ---------------------------------------------------------------
 
+  # Get quantiles
+  q       <- md_quantile_values(
+    welfare  = welfare,
+    weight   = weight,
+    n        = n,
+    popshare = popshare,
+    format   = "list"
+  )
+
   # Calculate cumulative welfare share at given popshare
   total_welfare <- sum(welfare * weight)
   welfare_sorted <- welfare[order(welfare)]
