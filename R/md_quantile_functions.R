@@ -126,8 +126,8 @@ md_quantile_values <- function(
 md_welfare_share_at <- function(
     welfare    = NULL,
     weight     = NULL,
-    n          = 10,
-    popshare   = seq(from = 1/n, to = 1, by = 1/n),
+    n          = NULL,
+    popshare   = NULL,
     format     = c("dt", "list", "atomic")
 ){
   # ____________________________________________________________________________
@@ -152,27 +152,40 @@ md_welfare_share_at <- function(
   }
   format <- match.arg(format)
 
-  # ____________________________________________________________________________
-  # Specify Quantiles ----------------------------------------------------------
-  if (!is.null(n)) {
+  # ----------------------------------------------------------------------------
+  # Validate popshare ----------------------------------------------------------
+  if (!is.null(popshare)) {
+    if (any(popshare < 0 | popshare > 1)) {
+      stop("popshare must be within the range [0, 1]")
+    }
+  } else {
+    # Generate popshare based on n if popshare is NULL
     popshare <- seq(from = 1/n, to = 1, by = 1/n)
   }
-  weight  <- weight[order(welfare)]
-  welfare <- welfare[order(welfare)]
-  q       <- md_quantile_values(
-    welfare  = welfare,
-    weight   = weight,
-    n        = n,
-    popshare = popshare,
-    format   = "list"
-  )
-  total_weight <- fsum(weight)
-  output <- lapply(
-    q,
-    \(x){
-      fsum(weight[welfare <= x])/total_weight
-    }
-  )
+
+  # ____________________________________________________________________________
+  # Validate n ----------------------------------------------------------
+  if (!is.null(n)) {
+    popshare <- seq(from = 1/n, to = 1, by = 1/n)
+  } # if n is specified, it will override popshare.
+
+  # ____________________________________________________________________________
+  # Calculations ---------------------------------------------------------------
+
+  # Calculate cumulative welfare share at given popshare
+  total_welfare <- sum(welfare * weight)
+  welfare_sorted <- welfare[order(welfare)]
+  weight_sorted <- weight[order(welfare)]
+  cumulative_welfare <- cumsum(welfare_sorted * weight_sorted)
+
+  # Use q to find the cumulative welfare share
+  output <- lapply(q, function(quantile_welfare) {
+    # Find the closest welfare value in the sorted list that is greater than or equal to the quantile welfare
+    index <- which.min(abs(welfare_sorted - quantile_welfare))
+    # Calculate the cumulative share of welfare up to that index
+    welfare_share <- cumulative_welfare[index] / total_welfare
+    return(welfare_share)
+  })
 
   # ____________________________________________________________________________
   # Format & Return -------------------------------------------------------------
