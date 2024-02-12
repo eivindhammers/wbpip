@@ -181,20 +181,18 @@ md_welfare_share_at <- function(
     format   = "list"
   )
 
-  # Calculate cumulative welfare share at given popshare
-  total_welfare <- sum(welfare * weight)
-  welfare_sorted <- welfare[order(welfare)]
-  weight_sorted <- weight[order(welfare)]
-  cumulative_welfare <- cumsum(welfare_sorted * weight_sorted)
+  # Get total welfare, and order other vecs
+  total_welfare <- fsum(x = welfare,
+                        w = weight)
+  weight        <- weight[order(welfare)]
+  welfare       <- welfare[order(welfare)]
 
-  # Use q to find the cumulative welfare share
-  output <- lapply(q, function(quantile_welfare) {
-    # Find the closest welfare value in the sorted list that is greater than or equal to the quantile welfare
-    index <- which.min(abs(welfare_sorted - quantile_welfare))
-    # Calculate the cumulative share of welfare up to that index
-    welfare_share <- cumulative_welfare[index] / total_welfare
-    return(welfare_share)
-  })
+  # Weighted welfare shares
+  output <- lapply(q,
+                     \(y){
+                       fsum(x = welfare[welfare <= y],
+                            w = weight[welfare <= y]) / total_welfare
+                     })
 
   # ____________________________________________________________________________
   # Format & Return -------------------------------------------------------------
