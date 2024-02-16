@@ -230,17 +230,6 @@ get_palma_ratio <- function(top10,
 #'
 #' @return Numeric vector giving the ratio of the top 10% to the bottom 10% of the welfare distribution
 #' @export
-#'
-#' @examples
-#' if (suppressWarnings(require(pipr))) {
-#'   pip <- get_stats()
-#'
-#'   get_9010_ratio(
-#'     top10    = pip$decile10,
-#'     bottom10 = pip$decile1
-#'     ) |>
-#'     head()
-#' }
 get_9010_ratio <- function(
     top10,
     bottom10){

@@ -670,6 +670,7 @@ gd_compute_headcount_lq <- function(
 #' Compute poverty gap using Lorenz quadratic fit
 #'
 #' @inheritParams gd_compute_poverty_stats_lq
+#' @inheritParams gd_compute_fit_lq
 #' @inheritParams value_at_lq
 #'
 #' @return numeric
