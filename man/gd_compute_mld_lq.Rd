@@ -25,4 +25,3 @@ numeric
 \code{gd_compute_mld_lq()} computes the Mean Log deviation (MLD) from a Lorenz
 Quadratic fit
 }
-\keyword{internal}
