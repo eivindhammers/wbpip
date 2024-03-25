@@ -112,7 +112,7 @@ gd_compute_pip_stats_lq <- function(welfare,
 #' *Journal of Econometrics 40* (2): 327-338.
 #'
 #' @return data.frame
-#' @keywords internal
+#' @export
 create_functional_form_lq <- function(welfare,
                                       population) {
   # CHECK inputs
@@ -158,15 +158,13 @@ create_functional_form_lq <- function(welfare,
 #' *Journal of Econometrics 40* (2): 327-338.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 derive_lq <- function(x, A, B, C) {
   e <- -(A + B + C + 1)
   alpha <- (B^2) - (4 * A)
   beta <- (2 * B * e) - (4 * C) # C is called D in original paper, but C in Datt paper
   tmp <- (alpha * x^2) + (beta * x) + (e^2)
-  tmp <- if (!is.na(tmp)) {
-    if (tmp < 0) 0L else tmp # Why would we set tmp to 0? It would still fail: division by 0.
-  }
+  tmp[!is.na(tmp) & tmp < 0]  <- 0L
 
   # Formula for first derivative of GQ Lorenz Curve
   val <- -(B / 2) - ((2 * alpha * x + beta) / (4 * sqrt(tmp)))
@@ -200,7 +198,7 @@ derive_lq <- function(x, A, B, C) {
 #' *Journal of Econometrics 40* (2): 327-338.
 #'
 #' @return list
-#' @keywords internal
+#' @export
 check_curve_validity_lq <- function(A, B, C, e, m, n, r) {
   is_normal <- FALSE
   is_valid <- FALSE
@@ -256,7 +254,7 @@ check_curve_validity_lq <- function(A, B, C, e, m, n, r) {
 #' Discussion Paper 50. World Bank, Washington, DC.
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 
   # For the GQ Lorenz curve, the Gini formula are valid under the condition A+C>=1
@@ -301,7 +299,7 @@ gd_compute_gini_lq <- function(A, B, C, e, m, n, r) {
 #' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 value_at_lq <- function(x, A, B, C) {
   e <- -(A + B + C + 1)
   m <- (B^2) - (4 * A)
@@ -324,7 +322,7 @@ value_at_lq <- function(x, A, B, C) {
 #' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_mld_lq <- function(dd, A, B, C) {
   x1 <- derive_lq(0.0005, A, B, C)
   gap <- 0L
@@ -392,7 +390,7 @@ gd_compute_quantile_lq <- function(A, B, C, n_quantile = 10) {
 #' @inheritParams gd_estimate_lq
 #'
 #' @return numeric
-#' @keywords internal
+#' @export
 gd_compute_watts_lq <- function(headcount, mu, povline, dd, A, B, C) {
   if (headcount <= 0 | is.na(headcount)) {
     return(0)
@@ -496,89 +494,275 @@ gd_compute_dist_stats_lq <- function(mean, p0, A, B, C, e, m, n, r) {
 #'
 #' @return list
 #' @keywords internal
-gd_compute_poverty_stats_lq <- function(mean,
-                                        povline,
-                                        A,
-                                        B,
-                                        C,
-                                        e,
-                                        m,
-                                        n,
-                                        r,
-                                        s1,
-                                        s2) {
+gd_compute_poverty_stats_lq <- function(
+    mean,
+    povline,
+    A,
+    B,
+    C,
+    e,
+    m,
+    n,
+    r,
+    s1,
+    s2
+) {
+  # ____________________________________________________________________________
   # Compute headcount
-  bu <- B + (2 * povline / mean)
-  u <- mean / povline
+  # ____________________________________________________________________________
+  headcount <- gd_compute_headcount_lq(
+    mean    = mean,
+    povline = povline,
+    B       = B,
+    m       = m,
+    n       = n,
+    r       = r
+  )
 
-  headcount <- -(n + ((r * bu) / sqrt(bu^2 - m))) / (2 * m)
-
+  # ____________________________________________________________________________
+  # Compute intermediate terms
+  # ____________________________________________________________________________
+  u    <- mean / povline
   tmp0 <- (m * headcount^2) + (n * headcount) + (e^2)
   tmp0 <- if (tmp0 < 0) 0L else tmp0
   tmp0 <- sqrt(tmp0)
 
-  # First derivative of the Lorenz curve
+  # ____________________________________________________________________________
+  # Compute dl - first derivative of Lorenz curve
+  # ____________________________________________________________________________
   dl <- -(0.5 * B) - (0.25 * ((2 * m * headcount) + n) / tmp0)
 
-  # Second derivative of the Lorenz curve
+  # ____________________________________________________________________________
+  # Compute ddl - second derivative of Lorenz curve
+  # ____________________________________________________________________________
   ddl <- r^2 / (tmp0^3 * 8)
 
+  # if negative headcount, set all to 0
   if (headcount < 0) {
     headcount <- pov_gap <- pov_gap_sq <- watts <- 0L
     eh <- epg <- ep <- gh <- gpg <- gp <- 0L
   } else {
 
-    # HC value at LQ
-    hc_lq <- value_at_lq(headcount, A, B, C)
+    # __________________________________________________________________________
+    # Compute Poverty gap
+    # __________________________________________________________________________
+    pov_gap <- gd_compute_pov_gap_lq(
+      mean      = mean,
+      povline   = povline,
+      headcount = headcount,
+      A         = A,
+      B         = B,
+      C         = C
+    )
 
-    # Poverty gap index (P.pg)
-    pov_gap <- headcount - (u * hc_lq)
+    # __________________________________________________________________________
+    # Compute poverty severity
+    # __________________________________________________________________________
 
-    # P.p2 - Distributionally sensitive FGT poverty measure
-    # P.p2 <- (2*P.pg) - P.h - u^2 * (A*P.h + B*value_at_lq(P.h, A, B, C) - (r/16 *log((1 - P.h/s1))/(1 - P.h/s2)))
-    # Poverty severity
-    pov_gap_sq <- (2 * pov_gap) - headcount -
-      (u^2 * (A * headcount + B * hc_lq -
-        ((r / 16) * log((1 - headcount / s1) / (1 - headcount / s2)))))
-
-    # Elasticity of headcount index w.r.t mean (P.eh)
+    pov_gap_sq <- gd_compute_pov_severity_lq(
+      mean      = mean,
+      povline   = povline,
+      headcount = headcount,
+      pov_gap   = pov_gap,
+      A         = A,
+      B         = B,
+      C         = C,
+      e         = e,
+      m         = m,
+      n         = n,
+      r         = r,
+      s1        = s1,
+      s2        = s2
+    )
+    # __________________________________________________________________________
+    # Compute elasticity of headcount index wrt mean (P.eh)
+    # __________________________________________________________________________
     eh <- -povline / (mean * headcount * ddl)
 
-    # Elasticity of poverty gap index w.r.t mean (P.epg)
+    # __________________________________________________________________________
+    # Compute Elasticity of poverty gap index w.r.t mean (P.epg)
+    # __________________________________________________________________________
     epg <- 1 - (headcount / pov_gap)
 
-    # Elasticity of distributionally sensitive FGT poverty measure w.r.t mean (P.ep)
+    # __________________________________________________________________________
+    # Compute Elasticity of distributionally sensitive
+    #            FGT poverty measure w.r.t mean (P.ep)
+    # __________________________________________________________________________
     ep <- 2 * (1 - pov_gap / pov_gap_sq)
 
-    # PElasticity of headcount index w.r.t gini index (P.gh)
+    # __________________________________________________________________________
+    # Compute Elasticity of headcount index w.r.t gini index (P.gh)
+    # __________________________________________________________________________
     gh <- (1 - povline / mean) / (headcount * ddl)
 
-    # Elasticity of poverty gap index w.r.t gini index (P.gpg)
+    # __________________________________________________________________________
+    # Compute Elasticity of poverty gap index w.r.t gini index (P.gpg)
+    # __________________________________________________________________________
     gpg <- 1 + (((mean / povline) - 1) * headcount / pov_gap)
 
-    # Elasticity of distributionally sensitive FGT poverty measure w.r.t gini index (P.gp)
+    # __________________________________________________________________________
+    # Compute Elasticity of distributionally sensitive
+    #             FGT poverty measure w.r.t gini index (P.gp)
+    # __________________________________________________________________________
     gp <- 2 * (1 + (((mean / povline) - 1) * pov_gap / pov_gap_sq))
 
+    # ____________________________________________________________________________
+    # Compute Watts
+    # ____________________________________________________________________________
     watts <- gd_compute_watts_lq(headcount, mean, povline, 0.01, A, B, C)
   }
 
   return(
     list(
       headcount = headcount,
-      pg = pov_gap,
-      p2 = pov_gap_sq,
-      eh = eh,
-      epg = epg,
-      ep = ep,
-      gh = gh,
-      gpg = gpg,
-      gp = gp,
-      watts = watts,
-      dl = dl,
-      ddl = ddl
+      pg        = pov_gap,
+      p2        = pov_gap_sq,
+      eh        = eh,
+      epg       = epg,
+      ep        = ep,
+      gh        = gh,
+      gpg       = gpg,
+      gp        = gp,
+      watts     = watts,
+      dl        = dl,
+      ddl       = ddl
     )
   )
 }
+
+
+
+
+
+
+
+#' Compute poverty for Quadratic Lorenz
+#'
+#' @inheritParams gd_compute_poverty_stats_lq
+#'
+#' @return poverty headcount
+#' @export
+gd_compute_headcount_lq <- function(
+    mean,
+    povline,
+    B,
+    m,
+    n,
+    r
+) {
+
+  #   _____________________________________________________________________
+  #   Compute headcount
+  #   _____________________________________________________________________
+  bu <- B + (2 * povline / mean)
+  headcount <- -(n + ((r * bu) / sqrt(bu^2 - m))) / (2 * m)
+
+
+  #   _____________________________________________________________________
+  #   Return
+  #   _____________________________________________________________________
+  return(headcount)
+
+}
+
+
+
+#' Compute poverty gap using Lorenz quadratic fit
+#'
+#' @inheritParams gd_compute_poverty_stats_lq
+#' @inheritParams gd_compute_fit_lq
+#' @inheritParams value_at_lq
+#'
+#' @return numeric
+#' @export
+gd_compute_pov_gap_lq <- function(mean,
+                                  povline,
+                                  headcount,
+                                  A,
+                                  B,
+                                  C) {
+
+  #   _____________________________________________________________________
+  #   Computations
+  #   _____________________________________________________________________
+
+
+  if (headcount < 0 ) {
+    pov_gap <- 0L
+  } else {
+
+    u    <- mean / povline
+
+    hc_lq <- value_at_lq(headcount, A, B, C)
+
+    # Poverty gap index (P.pg)
+    pov_gap <- headcount - (u * hc_lq)
+  }
+
+
+  #   _____________________________________________________________________
+  #   Return
+  #   _____________________________________________________________________
+  return(pov_gap)
+
+}
+
+
+
+
+
+#' Compute poverty severity for Lorenz Quadratic fit
+#'
+#' @param pov_gap numeric: Poverty gap.
+#' @inheritParams gd_compute_fit_lq
+#' @inheritParams gd_compute_poverty_stats_lq
+#'
+#' @return numeric
+#' @export
+gd_compute_pov_severity_lq <- function(
+    mean,
+    povline,
+    headcount,
+    pov_gap,
+    A,
+    B,
+    C,
+    e,
+    m,
+    n,
+    r,
+    s1,
+    s2
+) {
+
+  # ________________________________________________________________________
+  # Define objects
+  # ________________________________________________________________________
+  u <-  mean/povline
+  hc_lq <- value_at_lq(headcount, A, B, C)
+
+  # ________________________________________________________________________
+  # Calculations
+  # ________________________________________________________________________
+  pov_gap_sq <-
+    (2 * pov_gap) -
+    headcount -
+    (u ^ 2 * (A * headcount +
+                B * hc_lq -
+                ((r / 16) * log(
+                  (1 - headcount / s1) / (1 - headcount / s2)
+                ))))
+  # ________________________________________________________________________
+  # Return
+  # ________________________________________________________________________
+  return(pov_gap_sq)
+}
+
+
+
+
+
+
 
 #' Estimates poverty and inequality stats from Quadratic Lorenz fit
 #'
@@ -658,7 +842,7 @@ gd_estimate_lq <- function(mean, povline, p0, A, B, C) {
 #'   `regres_lq()$coef[3]`.
 #'
 #' @return list
-#' @keywords internal
+#' @export
 gd_compute_fit_lq <- function(welfare,
                               population,
                               headcount,
@@ -694,3 +878,5 @@ gd_compute_fit_lq <- function(welfare,
 
   return(out)
 }
+
+
