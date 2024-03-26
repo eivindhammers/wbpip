@@ -33,4 +33,3 @@ Villasenor, J., B. C. Arnold. 1989.
 "\href{https://EconPapers.repec.org/RePEc:eee:econom:v:40:y:1989:i:2:p:327-338}{Elliptical Lorenz curves}".
 \emph{Journal of Econometrics 40} (2): 327-338.
 }
-\keyword{internal}

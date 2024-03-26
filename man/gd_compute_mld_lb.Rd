@@ -22,4 +22,3 @@ numeric
 \code{gd_compute_mld_lb()} computes the Mean Log deviation (MLD) from a Lorenz
 beta fit.
 }
-\keyword{internal}
