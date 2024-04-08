@@ -30,7 +30,8 @@ compute_pip_stats <- function(welfare,
                                 "group",
                                 "aggregate",
                                 "imputed"
-                              )) {
+                              ),
+                              force_lorenz_form = NULL) {
   distribution_type <- match.arg(distribution_type)
 
   if (distribution_type == "micro") {
@@ -46,6 +47,8 @@ compute_pip_stats <- function(welfare,
 
     return(out)
   } else if (distribution_type %in% c("group", "aggregate")) {
+    stopifnot("requested_mean must be specified if distribution_type is 'group' or 'aggregate'" = !is.null(requested_mean))
+
     out <- gd_compute_pip_stats(
       welfare = welfare,
       povline = povline,
@@ -54,7 +57,8 @@ compute_pip_stats <- function(welfare,
       popshare = popshare,
       default_ppp = default_ppp,
       ppp = ppp,
-      p0 = p0
+      p0 = p0,
+      force_lorenz_form = force_lorenz_form
     )
 
     return(out)

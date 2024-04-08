@@ -32,8 +32,8 @@ gd_compute_pip_stats <- function(welfare,
                                  popshare = NULL,
                                  default_ppp = 1,
                                  ppp = NULL,
-                                 p0 = 0.5) {
-
+                                 p0 = 0.5,
+                                 force_lorenz_form) {
 
   # Apply Lorenz quadratic fit ----------------------------------------------
   results_lq <- gd_compute_pip_stats_lq(
@@ -59,12 +59,19 @@ gd_compute_pip_stats <- function(welfare,
     p0 = p0
   )
 
-
   # Apply selection rules ---------------------------------------------------
-  out <- gd_select_lorenz(
-    lq = results_lq,
-    lb = results_lb
-  )
+  if (is.null(force_lorenz_form)) {
+    out <- gd_select_lorenz(
+      lq = results_lq,
+      lb = results_lb
+    )
+  } else if (force_lorenz_form == "quadratic") {
+    out <- results_lq
+  } else if (force_lorenz_form == "beta") {
+    out <- results_lb
+  } else {
+    stop("force_lorenz_form must be either NULL, 'quadratic', or 'beta'")
+  }
 
   # Return only subset of variables
   out <- out[c(
